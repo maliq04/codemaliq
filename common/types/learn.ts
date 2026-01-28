@@ -13,6 +13,7 @@ export interface ILearn {
   level: string
   is_show: boolean
   language: string
+  type?: 'video' | 'link'
 }
 
 export interface ILearnCMS {

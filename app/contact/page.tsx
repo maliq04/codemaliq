@@ -9,7 +9,7 @@ import Contact from '@/modules/contact'
 
 export const metadata: Metadata = {
   title: `Contact ${METADATA.exTitle}`,
-  description: 'Contact codebayu.com, contact bayu setiawan',
+  description: `Contact ${METADATA.creator}`,
   keywords: 'frontend developer, software engineer, react js, javascript, typescript, contact',
   alternates: {
     canonical: `${process.env.DOMAIN}/contact`

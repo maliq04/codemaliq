@@ -13,6 +13,6 @@ describe('Embed Component', () => {
   })
 
   it('Should render username anchor', () => {
-    expect(screen.getAllByText('@codebayu.com')[0]).toBeTruthy()
+    expect(screen.getAllByText('@maliqalfathir')[0]).toBeTruthy()
   })
 })

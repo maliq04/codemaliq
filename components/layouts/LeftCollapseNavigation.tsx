@@ -1,8 +1,8 @@
-import Image from 'next/image'
-
 import { useState } from 'react'
 
-import { PROFILE_URL } from '@/common/constant'
+import { useBranding } from '@/components/providers/BrandingProvider'
+import DynamicLogo from '@/components/elements/DynamicLogo'
+
 import { MENU_ITEMS } from '@/common/constant/menu'
 
 import Copyright from '../elements/Copyright'
@@ -13,6 +13,8 @@ import Profile from './sidebar/Profile'
 export default function LeftCollapseNavigation() {
   const [isHover, setIsHover] = useState(false)
   const filterdMenu = MENU_ITEMS?.filter(item => item?.isShow)
+  const { branding } = useBranding()
+  
   return (
     <div
       onMouseEnter={() => setIsHover(true)}
@@ -25,15 +27,20 @@ export default function LeftCollapseNavigation() {
         ) : (
           <div className="flex flex-col items-center gap-8">
             <div className="z-10 rounded-full border-2 border-white shadow-md dark:border-neutral-800">
-              <Image src={PROFILE_URL} alt="profile" width={50} height={50} className="rounded-full xl:h-16 xl:w-16" />
+              <DynamicLogo 
+                width={50} 
+                height={50} 
+                className="rounded-full xl:h-16 xl:w-16" 
+                alt={branding.brandName}
+              />
             </div>
             <ToggleThemeIcon />
           </div>
         )}
       </div>
       <nav className="mb-6 mt-4 flex flex-col gap-3 border-t border-neutral-300 pt-4">
-        {filterdMenu.map((item, index) => (
-          <MenuItem key={index} {...item} isHover={isHover} className="flex items-center" />
+        {filterdMenu.map(item => (
+          <MenuItem key={item.href} {...item} isHover={isHover} className="flex items-center" />
         ))}
       </nav>
       <Copyright isHover={isHover} />

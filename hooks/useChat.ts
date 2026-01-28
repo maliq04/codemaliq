@@ -60,6 +60,12 @@ export default function useChat({ user }: { user: User }) {
     onValue(messagesRef, snapshot => {
       const data: IRawMessages = snapshot.val()
 
+      if (!data) {
+        setMessages([])
+        setLoading(false)
+        return
+      }
+
       const transformMessages: IMessage[] = Object.entries(data)
         .map(([id, value]) => ({
           id,

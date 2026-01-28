@@ -11,10 +11,14 @@ import { BlogItem } from '@/common/types/blog'
 
 import Blog from '@/modules/blog'
 
+// Force dynamic rendering to ensure fresh data
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata: Metadata = {
   title: `Blog ${METADATA.exTitle}`,
   description: 'My blogs content about programming and software development',
-  keywords: 'blog code bayu, codebayu',
+  keywords: 'blog code maliq, codemaliq',
   alternates: {
     canonical: `${process.env.DOMAIN}/blog`
   }
@@ -36,9 +40,11 @@ async function getBlog(category: string) {
   revalidatePath('/blog')
   const blogs = await getBlogData()
 
+  const activeId = BLOG_LINK.find(link => link.value === category)?.id
+  
   const data: BlogItem[] = blogs?.filter((blog: BlogItem) => {
-    const activeId = BLOG_LINK.find(link => link.value === category)?.id
     return blog.collection_id === activeId
   })
+  
   return data
 }

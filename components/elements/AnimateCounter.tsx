@@ -1,7 +1,7 @@
 'use client'
 
-import { AnimationPlaybackControls, animate } from 'framer-motion'
-import { HTMLProps, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { HTMLProps } from 'react'
 
 interface AnimateCounterProps extends HTMLProps<HTMLSpanElement> {
   total: number
@@ -9,24 +9,35 @@ interface AnimateCounterProps extends HTMLProps<HTMLSpanElement> {
 
 const AnimateCounter = ({ total, ...rest }: AnimateCounterProps) => {
   const countRef = useRef<HTMLSpanElement>(null)
-  const initialCount = 0
 
   useEffect(() => {
     const count = countRef.current
+    if (!count) return
 
-    const controls: AnimationPlaybackControls = animate(initialCount, total, {
-      duration: 1,
-      onUpdate: value => {
-        if (count) {
-          count.textContent = Math.floor(value).toString()
-        }
+    let startTime: number | null = null
+    const duration = 1000 // 1 second
+    const startValue = 0
+    const endValue = total
+
+    const animateValue = (timestamp: number) => {
+      if (!startTime) startTime = timestamp
+      const progress = Math.min((timestamp - startTime) / duration, 1)
+      
+      // Easing function (ease-out)
+      const easeOut = 1 - Math.pow(1 - progress, 3)
+      const currentValue = Math.floor(startValue + (endValue - startValue) * easeOut)
+      
+      count.textContent = currentValue.toString()
+      
+      if (progress < 1) {
+        requestAnimationFrame(animateValue)
       }
-    })
+    }
 
-    return () => controls.stop()
+    requestAnimationFrame(animateValue)
   }, [total])
 
-  return <span {...rest} ref={countRef} data-testid="counter" />
+  return <span {...rest} ref={countRef} data-testid="counter">0</span>
 }
 
 export default AnimateCounter

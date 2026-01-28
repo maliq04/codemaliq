@@ -14,12 +14,12 @@ export default async function Tiktok() {
       <SectionSubHeading>
         <p className="text-neutral-600 dark:text-neutral-400">Find me on tiktok</p>
         <Link
-          href={`https://www.tiktok.com/${TIKTOK_USERNAME}`}
+      href={`https://www.tiktok.com/@maliqalfathir`}
           target="_blank"
           passHref
           className="font-code text-sm text-neutral-600 hover:text-neutral-700 dark:text-neutral-400 hover:dark:text-neutral-400"
         >
-          {TIKTOK_USERNAME}
+      @maliqalfathir
         </Link>
       </SectionSubHeading>
       <Embed />

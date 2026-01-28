@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from 'next/cache'
 import BackButton from '@/components/elements/BackButton'
 import Container from '@/components/elements/Container'
 import PageHeading from '@/components/elements/PageHeading'
-import { getLearns } from '@/services/codebayu'
+import { getLearnContentBySlug } from '@/services/learn'
 
 import { METADATA } from '@/common/constant/metadata'
 
@@ -26,7 +26,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${content?.title} ${METADATA.exTitle}`,
     description: `${content?.description} on ${METADATA.openGraph.siteName}`,
     openGraph: {
-      images: content?.image,
       url: METADATA.openGraph.url,
       siteName: METADATA.openGraph.siteName,
       locale: METADATA.openGraph.locale,
@@ -58,8 +57,7 @@ export default async function LearnContentPage({ params }: LearnContentPage) {
 }
 
 async function getContent(contentSlug: string) {
-  const learns = await getLearns()
-  const content = learns.find(item => item?.slug === contentSlug) || null
+  const content = await getLearnContentBySlug(contentSlug)
 
   if (!content) {
     return {

@@ -1,0 +1,73 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": true,
+    "chat": {
+      ".read": true,
+      ".write": true,
+      "$messageId": {
+        ".validate": "newData.hasChildren(['id', 'message', 'name', 'email', 'image', 'created_at'])"
+      }
+    },
+    "audit_logs": {
+      ".read": true,
+      ".write": true,
+      "$logId": {
+        ".validate": "newData.hasChildren(['adminEmail', 'action', 'resourceType', 'resourceId', 'resourceTitle', 'timestamp'])"
+      }
+    },
+    "contacts": {
+      ".read": true,
+      ".write": true
+    },
+    "contact_settings": {
+      ".read": true,
+      ".write": true,
+      "links": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "inbox": {
+      ".read": true,
+      ".write": true,
+      "$messageId": {
+        ".validate": "newData.hasChildren(['name', 'email', 'message', 'timestamp', 'read'])"
+      }
+    },
+    "media": {
+      ".read": true,
+      ".write": true,
+      "$mediaId": {
+        ".validate": "newData.hasChildren(['name', 'url', 'size', 'contentType', 'created', 'folder'])"
+      }
+    },
+    "blog_stats": {
+      ".read": true,
+      ".write": true,
+      "$slug": {
+        ".validate": "newData.hasChildren(['views', 'likes', 'comments', 'shares', 'bookmarks'])"
+      }
+    },
+    "blog_comments": {
+      ".read": true,
+      ".write": true
+    },
+    "blog_comment_likes": {
+      ".read": true,
+      ".write": true
+    },
+    "blog_reply_likes": {
+      ".read": true,
+      ".write": true
+    },
+    "profile_settings": {
+      ".read": true,
+      ".write": true,
+      "cv": {
+        ".read": true,
+        ".write": true
+      }
+    }
+  }
+}

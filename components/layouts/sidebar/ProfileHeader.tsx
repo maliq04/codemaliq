@@ -1,12 +1,15 @@
+'use client'
+
 import NextImage from 'next/image'
 import Link from 'next/link'
 
 import clsx from 'clsx'
 import { MdVerified as VerifiedIcon } from 'react-icons/md'
 
-import { BACKDROP_IMAGE, DEVTO_PROFILE, PROFILE_URL } from '@/common/constant'
+import { BACKDROP_IMAGE, DEVTO_PROFILE } from '@/common/constant'
+import { useBranding } from '@/components/providers/BrandingProvider'
+import DynamicLogo from '@/components/elements/DynamicLogo'
 
-import Image from '../../elements/Image'
 import Status from '../../elements/Status'
 import ToggleThemeIcon from '../../elements/ToggleThemeIcon'
 import Tooltip from '../../elements/Tooltip'
@@ -17,6 +20,8 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ expandMenu, imageSize }: ProfileHeaderProps) {
+  const { branding } = useBranding()
+  
   return (
     <div
       className={clsx(
@@ -26,42 +31,35 @@ export default function ProfileHeader({ expandMenu, imageSize }: ProfileHeaderPr
     >
       <div className="relative hidden w-full flex-col items-center overflow-hidden pb-2 lg:flex">
         <Status />
-        <div className="h-24 w-full overflow-hidden rounded-lg dark:brightness-50 3xl:h-40">
-          <NextImage
-            src={BACKDROP_IMAGE}
-            alt="profile"
-            width={100}
-            height={100}
-            className="-ml-4 w-full scale-125"
-            priority
-          />
+        <div className="h-24 w-full overflow-hidden rounded-lg dark:brightness-50 3xl:h-40 bg-gradient-to-br from-blue-500 to-purple-600">
+          {/* Removed problematic Cloudinary image */}
         </div>
         <div className="absolute -right-1 bottom-[55px] z-10 rounded-xl py-2 pr-2 2xl:bottom-28 2xl:right-2">
           <ToggleThemeIcon />
         </div>
         <div className="z-10 -mt-11 rounded-full border-2 border-white shadow-md dark:border-neutral-800">
-          <Image
-            src={PROFILE_URL}
-            alt="profile"
+          <DynamicLogo
             width={expandMenu ? 80 : imageSize * 0.9}
             height={expandMenu ? 80 : imageSize * 0.9}
-            rounded="rounded-full"
-            className="lg:hover:scale-105"
+            className="rounded-full lg:hover:scale-105"
+            alt={branding.brandName}
           />
         </div>
       </div>
-      <Image
-        src={PROFILE_URL}
-        alt="profile"
-        width={expandMenu ? 80 : imageSize * 0.9}
-        height={expandMenu ? 80 : imageSize * 0.9}
-        rounded="rounded-full"
-        className="lg:hidden lg:hover:scale-105"
-      />
+      
+      {/* Mobile Avatar - Only show on mobile screens */}
+      <div className="flex lg:hidden">
+        <DynamicLogo
+          width={expandMenu ? 80 : imageSize * 0.9}
+          height={expandMenu ? 80 : imageSize * 0.9}
+          className="rounded-full lg:hover:scale-105"
+          alt={branding.brandName}
+        />
+      </div>
       <div className="mt-1 flex items-center gap-2">
         <Link href="/" passHref>
           <h2 className="font-sora flex-grow whitespace-nowrap text-lg font-medium lg:text-xl 3xl:text-2xl">
-            Bayu Setiawan
+            {branding.brandName}
           </h2>
         </Link>
         <Tooltip title="Verified">
@@ -73,7 +71,7 @@ export default function ProfileHeader({ expandMenu, imageSize }: ProfileHeaderPr
         target="_blank"
         className="font-sora hidden text-sm text-neutral-600 transition-all duration-300 hover:text-neutral-700 dark:text-neutral-500 dark:hover:text-neutral-400 lg:flex 3xl:text-lg"
       >
-        @codebayu
+        @maliq04
       </Link>
     </div>
   )

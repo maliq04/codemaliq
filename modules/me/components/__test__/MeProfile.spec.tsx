@@ -36,7 +36,7 @@ describe('MeProfile Component', () => {
   })
 
   it('Should render author name text', () => {
-    const text = screen.getByText('Bayu Setiawan')
+    const text = screen.getByText('Maliq Al Fathir')
     expect(text).toBeTruthy()
     expect(text.className).toBe('font-sora flex-grow text-lg font-medium lg:text-xl')
   })

@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from '@/components/elements/Image'
 import { usePathname, useRouter } from 'next/navigation'
 
 import Ribbon from '@/components/elements/Ribbon'
@@ -7,7 +7,7 @@ import { PLACEHOLDER_URL } from '@/common/constant'
 import { formatDate } from '@/common/helpers'
 import { sendDataLayer } from '@/common/libs/gtm'
 import { BlogItem } from '@/common/types/blog'
-import { ILearn } from '@/common/types/learn'
+import { ILearn } from '@/common/types/codemaliq'
 
 import useIsLargeDesktop from '@/hooks/useIsLargeDesktop'
 
@@ -36,9 +36,37 @@ export default function LatestArticleCard({ data, learns, index }: LatestArticle
   }
 
   function generateDetailUrl() {
-    if (!data.collection_id) return `/blog/${data.slug}?id=${data.id}&read-mode=true`
-    const collection = learns.find(collection => collection.id === `${data.collection_id}`)
-    return `/learn/${collection?.slug}/${data.slug}?id=${data.id}&read-mode=true`
+    // Determine post type and routing
+    const postSource = (data as any).source || 'unknown'
+    const postType = (data as any).post_type || 'unknown'
+    const isLocalPost = (data as any).is_local || postSource === 'mdx' || postSource === 'firebase'
+    const isAdminPost = postType === 'admin' || postSource === 'firebase'
+    const isDevtoPost = postType === 'devto' || (data as any).devto_id
+
+    // Generate appropriate post ID
+    let postId: string
+    if (isAdminPost) {
+      postId = `admin-${data.id}`
+    } else if (isDevtoPost && (data as any).devto_id) {
+      postId = (data as any).devto_id
+    } else if (isLocalPost) {
+      postId = `local-${data.slug}`
+    } else {
+      postId = data.id.toString()
+    }
+
+    // Handle collection-based routing (for learn content)
+    if (!data.collection_id) {
+      return `/blog/${data.slug}?id=${postId}&read-mode=true`
+    }
+    
+    // For roadmaps (codemaliq ILearn), we don't have id/slug properties, so fallback to blog URL
+    const collection = learns.find(collection => 'id' in collection && collection.id === `${data.collection_id}`)
+    if (collection && 'slug' in collection) {
+      return `/learn/${collection.slug}/${data.slug}?id=${postId}&read-mode=true`
+    }
+    
+    return `/blog/${data.slug}?id=${postId}&read-mode=true`
   }
 
   return (
@@ -52,6 +80,7 @@ export default function LatestArticleCard({ data, learns, index }: LatestArticle
             src={data.cover_image || PLACEHOLDER_URL}
             alt={data.title}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="h-full w-full rounded-md object-cover"
             priority
           />

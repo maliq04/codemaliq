@@ -34,8 +34,8 @@ export default function ProjectCard({ title, slug, description, image, stacks, i
           </div>
           <p className="text-[15px] leading-relaxed text-neutral-700 dark:text-neutral-400">{trimmedContent}</p>
           <div className="flex flex-wrap items-center gap-3 pt-2">
-            {stacks?.map((stack: string, index: number) => (
-              <div key={index} className="w-6">
+            {stacks?.map((stack: string) => (
+              <div key={stack} className="w-6">
                 <Tooltip title={stack}>{STACKS[stack]}</Tooltip>
               </div>
             ))}

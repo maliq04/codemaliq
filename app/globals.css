@@ -413,3 +413,567 @@
     --angle: 420deg;
   }
 }
+
+/* Fix Next.js Image aspect ratio warnings globally - EXCLUDE BLOG CARDS */
+img[style*="color:transparent"]:not(.blog-card-image) {
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Additional fix for all Next.js images - EXCLUDE BLOG CARDS AND RELATED ARTICLES */
+/* REMOVED: This rule was causing layout issues with blog cards */
+/* img[data-nimg]:not(.admin-preview):not(.logo-preview):not(.blog-card-image) {
+  width: auto !important;
+  height: auto !important;
+} */
+
+/* Fix for images with explicit width/height that cause warnings - but preserve admin preview sizes and logos */
+img[width][height]:not(.admin-preview):not(.logo-preview):not(.blog-card-image) {
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Specific fix for codemaliq.jpg to prevent aspect ratio warnings */
+img[src="/img/codemaliq.jpg"]:not(.blog-card-image), 
+img[src*="codemaliq.jpg"]:not(.blog-card-image),
+img[src*="codemaliq.jpg?"]:not(.blog-card-image) {
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Fix Next.js Image components with codemaliq.jpg */
+img[data-nimg][src*="codemaliq.jpg"]:not(.blog-card-image) {
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Admin preview images should maintain their container constraints */
+.admin-preview {
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Suppress browser extension connection errors */
+.extension-error-suppression {
+  /* This class can be used to identify and suppress extension-related errors */
+}
+
+/* Force rectangular images in blog carousel - Override any circular styles */
+.blog-carousel-image,
+.blog-carousel-image img,
+.blog-carousel-image [data-nimg] {
+  border-radius: 8px !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Ensure no circular styling is applied to carousel images */
+.blog-carousel-container img {
+  border-radius: 8px !important;
+}
+
+/* Force rectangular aspect ratio for carousel images */
+.blog-carousel-container .aspect-\[3\/2\] {
+  aspect-ratio: 3/2 !important;
+  border-radius: 8px !important;
+}
+
+/* Override any Tailwind rounded-full classes in carousel */
+.blog-carousel-container .rounded-full,
+.blog-carousel-image .rounded-full {
+  border-radius: 8px !important;
+}
+
+/* Specific override for any circular image styling in related articles */
+div[class*="RelatedArticles"] img,
+div[class*="related-articles"] img,
+.blog-carousel-container img[data-nimg] {
+  border-radius: 8px !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Data attribute based styling for maximum specificity */
+[data-image-type="rectangular"],
+[data-image-type="rectangular"] img,
+[data-shape="rectangular"] {
+  border-radius: 8px !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Force rectangular styling with highest specificity */
+.blog-carousel-container [data-shape="rectangular"][data-nimg] {
+  border-radius: 8px !important;
+}
+
+/* BLOG POST LARGE CENTERED IMAGE FIX */
+.blog-content-image-container,
+img[data-nimg] {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block !important;
+}
+
+/* Remove any remaining debug info to prevent it from shifting the layout */
+.debug-info {
+  display: none !important;
+}
+
+/* BLOG POST LEFT ALIGNMENT FIX */
+.blog-post-container {
+  margin-left: 0 !important;
+  width: 100% !important;
+  max-width: 800px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.blog-post-image {
+  margin-left: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+  object-position: left center;
+}
+
+/* LARGE HERO IMAGE STYLING */
+.blog-hero-large {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.blog-hero-large img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+}
+
+/* REMOVED: Problematic full-width blog post classes that caused layout issues */
+/* These classes were causing images to break out of containers and create layout problems */
+
+/* Blog content styling to ensure visibility */
+.prose {
+  color: inherit;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  color: inherit;
+}
+
+.prose p {
+  color: inherit;
+}
+
+.prose strong {
+  color: inherit;
+}
+
+.prose ul, .prose ol {
+  color: inherit;
+}
+
+.prose li {
+  color: inherit;
+}
+
+/* Dark mode prose styling */
+.dark .prose-invert {
+  color: #e5e5e5;
+}
+
+.dark .prose-invert h1, 
+.dark .prose-invert h2, 
+.dark .prose-invert h3, 
+.dark .prose-invert h4, 
+.dark .prose-invert h5, 
+.dark .prose-invert h6 {
+  color: #f5f5f5;
+}
+
+.dark .prose-invert p {
+  color: #e5e5e5;
+}
+
+.dark .prose-invert strong {
+  color: #f5f5f5;
+}
+
+.dark .prose-invert ul, 
+.dark .prose-invert ol {
+  color: #e5e5e5;
+}
+
+.dark .prose-invert li {
+  color: #e5e5e5;
+}
+
+/* BLOG CARD CONTAINER FIX - NO OVERFLOW */
+.card-blog {
+  @apply bg-white dark:bg-neutral-800; /* Follow theme */
+  border-radius: 12px;
+  overflow: hidden !important; /* Force cut anything that comes out */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.card-blog:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.dark .card-blog {
+  border: 1px solid #374151;
+}
+
+.blog-card-container {
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.blog-card-container:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.dark .blog-card-container {
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+
+/* BLOG CARD IMAGE PROTECTION - STANDARD IMG TAGS ONLY */
+.blog-card-container img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  transition: transform 0.3s ease;
+}
+
+.blog-card-container img:hover {
+  transform: scale(1.05);
+}
+
+/* ADDITIONAL ISOLATION FIX FOR BLOG CARDS */
+.blog-card-container {
+  isolation: isolate;
+  contain: layout style paint;
+}
+
+/* ENSURE NO WHITE BACKGROUND CLIPPING */
+.blog-card-content {
+  padding: 1rem;
+  background: inherit;
+}
+
+/* BLOG FEATURED HERO - LARGE LIKE REFERENCE IMAGE */
+.blog-featured-hero {
+  height: 500px;
+}
+
+@media (min-width: 640px) {
+  .blog-featured-hero {
+    height: 600px;
+  }
+}
+
+@media (min-width: 768px) {
+  .blog-featured-hero {
+    height: 700px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-featured-hero {
+    height: 800px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .blog-featured-hero {
+    height: 900px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .blog-featured-hero {
+    height: 1000px;
+  }
+}
+
+/* Enhanced blog layout styling */
+.blog-featured-post {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.blog-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blog-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Grid layout enhancements */
+.blog-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .blog-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Featured post animations */
+@keyframes featuredPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.featured-badge {
+  animation: featuredPulse 2s ease-in-out infinite;
+}
+
+/* Force rectangular images in blog carousel - Override any circular styles */
+.blog-carousel-image,
+.blog-carousel-image img,
+.blog-carousel-image [data-nimg] {
+  border-radius: 8px !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Ensure no circular styling is applied to carousel images */
+.blog-carousel-container img {
+  border-radius: 8px !important;
+}
+
+/* Force rectangular aspect ratio for carousel images */
+.blog-carousel-container .aspect-\[3\/2\] {
+  aspect-ratio: 3/2 !important;
+  border-radius: 8px !important;
+}
+
+/* Override any Tailwind rounded-full classes in carousel */
+.blog-carousel-container .rounded-full,
+.blog-carousel-image .rounded-full {
+  border-radius: 8px !important;
+}
+
+/* Specific override for any circular image styling in related articles */
+div[class*="RelatedArticles"] img,
+div[class*="related-articles"] img,
+.blog-carousel-container img[data-nimg] {
+  border-radius: 8px !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Data attribute based styling for maximum specificity */
+[data-image-type="rectangular"],
+[data-image-type="rectangular"] img,
+[data-shape="rectangular"] {
+  border-radius: 8px !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Force rectangular styling with highest specificity */
+.blog-carousel-container [data-shape="rectangular"][data-nimg] {
+  border-radius: 8px !important;
+}
+
+.blog-featured-image {
+  aspect-ratio: 16/9 !important;
+  border-radius: 12px !important;
+}
+
+/* Clean hover effects */
+.blog-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Clean grid layout */
+.blog-grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .blog-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* REMOVED: Problematic massive image classes */
+/* These were causing layout issues and breaking container boundaries */
+
+/* Enhanced blog post image sizing for desktop */
+.blog-post-image {
+  min-height: 300px;
+}
+
+@media (min-width: 768px) {
+  .blog-post-image {
+    min-height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-post-image {
+    min-height: 500px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .blog-post-image {
+    min-height: 600px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .blog-post-image {
+    min-height: 700px;
+  }
+}
+
+/* Hero blog post images with fixed heights for reliable sizing */
+.blog-post-hero-image {
+  height: 350px;
+}
+
+@media (min-width: 640px) {
+  .blog-post-hero-image {
+    height: 450px;
+  }
+}
+
+@media (min-width: 768px) {
+  .blog-post-hero-image {
+    height: 550px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-post-hero-image {
+    height: 650px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .blog-post-hero-image {
+    height: 750px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .blog-post-hero-image {
+    height: 850px;
+  }
+}
+
+/* Full-width blog post images */
+.blog-post-full-width {
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+
+@media (min-width: 768px) {
+  .blog-post-full-width {
+    margin-left: -2rem;
+    margin-right: -2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-post-full-width {
+    margin-left: 0;
+    margin-right: -2rem;
+  }
+}
+
+/* Ensure the Blog Hero Image always fills the entire border */
+article div.relative img {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Remove any stray padding on the main container */
+.blog-content-wrapper {
+  padding: 0 !important;
+}
+
+/* Ensure the image in the blog detail fits snugly against the edge of the container */
+.blog-detail-hero-wrapper img {
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important; /* To blend in with the corner of the card above */
+}
+
+/* Remove any old rules that might be interfering */
+.blog-post-massive-container,
+.blog-post-massive-image {
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* Ensure blog detail images fill the entire black card container */
+.blog-detail-card img {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+}
+
+/* Force full width for blog detail images - override any Next.js Image constraints */
+.blog-detail-card img,
+.blog-detail-hero-wrapper img {
+  max-width: none !important;
+  min-width: 100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
+/* Fix for duplicate avatar bug - ensure proper avatar positioning */
+.avatar-container {
+  position: relative !important;
+}
+
+/* Prevent avatar duplication issues */
+.avatar-img {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+/* Ensure profile header avatars don't overlap */
+.profile-header-avatar {
+  z-index: 1 !important;
+  position: relative !important;
+}

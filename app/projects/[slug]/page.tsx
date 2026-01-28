@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import BackButton from '@/components/elements/BackButton'
 import Container from '@/components/elements/Container'
 import PageHeading from '@/components/elements/PageHeading'
-import { getCodeBayuData } from '@/services/codebayu'
+import { getCodemaliqData } from '@/services/codemaliq'
 
 import { METADATA } from '@/common/constant/metadata'
 import loadMdxFiles from '@/common/libs/mdx'
@@ -49,7 +49,7 @@ export default async function ProjectDetailPage({ params }: ProjectsDetailPagePr
 }
 
 async function getProjectDetail(slug: string): Promise<IProjectItem> {
-  const response = await getCodeBayuData()
+  const response = await getCodemaliqData()
   const projects = response.projects
 
   const project = projects.find(item => item.slug === slug) as IProjectItem

@@ -2,7 +2,6 @@
 
 import Container from '@/components/elements/Container'
 import PageHeading from '@/components/elements/PageHeading'
-import { useHydrationZustand } from '@codebayu/use-hydration-zustand'
 import { DragDropContext, DropResult } from '@hello-pangea/dnd'
 
 import { tourTaskBoard } from '@/common/constant/drivers'
@@ -10,8 +9,7 @@ import createDrivers from '@/common/libs/drivers'
 import { IColumns } from '@/common/types/board'
 
 import { useTaskBoard } from '@/stores/board'
-
-import useHasMounted from '@/hooks/useHasMounted'
+import { useEffect, useState } from 'react'
 
 import TaskColumn from './TaskColumn'
 import TaskLoading from './TaskLoading'
@@ -21,8 +19,11 @@ const PAGE_DESCRIPTION = 'The task board to keep track of your tasks.'
 
 export default function TaskBoard() {
   const { columns, setColumns } = useTaskBoard()
-  const hydrate = useHydrationZustand(useTaskBoard)
-  const mounted = useHasMounted()
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const { runDriver, isProductTour } = createDrivers({ steps: tourTaskBoard, product: 'task-board' })
 
@@ -63,7 +64,7 @@ export default function TaskBoard() {
     }
   }
 
-  if (mounted && isProductTour) {
+  if (isMounted && isProductTour) {
     runDriver()
   }
 
@@ -71,8 +72,8 @@ export default function TaskBoard() {
     <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
       <Container withMarginTop={false}>
         <PageHeading title={PAGE_TITLE} description={PAGE_DESCRIPTION} />
-        <div className="min-h-fullmd:min-h-[70vh] mt-8 flex w-full flex-col space-y-4 md:flex-row md:space-y-0">
-          {hydrate ? (
+        <div className="min-h-[70vh] mt-8 flex w-full flex-col space-y-4 md:flex-row md:space-y-0">
+          {isMounted ? (
             Object.entries(columns).map(([columnId, column]) => (
               <TaskColumn key={columnId} columnId={columnId} column={column} />
             ))

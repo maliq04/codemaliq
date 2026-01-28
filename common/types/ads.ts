@@ -1,10 +1,8 @@
 export interface IAdsBanner {
-  id: string
-  text: string
   image: string
-  link: string
-  isShow: boolean
+  title: string
+  description: string
+  button_text: string
+  url: string
   showingOn: string[]
-  createdAt: string
-  updatedAt: string | null
 }

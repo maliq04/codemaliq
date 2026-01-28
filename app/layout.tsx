@@ -1,45 +1,24 @@
-import type { Viewport } from 'next'
+import type { Metadata, Viewport } from 'next'
 
 import Analytics from '@/components/elements/Analytics'
 import GoogleAdsense from '@/components/elements/GoogleAdsense'
+import DynamicFavicon from '@/components/elements/DynamicFavicon'
 import Layouts from '@/components/layouts/index'
+import NextAuthSessionProvider from '@/components/providers/SessionProvider'
+import BrandingProvider from '@/components/providers/BrandingProvider'
 import { GeistSans } from 'geist/font/sans'
 import NextTopLoader from 'nextjs-toploader'
 
 import ThemeProviderContext from '../stores/theme'
 import './globals.css'
 
-// export const metadata: Metadata = {
-//   applicationName: 'codebayu',
-//   manifest: '/manifest.json',
-//   appleWebApp: {
-//     title: 'codebayu',
-//     capable: true,
-//     statusBarStyle: 'default'
-//   },
-//   formatDetection: {
-//     telephone: false
-//   },
-//   metadataBase: new URL(process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.DOMAIN || ''),
-//   description: METADATA.description,
-//   keywords: METADATA.keyword,
-//   creator: METADATA.creator,
-//   authors: {
-//     name: METADATA.creator,
-//     url: METADATA.openGraph.url
-//   },
-//   openGraph: {
-//     images: METADATA.profile,
-//     url: METADATA.openGraph.url,
-//     siteName: METADATA.openGraph.siteName,
-//     locale: METADATA.openGraph.locale,
-//     type: 'website'
-//   },
-//   robots: {
-//     index: true,
-//     follow: true
-//   }
-// }
+export const metadata: Metadata = {
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  }
+}
 
 export const viewport: Viewport = {
   themeColor: '#0a0a0a'
@@ -61,9 +40,47 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           speed={200}
           shadow="0 0 10px #05b6d3,0 0 5px #45c6c0"
         />
-        <ThemeProviderContext>
-          <Layouts>{children}</Layouts>
-        </ThemeProviderContext>
+        <NextAuthSessionProvider>
+          <BrandingProvider>
+            <DynamicFavicon />
+            <ThemeProviderContext>
+              <Layouts>{children}</Layouts>
+            </ThemeProviderContext>
+          </BrandingProvider>
+        </NextAuthSessionProvider>
+        
+        {/* Error suppression script for browser extensions */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Suppress browser extension connection errors
+              const originalError = console.error;
+              console.error = function(...args) {
+                const message = args.join(' ');
+                if (
+                  message.includes('Could not establish connection') ||
+                  message.includes('Receiving end does not exist') ||
+                  message.includes('Extension context invalidated') ||
+                  message.includes('runtime.lastError')
+                ) {
+                  return; // Suppress extension-related errors
+                }
+                originalError.apply(console, args);
+              };
+              
+              // Suppress unhandled promise rejections from extensions
+              window.addEventListener('unhandledrejection', function(event) {
+                const message = event.reason?.message || '';
+                if (
+                  message.includes('Could not establish connection') ||
+                  message.includes('Extension context invalidated')
+                ) {
+                  event.preventDefault();
+                }
+              });
+            `
+          }}
+        />
 
         <Analytics />
       </body>

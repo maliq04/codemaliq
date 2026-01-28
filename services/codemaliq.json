@@ -1,0 +1,44 @@
+{
+  "roadmaps": {
+    "title": "Rekomendasi Alur Belajar",
+    "description": "Alur belajar yang direkomendasikan untuk menjadi seorang Software Engineer.",
+    "list": [
+      {
+        "title": "Frontend Engineer",
+        "description": "Fokus pada antarmuka pengguna, memastikan aplikasi web terlihat bagus dan berfungsi dengan baik di berbagai perangkat.",
+        "href": "/roadmap/frontend",
+        "icon": "frontend"
+      },
+      {
+        "title": "Backend Engineer",
+        "description": "Bertanggung jawab atas logika sisi server, database, dan memastikan semuanya berjalan lancar di belakang layar.",
+        "href": "/roadmap/backend",
+        "icon": "backend"
+      },
+      {
+        "title": "DevOps Engineer",
+        "description": "Menjembatani pengembangan dan operasi, mengotomatiskan pipeline deployment, dan mengelola infrastruktur cloud.",
+        "href": "/roadmap/devops",
+        "icon": "devops"
+      }
+    ]
+  },
+  "ads": [
+    {
+      "image": "/images/ads/saweria.png",
+      "title": "Dukung Kreator",
+      "description": "Jika Anda merasa konten ini bermanfaat, dukung saya melalui Saweria untuk terus membuat konten berkualitas.",
+      "button_text": "Dukung Sekarang",
+      "url": "https://saweria.co/codemaliq",
+      "showingOn": ["/roadmap", "/blog"]
+    },
+    {
+      "image": "/images/ads/course.png",
+      "title": "Kursus Online",
+      "description": "Tingkatkan skill Anda dengan kursus online mendalam yang saya siapkan.",
+      "button_text": "Lihat Kursus",
+      "url": "/courses",
+      "showingOn": ["/"]
+    }
+  ]
+}

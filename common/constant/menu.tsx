@@ -103,7 +103,7 @@ export const SOCIAL_MEDIA: SocialMedia[] = [
     id: 'GitHub',
     title: 'Explore the code',
     description: 'Explore the source code for all my projects on GitHub.',
-    href: 'https://github.com/codebayu',
+    href: 'https://github.com/maliq04',
     icon: <GithubIcon className="text-xl md:text-3xl" />,
     classContainer:
       'border-slate-300 from-slate-100 to-slate-200 dark:border-slate-600 dark:from-slate-900 dark:to-slate-950',
@@ -115,7 +115,7 @@ export const SOCIAL_MEDIA: SocialMedia[] = [
     id: 'Linkedin',
     title: 'Let`s connect',
     description: 'Connect for collaboration or explore my professional experience.',
-    href: 'https://www.linkedin.com/in/bayu-setiawan99/',
+    href: 'https://www.linkedin.com/in/maliq-al-fathir/',
     icon: <LinkedinIcon className="text-xl md:text-3xl" />,
     classContainer:
       'border-blue-300 from-blue-100 to-blue-200 dark:border-blue-600 dark:from-blue-900 dark:to-blue-950',
@@ -127,7 +127,7 @@ export const SOCIAL_MEDIA: SocialMedia[] = [
     id: 'NPM',
     title: 'Open source',
     description: 'Install and contribute to my open-source projects.',
-    href: 'https://www.npmjs.com/~bayu-setiawan',
+    href: 'https://www.npmjs.com/~maliqalfathir',
     icon: <NpmIcon className="text-xl md:text-3xl" />,
     classContainer:
       'border-rose-300 from-rose-100 to-rose-200 dark:border-rose-600 dark:from-rose-900 dark:to-rose-950',
@@ -138,7 +138,7 @@ export const SOCIAL_MEDIA: SocialMedia[] = [
   {
     id: 'Discord',
     title: 'Chat with the community',
-    description: 'Join over 1,000+ others developers on The Code Bayu Discord.',
+    description: 'Join over 1,000+ others developers on The Maliq Al Fathir Discord.',
     href: 'https://discord.gg/76UFeGdXy6',
     icon: <DiscordIcon className="text-xl md:text-3xl" />,
     classContainer:
@@ -173,5 +173,11 @@ export const BLOG_LINK = [
     href: '/roadmap?tribe=frontend-developer',
     label: 'Roadmap',
     value: 'roadmap'
+  },
+  {
+    id: null,
+    href: '?category=related-articles',
+    label: 'Related Articles',
+    value: 'related-articles'
   }
 ]

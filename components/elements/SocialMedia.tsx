@@ -31,6 +31,7 @@ export default function SocialMedia({ items, isMePage }: SocialMediaProps) {
       data-testid="social-media"
       data-aos={dataAos}
       className={cn('flex flex-col space-y-1', isMePage && 'mt-6 items-center')}
+      suppressHydrationWarning={true}
     >
       <div className="font-sora mb-2 ml-2 mt-1 text-sm text-neutral-600 dark:text-neutral-500">Let`s Connect</div>
       <div

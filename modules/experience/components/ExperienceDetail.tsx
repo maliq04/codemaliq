@@ -13,8 +13,6 @@ export default function ExperienceDetail(props: ICareer) {
   const startDate = new Date(start_date)
   const endDate = end_date ? new Date(end_date) : new Date()
 
-  console.log(slug)
-
   const contents = loadMdxFiles(slug, 'experience')
   const content = contents.find(item => item.slug === slug)?.content
 
@@ -28,7 +26,13 @@ export default function ExperienceDetail(props: ICareer) {
             <span>{end_date ? format(endDate, 'MMM yyyy') : 'Present'}</span>
           </div>
         </div>
-        <Image src={getCloudinaryUrl(logo)} alt={company} width={60} height={60} />
+        <Image 
+          src={getCloudinaryUrl(logo)} 
+          alt={company} 
+          width={60} 
+          height={60} 
+          style={{ width: 'auto', height: 'auto' }}
+        />
       </div>
       <p className="font-sans text-neutral-700 dark:text-neutral-300">
         At {company}, I proudly served as <strong>{position}</strong> based in {location}, contributing my expertise

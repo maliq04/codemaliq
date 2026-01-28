@@ -1,3 +1,4 @@
+import { METADATA } from '@/common/constant/metadata'
 import Saweria from '@/components/elements/Saweria'
 import TypeAnimation from '@/components/elements/TypeAnimation'
 
@@ -6,7 +7,7 @@ export default function Introduction() {
     <section className="space-y-2 bg-cover bg-no-repeat">
       <div className="flex items-center justify-between">
         <div className="font-sora flex gap-2 text-2xl font-bold lg:text-3xl 3xl:text-4xl">
-          <TypeAnimation sequence={["Hi, I'm Bayu Setiawan", "Hi, I'm Software Engineer"]} delay={3000} />
+          <TypeAnimation sequence={[`Hi, I'm ${METADATA.creator}`, "Hi, I'm a Software Engineer"]} delay={3000} />
         </div>
         <Saweria />
       </div>

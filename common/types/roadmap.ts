@@ -1,17 +1,21 @@
-export interface CourseCardProps {
-  icon: string
+interface RoadmapItem {
   title: string
-  linkIndonesia: string
-  linkEnglish: string
-}
-
-export interface BadgeProps {
-  label: string
-  path: string
-  isShow: boolean
+  icon: string
+  category: string
+  linkIndonesia?: string
+  linkEnglish?: string
 }
 
 export interface IRoadmap {
-  frontend: CourseCardProps[]
-  mastering_react: CourseCardProps[]
+  title: string
+  description: string
+  list: RoadmapItem[]
+}
+
+export interface CourseCardProps {
+  title: string
+  icon: string
+  category: string
+  linkIndonesia?: string
+  linkEnglish?: string
 }

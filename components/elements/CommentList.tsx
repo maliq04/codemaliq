@@ -18,7 +18,7 @@ export default function CommentList({ totalComments, comments }: CommentListProp
           <div data-testid="comment-count" className="pb-5 text-xl font-semibold">
             {totalComments} Comment{totalComments > 1 && 's'}
           </div>
-          {comments?.map(comment => <CommentItem key={comment?.id_code} {...comment} />)}
+          {comments?.map((comment, index) => <CommentItem key={comment?.id_code || index} {...comment} />)}
         </>
       ) : (
         <EmptyState message="No Comment." />

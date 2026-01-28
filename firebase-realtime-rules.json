@@ -1,0 +1,23 @@
+{
+  "rules": {
+    "portfolio_settings": {
+      ".read": true,
+      ".write": "auth != null && (auth.token.email == 'maliqalfathir04@gmail.com' || auth.uid == 'admin_uid')",
+      "contact_links": {
+        ".read": true,
+        ".write": "auth != null && (auth.token.email == 'maliqalfathir04@gmail.com' || auth.uid == 'admin_uid')"
+      },
+      "socials": {
+        ".read": true,
+        ".write": "auth != null && (auth.token.email == 'maliqalfathir04@gmail.com' || auth.uid == 'admin_uid')"
+      }
+    },
+    "inbox": {
+      ".read": "auth != null && (auth.token.email == 'maliqalfathir04@gmail.com' || auth.uid == 'admin_uid')",
+      ".write": true,
+      "$messageId": {
+        ".validate": "newData.hasChildren(['name', 'email', 'message', 'timestamp']) && newData.child('name').isString() && newData.child('email').isString() && newData.child('message').isString() && newData.child('timestamp').isNumber()"
+      }
+    }
+  }
+}

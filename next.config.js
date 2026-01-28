@@ -21,13 +21,25 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'media2.dev.to'
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com'
       }
-    ]
+    ],
+    // Allow data URLs for inline SVG placeholders
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
   },
+  // Disable font optimization to prevent build hanging on network issues
+  optimizeFonts: false,
   env: {
-    GTM_ID: process.env.GTM_ID,
-    GOOGLE_ADSENSE_UNIT_BLOG_CLIENT: process.env.GOOGLE_ADSENSE_UNIT_BLOG_CLIENT,
-    GOOGLE_ADSENSE_UNIT_BLOG_SLOT: process.env.GOOGLE_ADSENSE_UNIT_BLOG_SLOT
+    CODEMALIQ_SERVICE: process.env.CODEMALIQ_SERVICE || '',
   }
 }
 

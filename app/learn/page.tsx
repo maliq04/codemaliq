@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache'
 
 import Container from '@/components/elements/Container'
 import PageHeading from '@/components/elements/PageHeading'
-import { getLearns } from '@/services/codebayu'
+import { getLearnContent } from '@/services/learn'
 
 import { METADATA } from '@/common/constant/metadata'
 
@@ -24,7 +24,7 @@ const PAGE_DESCRIPTION =
 
 export default async function LearnPage() {
   noStore()
-  const learns = await getLearns()
+  const learns = await getLearnContent()
   const filteredContents = learns.filter(content => content.is_show) || []
   return (
     <>

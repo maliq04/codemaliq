@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Tooltip from '@/components/elements/Tooltip'
 import { formatDistanceToNow } from 'date-fns'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FiTrash2 as DeleteIcon } from 'react-icons/fi'
 import { ImReply } from 'react-icons/im'
 import { MdVerified as VerifiedIcon } from 'react-icons/md'
@@ -30,8 +30,13 @@ export default function ChatItem({
   clickReply
 }: IChatItemProps) {
   const [onHover, setOnHover] = useState(false)
+  const [time, setTime] = useState('') // Initialize empty to prevent hydration mismatch
   const authorEmail = process.env.NEXT_PUBLIC_AUTHOR_EMAIL as string
-  const time = formatDistanceToNow(new Date(created_at), { addSuffix: true })
+
+  useEffect(() => {
+    // Set time on client side to prevent hydration mismatch
+    setTime(formatDistanceToNow(new Date(created_at), { addSuffix: true }))
+  }, [created_at])
 
   return (
     <motion.div
@@ -40,7 +45,14 @@ export default function ChatItem({
       animate={{ opacity: 1, y: 0 }}
       className="flex w-full items-end space-x-2"
     >
-      <Image src={image} alt={name} width={40} height={40} className="mb-6 rounded-full" />
+      <Image 
+        src={image} 
+        alt={name} 
+        width={40} 
+        height={40} 
+        className="mb-6 rounded-full" 
+        style={{ width: 'auto', height: 'auto' }}
+      />
       <div className="flex w-full flex-col space-y-[2px]">
         <div
           className="flex w-full max-w-[90%] items-end space-x-2"

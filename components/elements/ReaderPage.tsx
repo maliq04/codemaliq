@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from '@/components/elements/Image'
 import Link from 'next/link'
 
 import Breakline from '@/components/elements/Breakline'
@@ -28,25 +28,50 @@ export default function ReaderPage({ content, comments, pageViewCount }: ReaderP
         published_at={published_at}
         page_views_count={pageViewCount}
       />
-      <div className="space-y-6 leading-[1.8] dark:text-neutral-300 ">
-        <div className="relative aspect-video w-full overflow-hidden">
-          <Image
-            src={cover_image || PLACEHOLDER_URL}
-            fill
-            alt={title}
-            className="object-cover transition-all duration-700 hover:scale-105"
-            priority
-          />
+      <div className="space-y-6 leading-[1.8] text-neutral-900 dark:text-neutral-100">
+        {/* Main Black Card */}
+        <div className="w-full max-w-4xl mx-auto overflow-hidden rounded-2xl bg-[#0a0a0a] shadow-2xl">
+          {/* Image Container: Created Full Width & Full Height according to aspect ratio */}
+          <div className="w-full h-[300px] md:h-[450px] relative">
+            <img
+              src={cover_image || PLACEHOLDER_URL}
+              alt={title}
+              className="w-full h-full object-cover"
+              style={{
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover' // This is key to ensuring the image isn't squashed but remains full.
+              }}
+            />
+            {/* Professional gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+            
+            {/* Title overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight">
+                {title}
+              </h1>
+            </div>
+          </div>
         </div>
-        {body_markdown && <MDXComponent>{body_markdown}</MDXComponent>}
+        
+        {/* BLOG CONTENT SECTION */}
+        <div className="max-w-4xl mx-auto px-4 py-8">
+          {body_markdown && (
+            <div className="prose prose-lg max-w-none dark:prose-invert">
+              <MDXComponent>{body_markdown}</MDXComponent>
+            </div>
+          )}
+        </div>
       </div>
       {tags?.length >= 1 && (
         <div className="my-10 space-y-2">
           <h3 className="text-lg font-medium">Tags:</h3>
           <div className="flex flex-wrap gap-2 pt-2">
-            {tags?.map((stack: string, index: number) => (
+            {tags?.map((stack: string) => (
               <span
-                key={index}
+                key={stack}
                 className="rounded-full bg-neutral-200 px-4 py-1 text-[14px] font-medium text-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
               >
                 {stack}

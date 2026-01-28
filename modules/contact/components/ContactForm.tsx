@@ -2,6 +2,7 @@
 
 import InputField from '@/components/elements/InputField'
 import { Button } from '@/components/ui/button'
+import { FirebaseContactInboxService } from '@/lib/firebase-social-links'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -28,8 +29,21 @@ export default function ContactForm() {
   async function handleFormSubmit(payload: IFormEmail) {
     setIsLoading(true)
     try {
-      const response = await axios.post('/api/email', payload)
-      if (response.status === 200) setIsSuccess(true)
+      // Send to both email API and Firebase inbox
+      const [emailResponse] = await Promise.allSettled([
+        axios.post('/api/email', payload),
+        FirebaseContactInboxService.sendMessage({
+          name: payload.name,
+          email: payload.email,
+          message: payload.message
+        })
+      ])
+
+      // Consider success if email API works (Firebase is optional)
+      if (emailResponse.status === 'fulfilled' && emailResponse.value.status === 200) {
+        setIsSuccess(true)
+      }
+      
       reset()
       setIsLoading(false)
     } catch (error) {

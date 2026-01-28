@@ -9,6 +9,7 @@ export default function GoHome() {
       data-testid="go-home"
       className="mt-8 flex w-full flex-col justify-center space-y-3 px-6 md:flex-row md:space-x-3 md:space-y-0"
       data-aos="zoom-in-down"
+      suppressHydrationWarning={true}
     >
       <Link
         href="/"

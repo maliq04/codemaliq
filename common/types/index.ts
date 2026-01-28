@@ -6,7 +6,7 @@ import { IServices } from './services'
 
 export type IBadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
 
-export interface ICodeBayuData {
+export interface ICodeMaliqData {
   careers: ICareer[]
   projects: IProjectItem[]
   learns: ILearn[]
@@ -18,7 +18,7 @@ export interface IRequestHeader {
   [key: string]: string | number
 }
 
-export interface IResponseCodeBayuService<T> {
+export interface IResponseCodeMaliqService<T> {
   statusCode: number
   message: string
   data: T

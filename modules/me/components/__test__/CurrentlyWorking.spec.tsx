@@ -11,7 +11,7 @@ vi.mock('next/image', () => ({
   __esModule: true,
   default: (
     props: JSX.IntrinsicAttributes & ClassAttributes<HTMLImageElement> & ImgHTMLAttributes<HTMLImageElement>
-  ) => <img {...props} alt="CodeBayu" />
+  ) => <img {...props} alt="CodeMaliq" />
 }))
 
 describe('CurrentlyWorking Component', () => {

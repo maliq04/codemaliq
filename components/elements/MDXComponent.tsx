@@ -29,8 +29,8 @@ const MDXComponent = ({ children }: MarkdownRendererProps) => {
         p: props => <div {...props} className="font-sans" />,
         h2: props => <h2 className="font-sans text-xl font-medium dark:text-neutral-300" {...props} />,
         h3: props => <h3 className="pt-4 text-[18px] font-medium leading-snug dark:text-neutral-300" {...props} />,
-        ul: props => <ul className="list-disc space-y-3 pb-5 pl-10 font-sans" {...props} />,
-        ol: props => <ol className="list-decimal space-y-3 pb-5 pl-10 font-sans" {...props} />,
+        ul: ({ ordered, ...props }) => <ul className="list-disc space-y-3 pb-5 pl-10 font-sans" {...props} />,
+        ol: ({ ordered, ...props }) => <ol className="list-decimal space-y-3 pb-5 pl-10 font-sans" {...props} />,
         code: props => <CodeBlock {...props} />,
         blockquote: props => (
           <blockquote

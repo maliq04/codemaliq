@@ -23,8 +23,8 @@ export default function SkillList() {
           const slider = [...stacksInArray].sort(() => Math.random() - 0.5)
           return (
             <MarqueeElement key={index} direction={index % 2 === 0 ? 'left' : 'right'}>
-              {slider.map(([name, icon], index) => (
-                <SkillCard key={index} name={name} icon={icon} />
+              {slider.map(([name, icon]) => (
+                <SkillCard key={name} name={name} icon={icon} />
               ))}
             </MarqueeElement>
           )

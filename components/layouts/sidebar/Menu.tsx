@@ -14,7 +14,7 @@ export default function Menu({ title, list }: MenuProps) {
           {title}
         </div>
       )}
-      {list?.map((item: MenuItemProps, index: number) => <MenuItem key={index} {...item} />)}
+      {list?.map((item: MenuItemProps) => <MenuItem key={item.href} {...item} />)}
     </div>
   )
 }

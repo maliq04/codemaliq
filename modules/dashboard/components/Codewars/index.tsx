@@ -9,7 +9,7 @@ import { CodewarsData } from '@/common/types/codewars'
 
 import OverviewItem from '../Contributions/OverviewItem'
 
-export default function Codewars({ codewarsData }: { codewarsData: CodewarsData }) {
+export default function Codewars({ codewarsData }: { codewarsData: CodewarsData | null }) {
   return (
     <section>
       <SectionHeading
@@ -31,12 +31,17 @@ export default function Codewars({ codewarsData }: { codewarsData: CodewarsData 
           codewars
         </Link>
       </SectionSubHeading>
-      <div className="grid grid-cols-2 gap-3 py-2 sm:grid-cols-4">
-        <OverviewItem label="Rank" value={Math.abs(codewarsData?.ranks.overall.rank)} unit="kyu" />
-        <OverviewItem label="Honor" value={codewarsData?.honor} />
-        <OverviewItem label="Total Completed Kata" value={codewarsData?.codeChallenges.totalCompleted} />
-        <OverviewItem label="Leaderboard Position" value={codewarsData?.leaderboardPosition} />
-      </div>
+
+      {!codewarsData && <div className="dark:text-neutral-400">No Data</div>}
+
+      {codewarsData && (
+        <div className="grid grid-cols-2 gap-3 py-2 sm:grid-cols-4">
+          <OverviewItem label="Rank" value={Math.abs(codewarsData?.ranks.overall.rank)} unit="kyu" />
+          <OverviewItem label="Honor" value={codewarsData?.honor} />
+          <OverviewItem label="Total Completed Kata" value={codewarsData?.codeChallenges.totalCompleted} />
+          <OverviewItem label="Leaderboard Position" value={codewarsData?.leaderboardPosition} />
+        </div>
+      )}
     </section>
   )
 }

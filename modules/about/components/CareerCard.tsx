@@ -59,7 +59,14 @@ export default function CareerCard({ position, company, logo, location, start_da
           )}
         >
           {logo ? (
-            <Image src={getCloudinaryUrl(logo)} width={55} height={55} alt={company} className="relative z-10" />
+            <Image 
+              src={getCloudinaryUrl(logo)} 
+              width={55} 
+              height={55} 
+              alt={company} 
+              className="relative z-10" 
+              style={{ width: 'auto', height: 'auto' }}
+            />
           ) : (
             <CompanyIcon size={30} />
           )}

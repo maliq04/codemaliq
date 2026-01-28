@@ -1,0 +1,45 @@
+JOHN DOE - SOFTWARE DEVELOPER
+================================
+
+CONTACT INFORMATION
+-------------------
+Email: john.doe@example.com
+Phone: +1 (555) 123-4567
+LinkedIn: linkedin.com/in/johndoe
+GitHub: github.com/johndoe
+
+PROFESSIONAL EXPERIENCE
+------------------------
+Senior Software Developer | Tech Company | 2020-Present
+• Developed web applications using React and Node.js
+• Led a team of 5 developers
+• Implemented CI/CD pipelines
+• Worked with Firebase and cloud services
+
+Software Developer | StartupCorp | 2018-2020
+• Built responsive web applications
+• Collaborated with design team
+• Implemented real-time features
+
+TECHNICAL SKILLS
+----------------
+Languages: JavaScript, TypeScript, Python
+Frontend: React, Next.js, HTML5, CSS3, Tailwind CSS
+Backend: Node.js, Express, Firebase, MongoDB
+Tools: Git, Docker, AWS, CI/CD
+
+EDUCATION
+---------
+Bachelor of Science in Computer Science
+University of Technology | 2014-2018
+
+PROJECTS
+--------
+• Portfolio Website - Personal portfolio with blog system
+• E-commerce Platform - Full-stack online store
+• Real-time Chat App - WebSocket-based messaging system
+
+---
+This is a test CV file for Firebase upload testing.
+Generated on: January 26, 2026
+File format: Plain text (for testing purposes)

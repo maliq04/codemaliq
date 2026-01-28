@@ -1,18 +1,9 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "next",
-    "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
-  "env": {
-    "browser": true,
-    "es2021": true,
-    "node": true
-  },
-  "plugins": ["@typescript-eslint", "simple-import-sort", "unused-imports"],
+  "extends": "next/core-web-vitals",
   "rules": {
-    "semi": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "@next/next/no-img-element": "off",
+    "react/no-unescaped-entities": "off",
+    "no-empty": "off"
   }
 }

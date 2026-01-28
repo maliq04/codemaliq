@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 
 import Container from '@/components/elements/Container'
 import PageHeading from '@/components/elements/PageHeading'
-import { getCodeBayuData, getPromotions } from '@/services/codebayu'
+import { getCodemaliqData, getPromotions } from '@/services/codemaliq'
 
 import { METADATA } from '@/common/constant/metadata'
 import { IAdsBanner } from '@/common/types/ads'
@@ -22,7 +22,7 @@ const PAGE_TITLE = 'Roadmap'
 const PAGE_DESCRIPTION = 'Learning path recomendation and free course playlist'
 
 export default async function RoadmapPage() {
-  const roadmaps = await getRoadmaps()
+  const { roadmaps } = await getCodemaliqData()
   const promotions = await getPromotions()
   const promotion = promotions.find((item: IAdsBanner) => item.showingOn.includes('/roadmap'))
   return (
@@ -33,9 +33,4 @@ export default async function RoadmapPage() {
       </Container>
     </>
   )
-}
-
-async function getRoadmaps(): Promise<IRoadmap> {
-  const response = await getCodeBayuData()
-  return response.roadmaps
 }

@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CopyIcon } from '@radix-ui/react-icons'
+import { useEffect, useState } from 'react'
 import {
   EmailIcon,
   EmailShareButton,
@@ -20,8 +20,11 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 
 export default function SocialShare() {
-  const url = window.location.href
-  const [value, copy] = useCopyToClipboard()
+  const [, copy] = useCopyToClipboard()
+  const [url, setUrl] = useState('')
+  useEffect(() => {
+    setUrl(window.location.href)
+  }, [])
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-wrap items-center gap-2">

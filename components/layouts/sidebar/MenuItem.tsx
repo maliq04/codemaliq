@@ -16,7 +16,7 @@ export default function MenuItem({ title, href, icon, onClick, className = '', c
   const isExternalUrl = href?.includes('http')
   const isHashLink = href === '#'
   const pathname = usePathname()
-  const url = new URL(href, 'https://codebayu.com')
+  const url = new URL(href, 'https://codemaliq.com')
 
   const activeClasses = `flex ${
     !isHover ? 'justify-center px-4 py-2 rounded-lg lg:rounded-full lg:p-2' : 'lg:rounded-lg lg:py-2 lg:px-4'

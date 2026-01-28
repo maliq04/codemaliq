@@ -9,7 +9,7 @@ interface MultiplePromotionProps {
 export default function MultiplePromotion({ data }: MultiplePromotionProps) {
   return (
     <div className="mt-6 flex flex-col items-center gap-2">
-      {data?.map((banner: IAdsBanner, index: number) => <AdsBanner key={index} data={banner} />)}
+      {data?.map((banner: IAdsBanner, index: number) => <AdsBanner key={`${banner.title}-${index}`} data={banner} />)}
     </div>
   )
 }
