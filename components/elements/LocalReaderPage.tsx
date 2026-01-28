@@ -27,20 +27,7 @@ interface LocalStats {
 }
 
 export default function LocalReaderPage({ content, pageViewCount }: LocalReaderProps) {
-  // Safety check for content
-  if (!content) {
-    return (
-      <div className="p-8 text-center">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          Error: No content provided to LocalReaderPage
-        </div>
-      </div>
-    )
-  }
-
-  const { cover_image, title, body_markdown, published_at, tags, reading_time_minutes, slug } = content
-  
-  // Initialize state with error handling
+  // Initialize all hooks at the top level (unconditionally)
   const [stats, setStats] = useState<LocalStats>({
     views: pageViewCount || 0,
     likes: 0,
@@ -54,6 +41,64 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
     bookmarked: false
   })
 
+  // Load stats and user interactions on mount (must be before early return)
+  useEffect(() => {
+    if (!content?.slug) return
+    
+    const loadStats = async () => {
+      try {
+        const response = await fetch(`/api/blog/${content.slug}/stats`)
+        if (response.ok) {
+          const data = await response.json()
+          if (data.success) {
+            setStats(prev => ({ ...prev, ...data.data }))
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load stats:', error)
+      }
+    }
+
+    const loadUserInteractions = () => {
+      try {
+        const liked = localStorage.getItem(`liked_${content.slug}`) === 'true'
+        const bookmarked = localStorage.getItem(`bookmarked_${content.slug}`) === 'true'
+        setUserInteractions({ liked, bookmarked })
+      } catch (error) {
+        console.error('Failed to load user interactions:', error)
+      }
+    }
+
+    const trackView = async () => {
+      try {
+        await fetch(`/api/blog/${content.slug}/stats`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'view' })
+        })
+      } catch (error) {
+        console.error('Failed to track view:', error)
+      }
+    }
+    
+    loadStats()
+    loadUserInteractions()
+    trackView()
+  }, [content?.slug])
+
+  // Safety check for content (after hooks)
+  if (!content) {
+    return (
+      <div className="p-8 text-center">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          Error: No content provided to LocalReaderPage
+        </div>
+      </div>
+    )
+  }
+
+  const { cover_image, title, body_markdown, published_at, tags, reading_time_minutes, slug } = content
+  
   // Simplified functions with error handling
   const loadStats = async () => {
     if (!slug) return
