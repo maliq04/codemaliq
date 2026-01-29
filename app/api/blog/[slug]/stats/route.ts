@@ -1,19 +1,23 @@
 import { NextResponse } from 'next/server'
-import { database } from '@/lib/firebase-admin'
+
+import { getAdminDatabase } from '@/lib/firebase-admin'
 
 /**
  * GET /api/blog/[slug]/stats
  * Get blog post statistics (views, likes, comments, shares)
  */
-export async function GET(
-  request: Request,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(request: Request, { params }: { params: { slug: string } }) {
   try {
     const { slug } = params
+    const database = getAdminDatabase()
+    
+    if (!database) {
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
+    }
+    
     const statsRef = database.ref(`blog_stats/${slug}`)
     const snapshot = await statsRef.once('value')
-    
+
     const stats = snapshot.val() || {
       views: 0,
       likes: 0,
@@ -21,17 +25,14 @@ export async function GET(
       shares: 0,
       bookmarks: 0
     }
-    
+
     return NextResponse.json({
       success: true,
       data: stats
     })
   } catch (error) {
     console.error('Error fetching blog stats:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch stats' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to fetch stats' }, { status: 500 })
   }
 }
 
@@ -39,15 +40,18 @@ export async function GET(
  * POST /api/blog/[slug]/stats
  * Update blog post statistics
  */
-export async function POST(
-  request: Request,
-  { params }: { params: { slug: string } }
-) {
+export async function POST(request: Request, { params }: { params: { slug: string } }) {
   try {
     const { slug } = params
     const body = await request.json()
     const { action } = body // 'view', 'like', 'unlike', 'comment', 'share'
+
+    const database = getAdminDatabase()
     
+    if (!database) {
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
+    }
+
     const statsRef = database.ref(`blog_stats/${slug}`)
     const snapshot = await statsRef.once('value')
     const currentStats = snapshot.val() || {
@@ -57,7 +61,7 @@ export async function POST(
       shares: 0,
       bookmarks: 0
     }
-    
+
     switch (action) {
       case 'view':
         currentStats.views += 1
@@ -81,23 +85,17 @@ export async function POST(
         currentStats.bookmarks = Math.max(0, currentStats.bookmarks - 1)
         break
       default:
-        return NextResponse.json(
-          { success: false, error: 'Invalid action' },
-          { status: 400 }
-        )
+        return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 })
     }
-    
+
     await statsRef.set(currentStats)
-    
+
     return NextResponse.json({
       success: true,
       data: currentStats
     })
   } catch (error) {
     console.error('Error updating blog stats:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to update stats' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to update stats' }, { status: 500 })
   }
 }

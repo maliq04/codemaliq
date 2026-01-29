@@ -1,4 +1,4 @@
-import { database } from '@/lib/firebase-admin'
+import { getAdminDatabase } from '@/lib/firebase-admin'
 
 export type AuditAction = 'create' | 'update' | 'delete'
 export type AuditResourceType = 'blog' | 'project' | 'chat' | 'contact' | 'media' | 'config' | 'learn' | 'roadmap'
@@ -32,6 +32,13 @@ export interface CreateAuditLogParams {
  */
 export async function createAuditLog(params: CreateAuditLogParams): Promise<string | null> {
   try {
+    const database = getAdminDatabase()
+    
+    if (!database) {
+      console.warn('Database not available for audit logging')
+      return null
+    }
+    
     const auditLogsRef = database.ref('audit_logs')
 
     // Clean the log entry to remove undefined values that Firebase doesn't allow
@@ -49,7 +56,7 @@ export async function createAuditLog(params: CreateAuditLogParams): Promise<stri
     if (params.changes && Object.keys(params.changes).length > 0) {
       logEntry.changes = params.changes
     }
-    
+
     if (params.ipAddress) {
       logEntry.ipAddress = params.ipAddress
     }
@@ -67,6 +74,13 @@ export async function createAuditLog(params: CreateAuditLogParams): Promise<stri
  */
 export async function getAuditLogs(limit: number = 50): Promise<AuditLog[]> {
   try {
+    const database = getAdminDatabase()
+    
+    if (!database) {
+      console.warn('Database not available for audit logs')
+      return []
+    }
+    
     const auditLogsRef = database.ref('audit_logs')
     const logsQuery = auditLogsRef.orderByChild('timestamp').limitToLast(limit)
 
