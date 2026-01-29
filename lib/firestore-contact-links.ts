@@ -1,17 +1,18 @@
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  doc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  orderBy, 
-  where,
-  serverTimestamp,
-  Timestamp 
-} from 'firebase/firestore'
 import { db } from '@/firebase'
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where
+} from 'firebase/firestore'
+
 import { ContactLinksFallback } from './contact-links-fallback'
 
 export interface ContactLink {
@@ -47,7 +48,7 @@ async function isFirestoreAvailable(): Promise<boolean> {
 export const getAllContactLinks = async (): Promise<ContactLink[]> => {
   try {
     const firestoreAvailable = await isFirestoreAvailable()
-    
+
     if (!firestoreAvailable) {
       console.log('Using fallback storage for contact links')
       return ContactLinksFallback.getAll().map(link => ({
@@ -59,11 +60,14 @@ export const getAllContactLinks = async (): Promise<ContactLink[]> => {
 
     const q = query(collection(db, COLLECTION_NAME), orderBy('order', 'asc'))
     const querySnapshot = await getDocs(q)
-    
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as ContactLink))
+
+    return querySnapshot.docs.map(
+      doc =>
+        ({
+          id: doc.id,
+          ...doc.data()
+        }) as ContactLink
+    )
   } catch (error) {
     console.error('Error fetching contact links, using fallback:', error)
     return ContactLinksFallback.getAll().map(link => ({
@@ -78,7 +82,7 @@ export const getAllContactLinks = async (): Promise<ContactLink[]> => {
 export const getActiveContactLinks = async (): Promise<ContactLink[]> => {
   try {
     const firestoreAvailable = await isFirestoreAvailable()
-    
+
     if (!firestoreAvailable) {
       console.log('Using fallback storage for active contact links')
       return ContactLinksFallback.getActive().map(link => ({
@@ -88,17 +92,16 @@ export const getActiveContactLinks = async (): Promise<ContactLink[]> => {
       }))
     }
 
-    const q = query(
-      collection(db, COLLECTION_NAME), 
-      where('isActive', '==', true),
-      orderBy('order', 'asc')
-    )
+    const q = query(collection(db, COLLECTION_NAME), where('isActive', '==', true), orderBy('order', 'asc'))
     const querySnapshot = await getDocs(q)
-    
-    return querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as ContactLink))
+
+    return querySnapshot.docs.map(
+      doc =>
+        ({
+          id: doc.id,
+          ...doc.data()
+        }) as ContactLink
+    )
   } catch (error) {
     console.error('Error fetching active contact links, using fallback:', error)
     return ContactLinksFallback.getActive().map(link => ({
@@ -110,7 +113,9 @@ export const getActiveContactLinks = async (): Promise<ContactLink[]> => {
 }
 
 // Add new contact link
-export const addContactLink = async (linkData: Omit<ContactLink, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> => {
+export const addContactLink = async (
+  linkData: Omit<ContactLink, 'id' | 'createdAt' | 'updatedAt'>
+): Promise<string> => {
   try {
     // Validate required fields
     if (!linkData.title || !linkData.url) {
@@ -123,7 +128,7 @@ export const addContactLink = async (linkData: Omit<ContactLink, 'id' | 'created
     }
 
     const firestoreAvailable = await isFirestoreAvailable()
-    
+
     if (!firestoreAvailable) {
       console.log('Using fallback storage to add contact link')
       const newLink = ContactLinksFallback.add(linkData)
@@ -149,10 +154,18 @@ export const addContactLink = async (linkData: Omit<ContactLink, 'id' | 'created
 export const updateContactLink = async (id: string, updateData: Partial<ContactLink>): Promise<void> => {
   try {
     const firestoreAvailable = await isFirestoreAvailable()
-    
+
     if (!firestoreAvailable) {
       console.log('Using fallback storage to update contact link')
-      const updated = ContactLinksFallback.update(id, updateData)
+      
+      // Convert Firestore types to fallback types
+      const fallbackUpdateData: Partial<import('./contact-links-fallback').ContactLink> = {
+        ...updateData,
+        createdAt: updateData.createdAt instanceof Timestamp ? updateData.createdAt.toDate().toISOString() : updateData.createdAt,
+        updatedAt: updateData.updatedAt instanceof Timestamp ? updateData.updatedAt.toDate().toISOString() : updateData.updatedAt
+      }
+      
+      const updated = ContactLinksFallback.update(id, fallbackUpdateData)
       if (!updated) {
         throw new Error('Contact link not found')
       }
@@ -160,7 +173,7 @@ export const updateContactLink = async (id: string, updateData: Partial<ContactL
     }
 
     const docRef = doc(db, COLLECTION_NAME, id)
-    
+
     const dataToUpdate = {
       ...updateData,
       updatedAt: serverTimestamp()
@@ -187,7 +200,7 @@ export const updateContactLink = async (id: string, updateData: Partial<ContactL
 export const deleteContactLink = async (id: string): Promise<void> => {
   try {
     const firestoreAvailable = await isFirestoreAvailable()
-    
+
     if (!firestoreAvailable) {
       console.log('Using fallback storage to delete contact link')
       const deleted = ContactLinksFallback.delete(id)
@@ -262,7 +275,7 @@ export const initializeDefaultContactLinks = async (): Promise<ContactLink[]> =>
     ]
 
     const initializedLinks: ContactLink[] = []
-    
+
     for (const link of defaultLinks) {
       const id = await addContactLink(link)
       initializedLinks.push({
