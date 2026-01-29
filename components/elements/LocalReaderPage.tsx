@@ -1,6 +1,5 @@
 'use client'
 
-import Image from '@/components/elements/Image'
 import { useState, useEffect } from 'react'
 
 import Breakline from '@/components/elements/Breakline'
@@ -98,58 +97,6 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
   }
 
   const { cover_image, title, body_markdown, published_at, tags, reading_time_minutes, slug } = content
-  
-  // Simplified functions with error handling
-  const loadStats = async () => {
-    if (!slug) return
-    
-    try {
-      const response = await fetch(`/api/blog/${slug}/stats`)
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success && setStats) {
-          setStats(prev => ({ ...prev, ...data.data }))
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load stats:', error)
-    }
-  }
-
-  const loadUserInteractions = () => {
-    if (!slug || !setUserInteractions) return
-    
-    try {
-      const liked = localStorage.getItem(`liked_${slug}`) === 'true'
-      const bookmarked = localStorage.getItem(`bookmarked_${slug}`) === 'true'
-      setUserInteractions({ liked, bookmarked })
-    } catch (error) {
-      console.error('Failed to load user interactions:', error)
-    }
-  }
-
-  const trackView = async () => {
-    if (!slug) return
-    
-    try {
-      await fetch(`/api/blog/${slug}/stats`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'view' })
-      })
-    } catch (error) {
-      console.error('Failed to track view:', error)
-    }
-  }
-
-  // Load stats and user interactions on mount
-  useEffect(() => {
-    if (!slug) return
-    
-    loadStats()
-    loadUserInteractions()
-    trackView()
-  }, [slug])
 
   const handleLike = async () => {
     if (!slug || !setStats || !setUserInteractions) return

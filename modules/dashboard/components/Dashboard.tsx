@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Breakline from '@/components/elements/Breakline'
 
 import { CodewarsData } from '@/common/types/codewars'
