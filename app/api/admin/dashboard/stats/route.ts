@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuth } from '@/lib/api/admin-middleware'
+import { getAdminDatabase } from '@/lib/firebase-admin'
 import { listMDXFiles, readJSONFile } from '@/lib/fs-utils'
-import { database } from '@/lib/firebase-admin'
+
 import type { DashboardStats } from '@/common/types/admin'
 
 async function getStats() {

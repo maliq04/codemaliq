@@ -1,4 +1,4 @@
-import { database } from '@/lib/firebase-admin'
+import { getAdminDatabase } from '@/lib/firebase-admin'
 
 export interface MediaItem {
   id: string
@@ -23,11 +23,11 @@ export async function uploadToFirebaseDatabase(
 ): Promise<MediaItem | null> {
   try {
     const mediaRef = database.ref('media')
-    
+
     // Convert buffer to base64
     const base64Data = file.toString('base64')
     const dataUrl = `data:image/jpeg;base64,${base64Data}`
-    
+
     // Create media item
     const mediaItem: Omit<MediaItem, 'id'> = {
       name: fileName,
@@ -37,10 +37,10 @@ export async function uploadToFirebaseDatabase(
       created: new Date().toISOString(),
       folder
     }
-    
+
     // Push to database
     const newMediaRef = await mediaRef.push(mediaItem)
-    
+
     return {
       id: newMediaRef.key!,
       ...mediaItem
@@ -74,13 +74,13 @@ export async function listFirebaseDatabaseMedia(folder?: string): Promise<MediaI
   try {
     const mediaRef = database.ref('media')
     const snapshot = await mediaRef.once('value')
-    
+
     if (!snapshot.exists()) {
       return []
     }
-    
+
     const mediaList: MediaItem[] = []
-    snapshot.forEach((childSnapshot) => {
+    snapshot.forEach(childSnapshot => {
       const data = childSnapshot.val()
       if (!folder || data.folder === folder) {
         mediaList.push({
@@ -90,10 +90,10 @@ export async function listFirebaseDatabaseMedia(folder?: string): Promise<MediaI
       }
       return false // Continue iteration
     })
-    
+
     // Sort by created date, newest first
     mediaList.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
-    
+
     return mediaList
   } catch (error) {
     console.error('Error listing Firebase Database media:', error)
@@ -109,11 +109,11 @@ export async function getFirebaseDatabaseMedia(mediaId: string): Promise<MediaIt
   try {
     const mediaRef = database.ref(`media/${mediaId}`)
     const snapshot = await mediaRef.once('value')
-    
+
     if (!snapshot.exists()) {
       return null
     }
-    
+
     return {
       id: snapshot.key!,
       ...snapshot.val()

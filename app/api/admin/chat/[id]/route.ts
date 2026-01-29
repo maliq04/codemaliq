@@ -1,13 +1,23 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { database } from '@/lib/firebase-admin'
 import { createAuditLog } from '@/lib/audit-log'
+import { getAdminDatabase } from '@/lib/firebase-admin'
 
 export const DELETE = withAdminAuthSession(async (request, session, context) => {
   try {
     const { id } = context?.params || {}
-    const chatRef = database.ref(`chat/${id}`)
+    const database = getAdminDatabase()
     
+    if (!database) {
+      return NextResponse.json(
+        { success: false, error: 'Database not available' },
+        { status: 503 }
+      )
+    }
+    
+    const chatRef = database.ref(`chat/${id}`)
+
     const snapshot = await chatRef.once('value')
     const message = snapshot.val()
 
@@ -53,6 +63,15 @@ export const PUT = withAdminAuthSession(async (request, session, context) => {
     const { id } = context?.params || {}
     const body = await request.json()
     const { is_show, flagged } = body
+
+    const database = getAdminDatabase()
+    
+    if (!database) {
+      return NextResponse.json(
+        { success: false, error: 'Database not available' },
+        { status: 503 }
+      )
+    }
 
     const chatRef = database.ref(`chat/${id}`)
     const snapshot = await chatRef.once('value')
