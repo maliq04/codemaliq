@@ -10,8 +10,8 @@ export function careerDto(career: ICareerCMS) {
     location: career.location,
     location_type: career.locationType,
     type: career.type,
-    start_date: new Date(career.startDate),
-    end_date: career.endDate ? new Date(career.endDate) : null,
+    start_date: career.startDate,
+    end_date: career.endDate,
     link: career.link,
     slug: career.slug
   }

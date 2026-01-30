@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { options } from '@/app/api/auth/[...nextauth]/options'
 import { createAuditLog } from '@/lib/audit-log'
-import { database } from '@/lib/firebase-admin'
+import { getAdminDatabase } from '@/lib/firebase-admin'
 import { getServerSession } from 'next-auth'
 
 /**
@@ -17,6 +17,12 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     }
 
     const { id } = params
+
+    const database = getAdminDatabase()
+
+    if (!database) {
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
+    }
 
     // Get file data before deletion for logging
     const fileRef = database.ref(`admin/uploaded_files/${id}`)

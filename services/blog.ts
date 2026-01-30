@@ -203,60 +203,67 @@ async function getLocalBlogPosts(): Promise<BlogItem[]> {
 
     // 2. Get admin-created posts from Firebase (if available)
     try {
-      const { database } = await import('@/lib/firebase-admin')
-      const adminPostsRef = database.ref('admin/blog_posts')
-      const snapshot = await adminPostsRef.once('value')
-      const adminPosts = snapshot.val()
+      const { getAdminDatabase } = await import('@/lib/firebase-admin')
+      const database = getAdminDatabase()
 
-      if (adminPosts) {
-        console.log('Admin posts found in Firebase:', Object.keys(adminPosts).length)
+      if (database) {
+        const adminPostsRef = database.ref('admin/blog_posts')
+        const snapshot = await adminPostsRef.once('value')
+        const adminPosts = snapshot.val()
 
-        Object.entries(adminPosts).forEach(([postId, postData]: [string, any]) => {
-          if (postData && postData.published !== false) {
-            const adminPost = {
-              type_of: 'article',
-              id: parseInt(postId) || Date.now(),
-              title: postData.title || 'Untitled',
-              description: postData.description || postData.excerpt || '',
-              published: postData.published !== false,
-              published_at: postData.publishedAt || postData.createdAt || new Date().toISOString(),
-              slug: postData.slug || postId,
-              path: `/blog/${postData.slug || postId}`,
-              url: `${process.env.DOMAIN || ''}/blog/${postData.slug || postId}?id=admin-${postId}`,
-              comments_count: postData.commentsCount || 0,
-              public_reactions_count: postData.likesCount || 0,
-              page_views_count: postData.viewsCount || 0,
-              published_timestamp: postData.publishedAt || postData.createdAt || new Date().toISOString(),
-              body_markdown: postData.content || postData.body || '',
-              positive_reactions_count: postData.likesCount || 0,
-              cover_image: postData.coverImage || postData.image || '',
-              tag_list: postData.tags || [],
-              canonical_url: `${process.env.DOMAIN || ''}/blog/${postData.slug || postId}`,
-              reading_time_minutes: Math.ceil((postData.content || '').split(' ').length / 200),
-              user: {
-                name: postData.author || 'Maliq Al Fathir',
-                username: 'codemaliq',
-                twitter_username: null,
-                github_username: 'maliq04',
-                user_id: 0,
-                profile_image: process.env.NEXT_PUBLIC_PROFILE_IMAGE || '',
-                profile_image_90: process.env.NEXT_PUBLIC_PROFILE_IMAGE || '',
-                website_url: process.env.DOMAIN || ''
-              },
-              db_views_count: postData.viewsCount || 0,
-              total_views_count: postData.viewsCount || 0,
-              created_at: postData.createdAt || new Date().toISOString(),
-              collection_id: postData.category === 'nextjs' ? 24593 : postData.category === 'typescript' ? 24596 : null,
-              tags: Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags || '',
-              // Add flags to identify post type
-              is_local: true,
-              post_type: 'admin',
-              source: 'firebase'
+        if (adminPosts) {
+          console.log('Admin posts found in Firebase:', Object.keys(adminPosts).length)
+
+          Object.entries(adminPosts).forEach(([postId, postData]: [string, any]) => {
+            if (postData && postData.published !== false) {
+              const adminPost = {
+                type_of: 'article',
+                id: parseInt(postId) || Date.now(),
+                title: postData.title || 'Untitled',
+                description: postData.description || postData.excerpt || '',
+                published: postData.published !== false,
+                published_at: postData.publishedAt || postData.createdAt || new Date().toISOString(),
+                slug: postData.slug || postId,
+                path: `/blog/${postData.slug || postId}`,
+                url: `${process.env.DOMAIN || ''}/blog/${postData.slug || postId}?id=admin-${postId}`,
+                comments_count: postData.commentsCount || 0,
+                public_reactions_count: postData.likesCount || 0,
+                page_views_count: postData.viewsCount || 0,
+                published_timestamp: postData.publishedAt || postData.createdAt || new Date().toISOString(),
+                body_markdown: postData.content || postData.body || '',
+                positive_reactions_count: postData.likesCount || 0,
+                cover_image: postData.coverImage || postData.image || '',
+                tag_list: postData.tags || [],
+                canonical_url: `${process.env.DOMAIN || ''}/blog/${postData.slug || postId}`,
+                reading_time_minutes: Math.ceil((postData.content || '').split(' ').length / 200),
+                user: {
+                  name: postData.author || 'Maliq Al Fathir',
+                  username: 'codemaliq',
+                  twitter_username: null,
+                  github_username: 'maliq04',
+                  user_id: 0,
+                  profile_image: process.env.NEXT_PUBLIC_PROFILE_IMAGE || '',
+                  profile_image_90: process.env.NEXT_PUBLIC_PROFILE_IMAGE || '',
+                  website_url: process.env.DOMAIN || ''
+                },
+                db_views_count: postData.viewsCount || 0,
+                total_views_count: postData.viewsCount || 0,
+                created_at: postData.createdAt || new Date().toISOString(),
+                collection_id:
+                  postData.category === 'nextjs' ? 24593 : postData.category === 'typescript' ? 24596 : null,
+                tags: Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags || '',
+                // Add flags to identify post type
+                is_local: true,
+                post_type: 'admin',
+                source: 'firebase'
+              }
+
+              posts.push(adminPost as any)
             }
-
-            posts.push(adminPost as any)
-          }
-        })
+          })
+        }
+      } else {
+        console.log('Database not available for admin posts')
       }
     } catch (firebaseError) {
       console.log('Firebase admin posts not available:', firebaseError)
@@ -303,53 +310,59 @@ export async function getBlogDetail({ searchParams }: Props): Promise<BlogDetail
     console.log('adminPostId:', adminPostId)
 
     try {
-      const { database } = await import('@/lib/firebase-admin')
-      const adminPostRef = database.ref(`admin/blog_posts/${adminPostId}`)
-      const snapshot = await adminPostRef.once('value')
-      const postData = snapshot.val()
+      const { getAdminDatabase } = await import('@/lib/firebase-admin')
+      const database = getAdminDatabase()
 
-      if (postData) {
-        console.log('Admin post found!')
-        console.log('title:', postData.title)
-        console.log('content length:', (postData.content || '').length)
+      if (database) {
+        const adminPostRef = database.ref(`admin/blog_posts/${adminPostId}`)
+        const snapshot = await adminPostRef.once('value')
+        const postData = snapshot.val()
 
-        return {
-          type_of: 'article',
-          id: parseInt(adminPostId) || Date.now(),
-          title: postData.title || 'Untitled',
-          description: postData.description || postData.excerpt || '',
-          readable_publish_date: new Date(
-            postData.publishedAt || postData.createdAt || new Date()
-          ).toLocaleDateString(),
-          published_at: postData.publishedAt || postData.createdAt || new Date().toISOString(),
-          created_at: postData.createdAt || new Date().toISOString(),
-          slug: postData.slug || adminPostId,
-          path: `/blog/${postData.slug || adminPostId}`,
-          url: `${process.env.DOMAIN || ''}/blog/${postData.slug || adminPostId}?id=${postId}`,
-          comments_count: postData.commentsCount || 0,
-          public_reactions_count: postData.likesCount || 0,
-          collection_id: postData.category === 'nextjs' ? 24593 : postData.category === 'typescript' ? 24596 : null,
-          published_timestamp: postData.publishedAt || postData.createdAt || new Date().toISOString(),
-          positive_reactions_count: postData.likesCount || 0,
-          cover_image: postData.coverImage || postData.image || '',
-          social_image: postData.coverImage || postData.image || '',
-          canonical_url: `${process.env.DOMAIN || ''}/blog/${postData.slug || adminPostId}`,
-          edited_at: postData.updatedAt || null,
-          crossposted_at: null,
-          last_comment_at: null,
-          tag_list: Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags || '',
-          tags: Array.isArray(postData.tags) ? postData.tags : postData.tags ? [postData.tags] : [],
-          reading_time_minutes: Math.ceil((postData.content || '').split(' ').length / 200),
-          body_html: `<div>${postData.content || ''}</div>`,
-          body_markdown: postData.content || '',
-          user: {
-            ...defaultUser,
-            name: postData.author || defaultUser.name
-          },
-          blog_slug: null
-        } as BlogDetailProps
+        if (postData) {
+          console.log('Admin post found!')
+          console.log('title:', postData.title)
+          console.log('content length:', (postData.content || '').length)
+
+          return {
+            type_of: 'article',
+            id: parseInt(adminPostId) || Date.now(),
+            title: postData.title || 'Untitled',
+            description: postData.description || postData.excerpt || '',
+            readable_publish_date: new Date(
+              postData.publishedAt || postData.createdAt || new Date()
+            ).toLocaleDateString(),
+            published_at: postData.publishedAt || postData.createdAt || new Date().toISOString(),
+            created_at: postData.createdAt || new Date().toISOString(),
+            slug: postData.slug || adminPostId,
+            path: `/blog/${postData.slug || adminPostId}`,
+            url: `${process.env.DOMAIN || ''}/blog/${postData.slug || adminPostId}?id=${postId}`,
+            comments_count: postData.commentsCount || 0,
+            public_reactions_count: postData.likesCount || 0,
+            collection_id: postData.category === 'nextjs' ? 24593 : postData.category === 'typescript' ? 24596 : null,
+            published_timestamp: postData.publishedAt || postData.createdAt || new Date().toISOString(),
+            positive_reactions_count: postData.likesCount || 0,
+            cover_image: postData.coverImage || postData.image || '',
+            social_image: postData.coverImage || postData.image || '',
+            canonical_url: `${process.env.DOMAIN || ''}/blog/${postData.slug || adminPostId}`,
+            edited_at: postData.updatedAt || null,
+            crossposted_at: null,
+            last_comment_at: null,
+            tag_list: Array.isArray(postData.tags) ? postData.tags.join(', ') : postData.tags || '',
+            tags: Array.isArray(postData.tags) ? postData.tags : postData.tags ? [postData.tags] : [],
+            reading_time_minutes: Math.ceil((postData.content || '').split(' ').length / 200),
+            body_html: `<div>${postData.content || ''}</div>`,
+            body_markdown: postData.content || '',
+            user: {
+              ...defaultUser,
+              name: postData.author || defaultUser.name
+            },
+            blog_slug: null
+          } as BlogDetailProps
+        } else {
+          console.error('Admin post not found in Firebase')
+        }
       } else {
-        console.error('Admin post not found in Firebase')
+        console.log('Database not available for admin post')
       }
     } catch (error) {
       console.error('Error reading admin blog post:', error)

@@ -23,30 +23,44 @@ async function getStats() {
     const totalProjects = config?.projects?.length || 0
     const recentProjects = 0 // Will be implemented with timestamps
 
-    // Get chat messages count from Firebase using Admin SDK
-    const chatRef = database.ref('chat')
-    const chatSnapshot = await chatRef.once('value')
-    const totalChatMessages = chatSnapshot.exists() ? Object.keys(chatSnapshot.val()).length : 0
-    const recentMessages = 0 // Will be implemented with date filtering
+    // Get database instance
+    const database = getAdminDatabase()
 
-    // Get contacts count from Firebase using Admin SDK
-    const contactsRef = database.ref('contacts')
-    const contactsSnapshot = await contactsRef.once('value')
+    let totalChatMessages = 0
+    let recentMessages = 0
     let unreadContacts = 0
     let recentContacts = 0
 
-    if (contactsSnapshot.exists()) {
-      const contacts = contactsSnapshot.val()
-      Object.values(contacts).forEach((contact: any) => {
-        if (!contact.read) {
-          unreadContacts++
+    if (database) {
+      try {
+        // Get chat messages count from Firebase using Admin SDK
+        const chatRef = database.ref('chat')
+        const chatSnapshot = await chatRef.once('value')
+        totalChatMessages = chatSnapshot.exists() ? Object.keys(chatSnapshot.val()).length : 0
+        recentMessages = 0 // Will be implemented with date filtering
+
+        // Get contacts count from Firebase using Admin SDK
+        const contactsRef = database.ref('contacts')
+        const contactsSnapshot = await contactsRef.once('value')
+
+        if (contactsSnapshot.exists()) {
+          const contacts = contactsSnapshot.val()
+          Object.values(contacts).forEach((contact: any) => {
+            if (!contact.read) {
+              unreadContacts++
+            }
+            // Check if recent (last 7 days)
+            const contactDate = new Date(contact.timestamp)
+            if (contactDate >= sevenDaysAgo) {
+              recentContacts++
+            }
+          })
         }
-        // Check if recent (last 7 days)
-        const contactDate = new Date(contact.timestamp)
-        if (contactDate >= sevenDaysAgo) {
-          recentContacts++
-        }
-      })
+      } catch (firebaseError) {
+        console.warn('Firebase data unavailable for dashboard stats:', firebaseError)
+      }
+    } else {
+      console.warn('Database not available for dashboard stats')
     }
 
     const stats: DashboardStats = {

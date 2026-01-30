@@ -4,11 +4,11 @@ import { getAdminDb } from './firebase-admin'
 export async function testFirebaseConnection() {
   try {
     const adminDb = getAdminDb()
-    
+
     if (!adminDb) {
       return { success: false, error: 'Firebase Admin not available' }
     }
-    
+
     // Try to access Firestore
     const testCollection = adminDb.collection('test')
     const snapshot = await testCollection.limit(1).get()
@@ -27,6 +27,12 @@ export async function testFirebaseConnection() {
 // Example function to create a document
 export async function createDocument(collection: string, data: any) {
   try {
+    const adminDb = getAdminDb()
+
+    if (!adminDb) {
+      return { success: false, error: 'Firebase Admin not available' }
+    }
+
     const docRef = await adminDb.collection(collection).add({
       ...data,
       createdAt: new Date(),
@@ -45,8 +51,14 @@ export async function createDocument(collection: string, data: any) {
 // Example function to get documents
 export async function getDocuments(collection: string, limit = 10) {
   try {
+    const adminDb = getAdminDb()
+
+    if (!adminDb) {
+      return { success: false, error: 'Firebase Admin not available' }
+    }
+
     const snapshot = await adminDb.collection(collection).limit(limit).get()
-    const documents = snapshot.docs.map(doc => ({
+    const documents = snapshot.docs.map((doc: any) => ({
       id: doc.id,
       ...doc.data()
     }))

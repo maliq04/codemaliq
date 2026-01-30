@@ -9,15 +9,12 @@ import { getAdminDatabase } from '@/lib/firebase-admin'
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
   try {
     const { slug } = params
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
-    
+
     const commentsRef = database.ref(`blog_comments/${slug}`)
     const snapshot = await commentsRef.once('value')
 
@@ -69,28 +66,16 @@ export async function POST(request: Request, { params }: { params: { slug: strin
       replies: {}
     }
 
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
-    
+
     const commentRef = database.ref(`blog_comments/${slug}/${commentId}`)
     await commentRef.set(comment)
 
     // Update comment count in stats
-    const database = getAdminDatabase();
-    
-    if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
-    }
-    
     const statsRef = database.ref(`blog_stats/${slug}`)
     const statsSnapshot = await statsRef.once('value')
     const currentStats = statsSnapshot.val() || { views: 0, likes: 0, comments: 0, shares: 0, bookmarks: 0 }

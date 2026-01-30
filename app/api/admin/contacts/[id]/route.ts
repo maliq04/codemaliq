@@ -8,14 +8,11 @@ export const DELETE = withAdminAuthSession(async (request, session, context) => 
   try {
     const { id } = context?.params || {}
     const database = getAdminDatabase()
-    
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
-    
+
     await database.ref(`contacts/${id}`).remove()
 
     await createAuditLog({
@@ -48,12 +45,9 @@ export const PUT = withAdminAuthSession(async (request, session, context) => {
     const body = await request.json()
 
     const database = getAdminDatabase()
-    
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
 
     await database.ref(`contacts/${id}`).update({

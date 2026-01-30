@@ -6,8 +6,8 @@ export interface ICareer {
   location: string
   location_type: string
   type: string
-  start_date: Date
-  end_date: Date | null
+  start_date: string
+  end_date: string | null
   link: string | null
   slug: string
 }

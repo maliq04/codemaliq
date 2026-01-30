@@ -157,14 +157,18 @@ export const updateContactLink = async (id: string, updateData: Partial<ContactL
 
     if (!firestoreAvailable) {
       console.log('Using fallback storage to update contact link')
-      
+
       // Convert Firestore types to fallback types
       const fallbackUpdateData: Partial<import('./contact-links-fallback').ContactLink> = {
         ...updateData,
-        createdAt: updateData.createdAt instanceof Timestamp ? updateData.createdAt.toDate().toISOString() : updateData.createdAt,
-        updatedAt: updateData.updatedAt instanceof Timestamp ? updateData.updatedAt.toDate().toISOString() : updateData.updatedAt
+        createdAt:
+          updateData.createdAt instanceof Timestamp
+            ? updateData.createdAt.toDate().toISOString()
+            : updateData.createdAt,
+        updatedAt:
+          updateData.updatedAt instanceof Timestamp ? updateData.updatedAt.toDate().toISOString() : updateData.updatedAt
       }
-      
+
       const updated = ContactLinksFallback.update(id, fallbackUpdateData)
       if (!updated) {
         throw new Error('Contact link not found')

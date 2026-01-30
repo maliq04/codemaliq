@@ -31,7 +31,7 @@ function isValidBase64Image(dataUrl: string): boolean {
 export async function GET() {
   try {
     const database = getAdminDatabase()
-    
+
     if (!database) {
       // Return default settings if database is not available
       const defaultSettings = {
@@ -41,13 +41,13 @@ export async function GET() {
         brandName: 'Maliq Al Fathir',
         brandDescription: 'Full Stack Developer & Tech Enthusiast'
       }
-      
+
       return NextResponse.json({
         success: true,
         data: defaultSettings
       })
     }
-    
+
     const settingsRef = database.ref('admin/upload_settings')
     const snapshot = await settingsRef.once('value')
 

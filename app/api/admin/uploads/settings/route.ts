@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { options } from '@/app/api/auth/[...nextauth]/options'
 import { createAuditLog } from '@/lib/audit-log'
-import { database } from '@/lib/firebase-admin'
+import { getAdminDatabase } from '@/lib/firebase-admin'
 import { getServerSession } from 'next-auth'
 
 /**
@@ -14,6 +14,12 @@ export async function GET() {
     const session = await getServerSession(options)
     if (!session?.user?.email || session.user.email !== 'maliqalfathir04@gmail.com') {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const database = getAdminDatabase()
+
+    if (!database) {
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
 
     const settingsRef = database.ref('admin/upload_settings')
@@ -54,6 +60,12 @@ export async function POST(request: Request) {
     if (!session?.user?.email || session.user.email !== 'maliqalfathir04@gmail.com') {
       console.log('Unauthorized access attempt')
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const database = getAdminDatabase()
+
+    if (!database) {
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
 
     const body = await request.json()

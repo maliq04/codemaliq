@@ -8,14 +8,11 @@ export const DELETE = withAdminAuthSession(async (request, session, context) => 
   try {
     const { id } = context?.params || {}
     const database = getAdminDatabase()
-    
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
-    
+
     const chatRef = database.ref(`chat/${id}`)
 
     const snapshot = await chatRef.once('value')
@@ -65,12 +62,9 @@ export const PUT = withAdminAuthSession(async (request, session, context) => {
     const { is_show, flagged } = body
 
     const database = getAdminDatabase()
-    
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
 
     const chatRef = database.ref(`chat/${id}`)

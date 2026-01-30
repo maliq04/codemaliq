@@ -17,15 +17,12 @@ export async function POST(request: Request, { params }: { params: { slug: strin
     }
 
     // Check if comment exists
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
-    
+
     const commentRef = database.ref(`blog_comments/${slug}/${commentId}`)
     const commentSnapshot = await commentRef.once('value')
 
@@ -42,15 +39,6 @@ export async function POST(request: Request, { params }: { params: { slug: strin
       likes: 0
     }
 
-    const database = getAdminDatabase();
-    
-    if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
-    }
-    
     const replyRef = database.ref(`blog_comments/${slug}/${commentId}/replies/${replyId}`)
     await replyRef.set(reply)
 

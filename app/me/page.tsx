@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   }
 }
 
+// Force dynamic rendering to avoid serialization issues
+export const dynamic = 'force-dynamic'
+
 export default async function MePage() {
   try {
     const [careers, promotions] = await Promise.all([

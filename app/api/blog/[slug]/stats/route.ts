@@ -10,11 +10,11 @@ export async function GET(request: Request, { params }: { params: { slug: string
   try {
     const { slug } = params
     const database = getAdminDatabase()
-    
+
     if (!database) {
       return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
-    
+
     const statsRef = database.ref(`blog_stats/${slug}`)
     const snapshot = await statsRef.once('value')
 
@@ -47,7 +47,7 @@ export async function POST(request: Request, { params }: { params: { slug: strin
     const { action } = body // 'view', 'like', 'unlike', 'comment', 'share'
 
     const database = getAdminDatabase()
-    
+
     if (!database) {
       return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }

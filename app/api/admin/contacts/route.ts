@@ -5,15 +5,12 @@ import { getAdminDatabase } from '@/lib/firebase-admin'
 
 export const GET = withAdminAuthSession(async () => {
   try {
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
-    
+
     const contactsRef = database.ref('contacts')
     const snapshot = await contactsRef.once('value')
     const data = snapshot.val()

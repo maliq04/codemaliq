@@ -33,12 +33,12 @@ export interface CreateAuditLogParams {
 export async function createAuditLog(params: CreateAuditLogParams): Promise<string | null> {
   try {
     const database = getAdminDatabase()
-    
+
     if (!database) {
       console.warn('Database not available for audit logging')
       return null
     }
-    
+
     const auditLogsRef = database.ref('audit_logs')
 
     // Clean the log entry to remove undefined values that Firebase doesn't allow
@@ -75,12 +75,12 @@ export async function createAuditLog(params: CreateAuditLogParams): Promise<stri
 export async function getAuditLogs(limit: number = 50): Promise<AuditLog[]> {
   try {
     const database = getAdminDatabase()
-    
+
     if (!database) {
       console.warn('Database not available for audit logs')
       return []
     }
-    
+
     const auditLogsRef = database.ref('audit_logs')
     const logsQuery = auditLogsRef.orderByChild('timestamp').limitToLast(limit)
 
@@ -91,7 +91,7 @@ export async function getAuditLogs(limit: number = 50): Promise<AuditLog[]> {
     }
 
     const logs: AuditLog[] = []
-    snapshot.forEach(childSnapshot => {
+    snapshot.forEach((childSnapshot: any) => {
       logs.push({
         id: childSnapshot.key!,
         ...childSnapshot.val()

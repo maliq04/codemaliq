@@ -1,4 +1,4 @@
-import { storage } from '@/lib/firebase-admin'
+import { getAdminStorage } from '@/lib/firebase-admin'
 
 export interface FirebaseUploadResult {
   url: string
@@ -25,6 +25,13 @@ export async function uploadToFirebaseStorage(
     console.log('File name:', fileName)
     console.log('Folder:', folder)
     console.log('Storage bucket:', process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET)
+
+    const storage = getAdminStorage()
+
+    if (!storage) {
+      console.warn('Storage not available for upload')
+      return null
+    }
 
     const bucket = storage.bucket()
     console.log('Bucket obtained:', bucket.name)
@@ -74,6 +81,13 @@ export async function uploadToFirebaseStorage(
  */
 export async function deleteFromFirebaseStorage(filePath: string): Promise<boolean> {
   try {
+    const storage = getAdminStorage()
+
+    if (!storage) {
+      console.warn('Storage not available for deletion')
+      return false
+    }
+
     const bucket = storage.bucket()
     const file = bucket.file(filePath)
     await file.delete()
@@ -90,6 +104,13 @@ export async function deleteFromFirebaseStorage(filePath: string): Promise<boole
  */
 export async function listFirebaseStorageFiles(folder: string = 'uploads'): Promise<FirebaseUploadResult[]> {
   try {
+    const storage = getAdminStorage()
+
+    if (!storage) {
+      console.warn('Storage not available for listing')
+      return []
+    }
+
     const bucket = storage.bucket()
     const [files] = await bucket.getFiles({ prefix: folder })
 
@@ -121,6 +142,13 @@ export async function listFirebaseStorageFiles(folder: string = 'uploads'): Prom
  * @param filePath - Path to the file
  */
 export function getFirebaseStorageUrl(filePath: string): string {
+  const storage = getAdminStorage()
+
+  if (!storage) {
+    console.warn('Storage not available for URL generation')
+    return ''
+  }
+
   const bucket = storage.bucket()
   return `https://storage.googleapis.com/${bucket.name}/${filePath}`
 }

@@ -22,15 +22,13 @@ export async function uploadToFirebaseDatabase(
   folder: string = 'uploads'
 ): Promise<MediaItem | null> {
   try {
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      console.warn('Database not available for media upload')
+      return null
     }
-    
+
     const mediaRef = database.ref('media')
 
     // Convert buffer to base64
@@ -66,15 +64,13 @@ export async function uploadToFirebaseDatabase(
  */
 export async function deleteFromFirebaseDatabase(mediaId: string): Promise<boolean> {
   try {
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      console.warn('Database not available for media deletion')
+      return false
     }
-    
+
     const mediaRef = database.ref(`media/${mediaId}`)
     await mediaRef.remove()
     return true
@@ -90,15 +86,13 @@ export async function deleteFromFirebaseDatabase(mediaId: string): Promise<boole
  */
 export async function listFirebaseDatabaseMedia(folder?: string): Promise<MediaItem[]> {
   try {
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      console.warn('Database not available for media listing')
+      return []
     }
-    
+
     const mediaRef = database.ref('media')
     const snapshot = await mediaRef.once('value')
 
@@ -107,7 +101,7 @@ export async function listFirebaseDatabaseMedia(folder?: string): Promise<MediaI
     }
 
     const mediaList: MediaItem[] = []
-    snapshot.forEach(childSnapshot => {
+    snapshot.forEach((childSnapshot: any) => {
       const data = childSnapshot.val()
       if (!folder || data.folder === folder) {
         mediaList.push({
@@ -134,15 +128,13 @@ export async function listFirebaseDatabaseMedia(folder?: string): Promise<MediaI
  */
 export async function getFirebaseDatabaseMedia(mediaId: string): Promise<MediaItem | null> {
   try {
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      console.warn('Database not available for media retrieval')
+      return null
     }
-    
+
     const mediaRef = database.ref(`media/${mediaId}`)
     const snapshot = await mediaRef.once('value')
 

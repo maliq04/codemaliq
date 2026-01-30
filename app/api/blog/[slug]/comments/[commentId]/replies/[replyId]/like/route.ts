@@ -17,25 +17,13 @@ export async function POST(
     const userIp = request.headers.get('x-forwarded-for') || 'anonymous'
     const likeKey = `${userIp}_${replyId}`
 
-    const database = getAdminDatabase();
-    
+    const database = getAdminDatabase()
+
     if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
+      return NextResponse.json({ success: false, error: 'Database not available' }, { status: 503 })
     }
-    
+
     const replyRef = database.ref(`blog_comments/${slug}/${commentId}/replies/${replyId}`)
-    const database = getAdminDatabase();
-    
-    if (!database) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 503 }
-      )
-    }
-    
     const likesRef = database.ref(`blog_reply_likes/${slug}/${commentId}/${replyId}/${likeKey}`)
 
     const [replySnapshot, likeSnapshot] = await Promise.all([replyRef.once('value'), likesRef.once('value')])
