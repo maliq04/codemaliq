@@ -45,12 +45,12 @@ export default function ChatItem({
       animate={{ opacity: 1, y: 0 }}
       className="flex w-full items-end space-x-2"
     >
-      <Image 
-        src={image} 
-        alt={name} 
-        width={40} 
-        height={40} 
-        className="mb-6 rounded-full" 
+      <Image
+        src={image}
+        alt={name}
+        width={40}
+        height={40}
+        className="mb-6 rounded-full"
         style={{ width: 'auto', height: 'auto' }}
       />
       <div className="flex w-full flex-col space-y-[2px]">

@@ -5,16 +5,19 @@
 ### What Was Implemented
 
 1. **RelatedArticlesCarousel.tsx - Rectangular Images**
+
    - ✅ Changed from circular to rectangular images using `aspect-[3/2]` ratio
    - ✅ Applied `rounded-lg` for subtle rounded corners (rectangular)
    - ✅ Added forced CSS styling with `!important` declarations
    - ✅ Added specific CSS classes and data attributes for maximum specificity
 
 2. **BlogCard.tsx - Rectangular Images**
+
    - ✅ Already using `aspect-[16/7]` ratio (rectangular)
    - ✅ Using `rounded-lg` styling
 
 3. **LatestArticleCard.tsx - Rectangular Images**
+
    - ✅ Already using `aspect-video` ratio (rectangular)
    - ✅ Using `rounded-md` styling
 
@@ -37,7 +40,7 @@
   border-radius: 8px !important;
 }
 
-[data-shape="rectangular"] {
+[data-shape='rectangular'] {
   border-radius: 8px !important;
 }
 ```
@@ -50,11 +53,13 @@
 ### Technical Implementation
 
 1. **Aspect Ratios Used:**
+
    - RelatedArticlesCarousel: `aspect-[3/2]` (3:2 ratio - rectangular)
    - BlogCard: `aspect-[16/7]` (16:7 ratio - rectangular)
    - LatestArticleCard: `aspect-video` (16:9 ratio - rectangular)
 
 2. **Border Radius:**
+
    - Post images: `rounded-lg` (8px border radius - rectangular with rounded corners)
    - Profile images: `rounded-full` (50% border radius - circular)
 
@@ -74,6 +79,7 @@
 ### Browser Cache Solution
 
 If images still appear circular in browser:
+
 1. **Hard refresh**: Ctrl+F5 (Windows) or Cmd+Shift+R (Mac)
 2. **Clear browser cache**: Developer Tools > Application > Storage > Clear site data
 3. **Incognito/Private mode**: Test in private browsing window

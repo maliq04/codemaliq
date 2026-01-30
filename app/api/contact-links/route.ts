@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+
 import { getActiveContactLinks } from '@/lib/firestore-contact-links'
 
 export async function GET() {

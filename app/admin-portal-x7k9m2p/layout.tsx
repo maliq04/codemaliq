@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import AdminAuthGuard from '@/components/admin/AdminAuthGuard'
 import AdminLayout from '@/components/admin/AdminLayout'
 

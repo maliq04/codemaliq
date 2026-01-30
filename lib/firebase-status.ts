@@ -1,4 +1,4 @@
-import { realtimeDb, db, auth } from '@/firebase'
+import { auth, db, realtimeDb } from '@/firebase'
 
 export interface FirebaseStatus {
   auth: boolean
@@ -67,7 +67,7 @@ export function getFirebaseConfigStatus() {
   ]
 
   const missingVars = requiredEnvVars.filter(varName => !process.env[varName])
-  
+
   return {
     isComplete: missingVars.length === 0,
     missingVars,

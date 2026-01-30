@@ -7,7 +7,7 @@ export async function getBlogViews(searchParams: string) {
   if (searchParams && searchParams.startsWith('local-')) {
     return 0
   }
-  
+
   // Only fetch views for dev.to posts
   try {
     const URL = `https://dev.to/api/articles/me/all`

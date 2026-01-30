@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
+
 import { options } from '@/app/api/auth/[...nextauth]/options'
+import { getServerSession } from 'next-auth'
 
 /**
  * GET /api/admin/check-access
@@ -9,7 +10,7 @@ import { options } from '@/app/api/auth/[...nextauth]/options'
 export async function GET() {
   try {
     const session = await getServerSession(options)
-    
+
     if (!session?.user?.email) {
       return NextResponse.json({
         isAdmin: false,
@@ -20,7 +21,7 @@ export async function GET() {
 
     // Check if user is admin (only maliqalfathir04@gmail.com)
     const isAdmin = session.user.email === 'maliqalfathir04@gmail.com'
-    
+
     return NextResponse.json({
       isAdmin,
       email: session.user.email,

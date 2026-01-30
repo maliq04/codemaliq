@@ -1,7 +1,8 @@
 import { listMDXFiles, readMDXFile } from '@/lib/fs-utils'
-import { ILearn } from '@/common/types/learn'
 import { readdirSync, statSync } from 'fs'
 import { join } from 'path'
+
+import { ILearn } from '@/common/types/learn'
 
 export async function getLearnContent(): Promise<ILearn[]> {
   try {
@@ -15,11 +16,11 @@ export async function getLearnContent(): Promise<ILearn[]> {
 
     for (const category of categories) {
       const files = await listMDXFiles(`${learnDir}/${category}`)
-      
+
       for (const file of files) {
         const slug = file.replace(/\.mdx?$/, '')
         const fileData = await readMDXFile(`${learnDir}/${category}/${file}`)
-        
+
         if (fileData && fileData.frontmatter) {
           const content: ILearn = {
             id: `${category}-${slug}`,
@@ -33,7 +34,7 @@ export async function getLearnContent(): Promise<ILearn[]> {
             language: fileData.frontmatter.language || 'en',
             type: fileData.frontmatter.type as 'video' | 'link' | undefined
           }
-          
+
           allContent.push(content)
         }
       }
@@ -41,7 +42,7 @@ export async function getLearnContent(): Promise<ILearn[]> {
 
     // Sort by title
     allContent.sort((a, b) => a.title.localeCompare(b.title))
-    
+
     return allContent
   } catch (error) {
     console.error('Failed to fetch learn content:', error)

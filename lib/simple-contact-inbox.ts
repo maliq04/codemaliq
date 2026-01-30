@@ -22,7 +22,7 @@ export class SimpleContactInboxService {
       timestamp: Date.now(),
       read: false
     }
-    
+
     messages.unshift(newMessage) // Add to beginning
     console.log('Message sent:', newMessage)
     return newMessage.id!
@@ -50,7 +50,7 @@ export class SimpleContactInboxService {
   static subscribeToMessages(callback: (messages: ContactMessage[]) => void): () => void {
     // Initial load
     callback([...messages])
-    
+
     // Return unsubscribe function (no-op for this simple implementation)
     return () => {}
   }
@@ -61,6 +61,7 @@ if (messages.length === 0) {
   SimpleContactInboxService.sendMessage({
     name: 'Demo User',
     email: 'demo@example.com',
-    message: 'This is a demo message to show how the inbox works. In a real implementation, this would be connected to a proper database.'
+    message:
+      'This is a demo message to show how the inbox works. In a real implementation, this would be connected to a proper database.'
   })
 }

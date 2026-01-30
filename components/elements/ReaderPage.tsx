@@ -1,8 +1,8 @@
-import Image from '@/components/elements/Image'
 import Link from 'next/link'
 
 import Breakline from '@/components/elements/Breakline'
 import CommentList from '@/components/elements/CommentList'
+import Image from '@/components/elements/Image'
 import MDXComponent from '@/components/elements/MDXComponent'
 
 import { PLACEHOLDER_URL } from '@/common/constant'
@@ -30,13 +30,13 @@ export default function ReaderPage({ content, comments, pageViewCount }: ReaderP
       />
       <div className="space-y-6 leading-[1.8] text-neutral-900 dark:text-neutral-100">
         {/* Main Black Card */}
-        <div className="w-full max-w-4xl mx-auto overflow-hidden rounded-2xl bg-[#0a0a0a] shadow-2xl">
+        <div className="mx-auto w-full max-w-4xl overflow-hidden rounded-2xl bg-[#0a0a0a] shadow-2xl">
           {/* Image Container: Created Full Width & Full Height according to aspect ratio */}
-          <div className="w-full h-[300px] md:h-[450px] relative">
+          <div className="relative h-[300px] w-full md:h-[450px]">
             <img
               src={cover_image || PLACEHOLDER_URL}
               alt={title}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
               style={{
                 display: 'block',
                 width: '100%',
@@ -46,20 +46,18 @@ export default function ReaderPage({ content, comments, pageViewCount }: ReaderP
             />
             {/* Professional gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-            
+
             {/* Title overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                {title}
-              </h1>
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-white md:p-8">
+              <h1 className="text-2xl font-bold leading-tight md:text-4xl lg:text-5xl">{title}</h1>
             </div>
           </div>
         </div>
-        
+
         {/* BLOG CONTENT SECTION */}
-        <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="mx-auto max-w-4xl px-4 py-8">
           {body_markdown && (
-            <div className="prose prose-lg max-w-none dark:prose-invert">
+            <div className="prose prose-lg dark:prose-invert max-w-none">
               <MDXComponent>{body_markdown}</MDXComponent>
             </div>
           )}

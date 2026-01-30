@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { FirebaseSocialLinksService, SocialLinksData } from '@/lib/firebase-social-links'
+import { useEffect, useState } from 'react'
+
 import { SOCIAL_MEDIA } from '@/common/constant/menu'
 
 import ContactCard from './ContactCard'
@@ -33,7 +34,7 @@ export default function ContactList() {
       }, 8000) // 8 second timeout for frontend
 
       // Subscribe to real-time social links updates
-      unsubscribe = FirebaseSocialLinksService.subscribeToSocialLinks((updatedLinks) => {
+      unsubscribe = FirebaseSocialLinksService.subscribeToSocialLinks(updatedLinks => {
         clearTimeout(timeoutId)
         setSocialLinks(updatedLinks)
         setLoading(false)
@@ -105,7 +106,7 @@ export default function ContactList() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="animate-pulse">
-              <div className="bg-gray-200 dark:bg-gray-700 rounded-2xl h-40"></div>
+              <div className="h-40 rounded-2xl bg-gray-200 dark:bg-gray-700"></div>
             </div>
           ))}
         </div>

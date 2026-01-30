@@ -14,12 +14,14 @@ const Image = (props: ImageProps) => {
   const [isLoading, setLoading] = useState(true)
 
   return (
-    <div className={clsx(
-      'overflow-hidden',
-      isLoading ? 'animate-pulse' : '',
-      rounded,
-      fill ? 'relative h-full w-full' : '' // Add relative positioning and full dimensions when using fill
-    )}>
+    <div
+      className={clsx(
+        'overflow-hidden',
+        isLoading ? 'animate-pulse' : '',
+        rounded,
+        fill ? 'relative h-full w-full' : '' // Add relative positioning and full dimensions when using fill
+      )}
+    >
       <NextImage
         data-testid="image"
         className={clsx(
@@ -30,7 +32,7 @@ const Image = (props: ImageProps) => {
         )}
         src={src}
         alt={alt}
-        loading={priority ? undefined : "lazy"} // Don't set loading when priority is true
+        loading={priority ? undefined : 'lazy'} // Don't set loading when priority is true
         quality={100}
         onLoad={() => setLoading(false)}
         fill={fill}

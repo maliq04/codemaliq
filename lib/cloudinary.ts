@@ -97,10 +97,7 @@ export async function deleteFromCloudinary(publicId: string): Promise<boolean> {
  * @param folder - Optional folder to filter by
  * @param maxResults - Maximum number of results to return
  */
-export async function getCloudinaryMedia(
-  folder?: string,
-  maxResults: number = 100
-): Promise<CloudinaryMediaItem[]> {
+export async function getCloudinaryMedia(folder?: string, maxResults: number = 100): Promise<CloudinaryMediaItem[]> {
   try {
     const options: any = {
       max_results: maxResults,
@@ -135,10 +132,7 @@ export async function getCloudinaryMedia(
  * @param tag - Tag to filter by
  * @param maxResults - Maximum number of results
  */
-export async function getCloudinaryMediaByTag(
-  tag: string,
-  maxResults: number = 100
-): Promise<CloudinaryMediaItem[]> {
+export async function getCloudinaryMediaByTag(tag: string, maxResults: number = 100): Promise<CloudinaryMediaItem[]> {
   try {
     const result = await cloudinary.api.resources_by_tag(tag, {
       max_results: maxResults,

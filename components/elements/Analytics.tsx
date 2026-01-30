@@ -15,10 +15,10 @@ export default function Analytics() {
 
   // Completely disable GTM in development
   // Check multiple ways to detect development mode
-  const isDevelopment = 
+  const isDevelopment =
     process.env.NODE_ENV === 'development' ||
-    typeof window !== 'undefined' && window.location.hostname === 'localhost' ||
-    typeof window !== 'undefined' && window.location.hostname.includes('127.0.0.1')
+    (typeof window !== 'undefined' && window.location.hostname === 'localhost') ||
+    (typeof window !== 'undefined' && window.location.hostname.includes('127.0.0.1'))
 
   const shouldLoadGTM = GTM_ID && !isDevelopment
 

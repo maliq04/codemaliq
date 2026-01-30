@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function AuditLogViewer() {
   const [logs, setLogs] = useState<any[]>([])
@@ -29,44 +29,42 @@ export default function AuditLogViewer() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <h1 className="text-2xl font-bold text-gray-900">Audit Log</h1>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="overflow-hidden rounded-lg bg-white shadow">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Admin</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resource</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Time</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Admin</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Action</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Resource</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500">Title</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-200 bg-white">
             {logs.map(log => (
               <tr key={log.id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                   {new Date(log.timestamp).toLocaleString()}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {log.adminName || log.adminEmail}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 py-1 text-xs rounded ${
-                    log.action === 'create' ? 'bg-green-100 text-green-700' :
-                    log.action === 'update' ? 'bg-blue-100 text-blue-700' :
-                    'bg-red-100 text-red-700'
-                  }`}>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">{log.adminName || log.adminEmail}</td>
+                <td className="whitespace-nowrap px-6 py-4">
+                  <span
+                    className={`rounded px-2 py-1 text-xs ${
+                      log.action === 'create'
+                        ? 'bg-green-100 text-green-700'
+                        : log.action === 'update'
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}
+                  >
                     {log.action}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {log.resourceType}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-900">
-                  {log.resourceTitle}
-                </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{log.resourceType}</td>
+                <td className="px-6 py-4 text-sm text-gray-900">{log.resourceTitle}</td>
               </tr>
             ))}
           </tbody>

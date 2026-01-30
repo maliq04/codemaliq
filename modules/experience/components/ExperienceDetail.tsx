@@ -26,11 +26,11 @@ export default function ExperienceDetail(props: ICareer) {
             <span>{end_date ? format(endDate, 'MMM yyyy') : 'Present'}</span>
           </div>
         </div>
-        <Image 
-          src={getCloudinaryUrl(logo)} 
-          alt={company} 
-          width={60} 
-          height={60} 
+        <Image
+          src={getCloudinaryUrl(logo)}
+          alt={company}
+          width={60}
+          height={60}
           style={{ width: 'auto', height: 'auto' }}
         />
       </div>

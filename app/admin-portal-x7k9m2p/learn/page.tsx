@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import LearnList from '@/components/admin/learn/LearnList'
 
 export const metadata: Metadata = {

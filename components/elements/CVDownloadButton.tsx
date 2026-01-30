@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { CVInfo, FirebaseCVManager } from '@/lib/firebase-cv-manager'
+import { useEffect, useState } from 'react'
 import { MdDownload, MdPictureAsPdf } from 'react-icons/md'
-import { FirebaseCVManager, CVInfo } from '@/lib/firebase-cv-manager'
 
 export default function CVDownloadButton() {
   const [cvInfo, setCvInfo] = useState<CVInfo | null>(null)
@@ -29,7 +29,7 @@ export default function CVDownloadButton() {
       }, 5000) // 5 second timeout
 
       // Subscribe to CV updates
-      unsubscribe = FirebaseCVManager.subscribeToCV((updatedCvInfo) => {
+      unsubscribe = FirebaseCVManager.subscribeToCV(updatedCvInfo => {
         clearTimeout(timeoutId)
         setCvInfo(updatedCvInfo)
         setLoading(false)
@@ -52,7 +52,7 @@ export default function CVDownloadButton() {
       alert('CV is not available at the moment. Please try again later.')
       return
     }
-    
+
     try {
       FirebaseCVManager.downloadCV(cvInfo)
     } catch (error) {
@@ -70,9 +70,9 @@ export default function CVDownloadButton() {
   if (loading) {
     return (
       <div className="mt-6">
-        <div className="animate-pulse flex items-center gap-3 bg-gray-200 dark:bg-gray-700 px-6 py-3 rounded-full w-fit">
-          <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded"></div>
-          <div className="w-24 h-4 bg-gray-300 dark:bg-gray-600 rounded"></div>
+        <div className="flex w-fit animate-pulse items-center gap-3 rounded-full bg-gray-200 px-6 py-3 dark:bg-gray-700">
+          <div className="h-5 w-5 rounded bg-gray-300 dark:bg-gray-600"></div>
+          <div className="h-4 w-24 rounded bg-gray-300 dark:bg-gray-600"></div>
         </div>
       </div>
     )
@@ -87,16 +87,17 @@ export default function CVDownloadButton() {
     <div className="mt-6">
       <button
         onClick={handleDownload}
-        className="flex items-center gap-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-6 py-3 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-600"
+        className="flex items-center gap-3 rounded-full border border-gray-200 bg-white px-6 py-3 font-medium text-gray-900 shadow-md transition-colors duration-200 hover:bg-gray-100 hover:shadow-lg dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
       >
-        <MdPictureAsPdf className="w-5 h-5 text-red-600" />
+        <MdPictureAsPdf className="h-5 w-5 text-red-600" />
         <span>Download My CV</span>
-        <MdDownload className="w-4 h-4" />
+        <MdDownload className="h-4 w-4" />
       </button>
-      
+
       {/* CV Info */}
-      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-        PDF • {FirebaseCVManager.formatFileSize(cvInfo.fileSize)} • Updated {new Date(cvInfo.lastUpdated).toLocaleDateString()}
+      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        PDF • {FirebaseCVManager.formatFileSize(cvInfo.fileSize)} • Updated{' '}
+        {new Date(cvInfo.lastUpdated).toLocaleDateString()}
       </p>
     </div>
   )

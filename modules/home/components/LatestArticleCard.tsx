@@ -1,6 +1,6 @@
-import Image from '@/components/elements/Image'
 import { usePathname, useRouter } from 'next/navigation'
 
+import Image from '@/components/elements/Image'
 import Ribbon from '@/components/elements/Ribbon'
 
 import { PLACEHOLDER_URL } from '@/common/constant'
@@ -59,13 +59,13 @@ export default function LatestArticleCard({ data, learns, index }: LatestArticle
     if (!data.collection_id) {
       return `/blog/${data.slug}?id=${postId}&read-mode=true`
     }
-    
+
     // For roadmaps (codemaliq ILearn), we don't have id/slug properties, so fallback to blog URL
     const collection = learns.find(collection => 'id' in collection && collection.id === `${data.collection_id}`)
     if (collection && 'slug' in collection) {
       return `/learn/${collection.slug}/${data.slug}?id=${postId}&read-mode=true`
     }
-    
+
     return `/blog/${data.slug}?id=${postId}&read-mode=true`
   }
 

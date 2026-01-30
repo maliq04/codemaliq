@@ -36,16 +36,16 @@ export default function BlogCard({ post, priority = false }: BlogCardProps) {
       article_collection_id: post.collection_id || '',
       page_path: pathname
     })
-    
+
     // Determine post type and routing
     const postSource = (post as any).source || 'unknown'
     const postType = (post as any).post_type || 'unknown'
     const isLocalPost = (post as any).is_local || postSource === 'mdx' || postSource === 'firebase'
     const isDevtoPost = postType === 'devto' || (post as any).devto_id
     const isAdminPost = postType === 'admin' || postSource === 'firebase'
-    
+
     // Generate appropriate slug and post ID
-    const newSlug = (isLocalPost && !isDevtoPost) ? post.slug : formatBlogSlug(post.slug)
+    const newSlug = isLocalPost && !isDevtoPost ? post.slug : formatBlogSlug(post.slug)
 
     let postId: string
     if (isAdminPost) {
@@ -61,20 +61,20 @@ export default function BlogCard({ post, priority = false }: BlogCardProps) {
       // Fallback to regular ID
       postId = post.id.toString()
     }
-    
+
     console.log('BlogCard navigating to post:', { postType, postSource, isLocalPost, isAdminPost, postId, newSlug })
-    
+
     router.push(`/blog/${newSlug}?id=${postId}&read-mode=true`)
   }
 
   return (
     <div className="flex w-full cursor-pointer flex-col text-start" onClick={handleCardClick}>
       <div className="relative aspect-[16/7] overflow-hidden rounded-lg">
-        <Image 
-          src={post.cover_image || PLACEHOLDER_URL} 
-          fill 
+        <Image
+          src={post.cover_image || PLACEHOLDER_URL}
+          fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          alt={post.title} 
+          alt={post.title}
           className="h-full w-full object-cover"
           priority={priority}
         />

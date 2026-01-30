@@ -5,44 +5,44 @@ export function getMockPageSpeedData() {
       categories: {
         performance: {
           score: 0.92,
-          title: "Performance"
+          title: 'Performance'
         },
         accessibility: {
           score: 0.98,
-          title: "Accessibility"
+          title: 'Accessibility'
         },
-        "best-practices": {
+        'best-practices': {
           score: 0.95,
-          title: "Best Practices"
+          title: 'Best Practices'
         },
         seo: {
           score: 1.0,
-          title: "SEO"
+          title: 'SEO'
         }
       },
       audits: {
-        "first-contentful-paint": {
-          displayValue: "1.2 s",
+        'first-contentful-paint': {
+          displayValue: '1.2 s',
           score: 0.9
         },
-        "largest-contentful-paint": {
-          displayValue: "2.1 s", 
+        'largest-contentful-paint': {
+          displayValue: '2.1 s',
           score: 0.85
         },
-        "first-meaningful-paint": {
-          displayValue: "1.4 s",
+        'first-meaningful-paint': {
+          displayValue: '1.4 s',
           score: 0.88
         },
-        "speed-index": {
-          displayValue: "2.3 s",
+        'speed-index': {
+          displayValue: '2.3 s',
           score: 0.82
         },
-        "interactive": {
-          displayValue: "3.1 s",
+        interactive: {
+          displayValue: '3.1 s',
           score: 0.78
         },
-        "cumulative-layout-shift": {
-          displayValue: "0.05",
+        'cumulative-layout-shift': {
+          displayValue: '0.05',
           score: 0.95
         }
       }
@@ -51,15 +51,15 @@ export function getMockPageSpeedData() {
       metrics: {
         FIRST_CONTENTFUL_PAINT_MS: {
           percentile: 1200,
-          category: "FAST"
+          category: 'FAST'
         },
         LARGEST_CONTENTFUL_PAINT_MS: {
           percentile: 2100,
-          category: "AVERAGE"
+          category: 'AVERAGE'
         },
         CUMULATIVE_LAYOUT_SHIFT_SCORE: {
           percentile: 0.05,
-          category: "FAST"
+          category: 'FAST'
         }
       }
     }

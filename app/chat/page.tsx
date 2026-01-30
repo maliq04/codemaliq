@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 
+import { options } from '@/app/api/auth/[...nextauth]/options'
 import Container from '@/components/elements/Container'
 import PageHeading from '@/components/elements/PageHeading'
 import { User } from 'next-auth'
 import { getServerSession } from 'next-auth/next'
 
 import { METADATA } from '@/common/constant/metadata'
-import { options } from '@/app/api/auth/[...nextauth]/options'
 
 import ChatRoom from '@/modules/chat'
 

@@ -22,11 +22,9 @@ export default async function MePage() {
       getCareers().catch(() => []), // Fallback to empty array on error
       getPromotions().catch(() => []) // Fallback to empty array on error
     ])
-    
-    const promotion = promotions.filter((item: IAdsBanner) => 
-      item.showingOn && item.showingOn.includes('/me')
-    )
-    
+
+    const promotion = promotions.filter((item: IAdsBanner) => item.showingOn && item.showingOn.includes('/me'))
+
     return <MeSection careers={careers} promotions={promotion} />
   } catch (error) {
     console.error('Error in MePage:', error)

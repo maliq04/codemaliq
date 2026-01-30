@@ -5,11 +5,13 @@ This document explains how the Firebase Admin SDK has been configured for your p
 ## 🔧 Configuration Files
 
 ### 1. Firebase Admin SDK Setup (`lib/firebase-admin.ts`)
+
 - Initializes Firebase Admin SDK with service account credentials
 - Exports `adminDb` (Firestore) and `adminAuth` (Authentication) instances
 - Uses environment variables for secure credential management
 
 ### 2. Environment Variables (`.env.local`)
+
 The following environment variables are required:
 
 ```env
@@ -19,7 +21,9 @@ FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n[YOUR_PRIVATE_KEY]\n-----END 
 ```
 
 ### 3. Utility Functions (`lib/firebase-utils.ts`)
+
 Helper functions for common Firebase operations:
+
 - `testFirebaseConnection()` - Test database connectivity
 - `createDocument(collection, data)` - Create new documents
 - `getDocuments(collection, limit)` - Retrieve documents
@@ -27,16 +31,19 @@ Helper functions for common Firebase operations:
 ## 🚀 Testing the Configuration
 
 ### Method 1: API Route
+
 Visit: `http://localhost:3000/api/test-firebase`
 
 This will test the Firebase Admin SDK connection.
 
 ### Method 2: Chat Functionality
+
 Visit: `http://localhost:3000/chat`
 
 This tests the client-side Firebase configuration including Realtime Database.
 
 ### Method 3: Server-side Usage
+
 ```typescript
 import { adminDb } from '@/lib/firebase-admin'
 import { testFirebaseConnection } from '@/lib/firebase-utils'
@@ -51,10 +58,11 @@ const snapshot = await adminDb.collection('users').get()
 ## 📝 Usage Examples
 
 ### Admin Media Library (Firebase Database Storage)
+
 The admin media library stores images as base64 in Firebase Realtime Database:
 
 ```typescript
-import { uploadToFirebaseDatabase, listFirebaseDatabaseMedia, deleteFromFirebaseDatabase } from '@/lib/firebase-media'
+import { deleteFromFirebaseDatabase, listFirebaseDatabaseMedia, uploadToFirebaseDatabase } from '@/lib/firebase-media'
 
 // Upload image (max 5MB)
 const buffer = Buffer.from(fileBytes)
@@ -74,6 +82,7 @@ const success = await deleteFromFirebaseDatabase(mediaId)
 **Note**: Images are stored as base64 data URLs in the database. File size limit is 5MB to prevent database bloat.
 
 ### Creating Documents
+
 ```typescript
 import { createDocument } from '@/lib/firebase-utils'
 
@@ -84,6 +93,7 @@ const result = await createDocument('users', {
 ```
 
 ### Reading Documents
+
 ```typescript
 import { getDocuments } from '@/lib/firebase-utils'
 
@@ -94,6 +104,7 @@ if (result.success) {
 ```
 
 ### Direct Firestore Operations
+
 ```typescript
 import { adminDb } from '@/lib/firebase-admin'
 
@@ -129,10 +140,12 @@ await adminDb.collection('posts').doc(docRef.id).delete()
 ### Common Issues:
 
 1. **"Project ID not found"**
+
    - Check `FIREBASE_PROJECT_ID` in `.env.local`
    - Ensure the project exists in Firebase Console
 
 2. **"Invalid private key"**
+
    - Verify the private key format includes `\n` for line breaks
    - Check for any missing characters in the key
 
@@ -145,6 +158,7 @@ await adminDb.collection('posts').doc(docRef.id).delete()
    - Check service account permissions in Firebase Console
 
 ### Testing Connection:
+
 ```bash
 # Visit the test endpoint
 curl http://localhost:3000/api/test-firebase
@@ -153,13 +167,15 @@ curl http://localhost:3000/api/test-firebase
 ## 📚 Next Steps
 
 1. **Configure Firebase Realtime Database Security Rules** (Required for Chat)
+
    - Go to [Firebase Console](https://console.firebase.google.com/)
    - Select your project: `codemaliq`
    - Navigate to **Realtime Database** > **Rules**
    - Copy the rules from `firebase-database-rules.json` and paste them
    - Click **Publish**
-   
+
    The rules allow:
+
    - Anyone to read chat messages
    - Only authenticated users to write messages
    - Validation for required message fields
@@ -168,7 +184,7 @@ curl http://localhost:3000/api/test-firebase
 2. Configure Firestore security rules in Firebase Console (if using Firestore)
 3. Set up proper indexes for your queries
 4. Implement error handling in your application
-4. Consider implementing caching for frequently accessed data
+5. Consider implementing caching for frequently accessed data
 
 ## 🔗 Resources
 

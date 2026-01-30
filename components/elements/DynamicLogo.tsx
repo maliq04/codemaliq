@@ -1,8 +1,9 @@
 'use client'
 
-import { useBranding } from '@/components/providers/BrandingProvider'
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+
+import { useBranding } from '@/components/providers/BrandingProvider'
+import { useEffect, useState } from 'react'
 
 interface DynamicLogoProps {
   width?: number
@@ -18,13 +19,13 @@ function isValidBase64Image(dataUrl: string): boolean {
   if (!dataUrl.startsWith('data:image/')) {
     return false
   }
-  
+
   try {
     const base64Part = dataUrl.split(',')[1]
     if (!base64Part || base64Part === 'test-data' || base64Part.length < 20) {
       return false
     }
-    
+
     // Try to decode the base64 to validate it
     const decoded = atob(base64Part)
     return decoded.length > 100 // Ensure it's a real image with some content
@@ -33,12 +34,7 @@ function isValidBase64Image(dataUrl: string): boolean {
   }
 }
 
-export default function DynamicLogo({ 
-  width = 40, 
-  height = 40, 
-  className = '', 
-  alt 
-}: DynamicLogoProps) {
+export default function DynamicLogo({ width = 40, height = 40, className = '', alt }: DynamicLogoProps) {
   const { branding, isLoading } = useBranding()
   const [imageError, setImageError] = useState(false)
   const [renderKey, setRenderKey] = useState(0)
@@ -59,7 +55,7 @@ export default function DynamicLogo({
     window.addEventListener('brandingUpdated', handleBrandingUpdate)
     window.addEventListener('brandingForceUpdate', handleBrandingUpdate)
     window.addEventListener('brandingRefresh', handleBrandingUpdate)
-    
+
     return () => {
       window.removeEventListener('brandingUpdated', handleBrandingUpdate)
       window.removeEventListener('brandingForceUpdate', handleBrandingUpdate)
@@ -70,8 +66,8 @@ export default function DynamicLogo({
   // Show loading placeholder while fetching branding
   if (isLoading) {
     return (
-      <div 
-        className={`bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse ${className}`}
+      <div
+        className={`animate-pulse rounded bg-neutral-200 dark:bg-neutral-700 ${className}`}
         style={{ width, height }}
       />
     )
@@ -79,17 +75,17 @@ export default function DynamicLogo({
 
   // Validate logo URL and fallback to default if invalid
   let logoSrc = branding.logoUrl || '/img/codemaliq.jpg'
-  
+
   // Check if it's an invalid base64 URL
   if (logoSrc.startsWith('data:') && !isValidBase64Image(logoSrc)) {
     logoSrc = '/img/codemaliq.jpg'
   }
-  
+
   // Fallback to default logo if uploaded image fails to load
   if (imageError) {
     logoSrc = '/img/codemaliq.jpg'
   }
-  
+
   const logoAlt = alt || branding.brandName || 'Logo'
 
   // Check if the logo is a base64 data URL
@@ -109,7 +105,7 @@ export default function DynamicLogo({
         className={`logo-preview ${className}`}
         onError={() => setImageError(true)}
         key={cacheKey}
-        style={{ 
+        style={{
           objectFit: 'contain',
           imageRendering: 'auto',
           maxWidth: '100%',
@@ -132,7 +128,7 @@ export default function DynamicLogo({
       onError={() => setImageError(true)}
       priority
       key={cacheKey}
-      style={{ 
+      style={{
         objectFit: 'contain',
         imageRendering: 'auto',
         width: 'auto',

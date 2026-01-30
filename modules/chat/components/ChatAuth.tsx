@@ -23,12 +23,12 @@ export default function ChatAuth({ user, reply, sendMessage, cancleReply }: Chat
           <ChatInput sendMessage={sendMessage} reply={reply} cancleReply={cancleReply} />
           <div className="mt-6 flex items-center justify-between text-sm">
             <div className=" flex items-center space-x-2 text-neutral-500">
-              <Image 
-                src={String(user.image)} 
-                alt={String(user.name)} 
-                width={35} 
-                height={35} 
-                className="rounded-full" 
+              <Image
+                src={String(user.image)}
+                alt={String(user.name)}
+                width={35}
+                height={35}
+                className="rounded-full"
                 style={{ width: 'auto', height: 'auto' }}
               />
               <div className="flex flex-col">

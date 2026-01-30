@@ -1,14 +1,18 @@
-import Tooltip from '@/components/elements/Tooltip'
-import { MdVerified as VerifiedIcon } from 'react-icons/md'
-
-import { useBranding } from '@/components/providers/BrandingProvider'
 import DynamicLogo from '@/components/elements/DynamicLogo'
+import Tooltip from '@/components/elements/Tooltip'
+import { useBranding } from '@/components/providers/BrandingProvider'
+import { MdVerified as VerifiedIcon } from 'react-icons/md'
 
 export default function MeProfile() {
   const { branding } = useBranding()
-  
+
   return (
-    <div data-testid="me-profile" className="mt-6 flex flex-col items-center space-y-2 px-6" data-aos="zoom-in-down" suppressHydrationWarning={true}>
+    <div
+      data-testid="me-profile"
+      className="mt-6 flex flex-col items-center space-y-2 px-6"
+      data-aos="zoom-in-down"
+      suppressHydrationWarning={true}
+    >
       <div className="rounded-full border border-neutral-200 p-2 dark:border-neutral-700">
         <div className="overflow-hidden rounded-full">
           <DynamicLogo

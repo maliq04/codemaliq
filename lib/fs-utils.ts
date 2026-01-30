@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
-import path from 'path'
 import matter from 'gray-matter'
+import path from 'path'
 
 /**
  * Read an MDX file and parse its frontmatter
@@ -13,7 +13,7 @@ export async function readMDXFile(filePath: string): Promise<{
     const fullPath = path.join(process.cwd(), filePath)
     const fileContent = await fs.readFile(fullPath, 'utf-8')
     const { data, content } = matter(fileContent)
-    
+
     return {
       content,
       frontmatter: data
@@ -36,30 +36,30 @@ export async function writeMDXFile(
   try {
     const fullPath = path.join(process.cwd(), filePath)
     const tempPath = `${fullPath}.tmp`
-    
+
     // Ensure directory exists
     const dir = path.dirname(fullPath)
     await fs.mkdir(dir, { recursive: true })
-    
+
     // Create MDX content with frontmatter
     const fileContent = matter.stringify(content, frontmatter)
-    
+
     // Write to temp file first
     await fs.writeFile(tempPath, fileContent, 'utf-8')
-    
+
     // Atomic rename
     await fs.rename(tempPath, fullPath)
-    
+
     return true
   } catch (error) {
     console.error(`Error writing MDX file ${filePath}:`, error)
-    
+
     // Clean up temp file if it exists
     try {
       const tempPath = `${path.join(process.cwd(), filePath)}.tmp`
       await fs.unlink(tempPath)
     } catch {}
-    
+
     return false
   }
 }
@@ -84,7 +84,7 @@ export async function deleteMDXFile(filePath: string): Promise<boolean> {
 export async function listMDXFiles(dirPath: string): Promise<string[]> {
   try {
     const fullPath = path.join(process.cwd(), dirPath)
-    
+
     // Check if directory exists
     try {
       await fs.access(fullPath)
@@ -92,7 +92,7 @@ export async function listMDXFiles(dirPath: string): Promise<string[]> {
       // Directory doesn't exist, return empty array
       return []
     }
-    
+
     const files = await fs.readdir(fullPath)
     return files.filter(file => file.endsWith('.mdx') || file.endsWith('.md'))
   } catch (error) {
@@ -119,16 +119,12 @@ export async function readJSONFile<T = any>(filePath: string): Promise<T | null>
  * Write a JSON file with atomic write
  * Creates a backup before writing
  */
-export async function writeJSONFile(
-  filePath: string,
-  data: any,
-  createBackup: boolean = true
-): Promise<boolean> {
+export async function writeJSONFile(filePath: string, data: any, createBackup: boolean = true): Promise<boolean> {
   try {
     const fullPath = path.join(process.cwd(), filePath)
     const tempPath = `${fullPath}.tmp`
     const backupPath = `${fullPath}.backup`
-    
+
     // Create backup of existing file
     if (createBackup) {
       try {
@@ -137,18 +133,18 @@ export async function writeJSONFile(
         // File might not exist yet, that's okay
       }
     }
-    
+
     // Write to temp file
     const jsonContent = JSON.stringify(data, null, 2)
     await fs.writeFile(tempPath, jsonContent, 'utf-8')
-    
+
     // Atomic rename
     await fs.rename(tempPath, fullPath)
-    
+
     return true
   } catch (error) {
     console.error(`Error writing JSON file ${filePath}:`, error)
-    
+
     // Try to restore from backup
     if (createBackup) {
       try {
@@ -158,13 +154,13 @@ export async function writeJSONFile(
         console.log(`Restored ${filePath} from backup`)
       } catch {}
     }
-    
+
     // Clean up temp file
     try {
       const tempPath = `${path.join(process.cwd(), filePath)}.tmp`
       await fs.unlink(tempPath)
     } catch {}
-    
+
     return false
   }
 }
@@ -195,18 +191,14 @@ export function generateSlug(title: string): string {
 /**
  * Ensure a slug is unique by appending a number if necessary
  */
-export async function ensureUniqueSlug(
-  baseSlug: string,
-  dirPath: string,
-  extension: string = '.mdx'
-): Promise<string> {
+export async function ensureUniqueSlug(baseSlug: string, dirPath: string, extension: string = '.mdx'): Promise<string> {
   let slug = baseSlug
   let counter = 1
-  
+
   while (await fileExists(path.join(dirPath, `${slug}${extension}`))) {
     slug = `${baseSlug}-${counter}`
     counter++
   }
-  
+
   return slug
 }

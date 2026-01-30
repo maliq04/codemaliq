@@ -8,8 +8,8 @@ interface SpeedSectionProps {
 
 export default function SpeedSection({ data, isLoading }: SpeedSectionProps) {
   const categories = data?.lighthouseResult?.categories || {}
-  const categoriesInArray = Object.keys(categories).map(key => ({ 
-    ...categories[key], 
+  const categoriesInArray = Object.keys(categories).map(key => ({
+    ...categories[key],
     key: key // Add the key from the original object
   }))
 

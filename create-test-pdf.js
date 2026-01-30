@@ -1,7 +1,7 @@
 // Simple PDF creation script for testing
 // This creates a minimal PDF-like structure for testing purposes
 
-const fs = require('fs');
+const fs = require('fs')
 
 // Create a minimal PDF structure (this is a simplified approach)
 // In a real scenario, you'd use a proper PDF library like jsPDF or PDFKit
@@ -82,16 +82,16 @@ trailer
 >>
 startxref
 625
-%%EOF`;
+%%EOF`
 
 // Write the PDF content to a file
-fs.writeFileSync('test-cv.pdf', pdfHeader);
+fs.writeFileSync('test-cv.pdf', pdfHeader)
 
-console.log('✅ Test PDF created successfully: test-cv.pdf');
-console.log('📁 File size:', fs.statSync('test-cv.pdf').size, 'bytes');
-console.log('🧪 You can now use this file to test the CV upload system!');
-console.log('');
-console.log('Next steps:');
-console.log('1. Go to http://localhost:3000/admin-portal-x7k9m2p/profile');
-console.log('2. Upload the test-cv.pdf file');
-console.log('3. Check http://localhost:3000/about for the download button');
+console.log('✅ Test PDF created successfully: test-cv.pdf')
+console.log('📁 File size:', fs.statSync('test-cv.pdf').size, 'bytes')
+console.log('🧪 You can now use this file to test the CV upload system!')
+console.log('')
+console.log('Next steps:')
+console.log('1. Go to http://localhost:3000/admin-portal-x7k9m2p/profile')
+console.log('2. Upload the test-cv.pdf file')
+console.log('3. Check http://localhost:3000/about for the download button')

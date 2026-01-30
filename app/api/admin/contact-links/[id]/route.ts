@@ -1,15 +1,13 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { updateContactLink, deleteContactLink } from '@/lib/firestore-contact-links'
+import { deleteContactLink, updateContactLink } from '@/lib/firestore-contact-links'
 
 export const PUT = withAdminAuthSession(async (request: Request, session: any, context?: { params: any }) => {
   try {
     const { id } = context?.params || {}
     if (!id) {
-      return NextResponse.json(
-        { success: false, error: 'ID parameter is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'ID parameter is required' }, { status: 400 })
     }
     const body = await request.json()
 
@@ -41,10 +39,7 @@ export const DELETE = withAdminAuthSession(async (_request: Request, _session: a
   try {
     const { id } = context?.params || {}
     if (!id) {
-      return NextResponse.json(
-        { success: false, error: 'ID parameter is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'ID parameter is required' }, { status: 400 })
     }
 
     await deleteContactLink(id)

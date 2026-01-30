@@ -2,8 +2,8 @@ import { Metadata } from 'next'
 
 import BackButton from '@/components/elements/BackButton'
 import Container from '@/components/elements/Container'
-import ReaderPage from '@/components/elements/ReaderPage'
 import LocalReaderPage from '@/components/elements/LocalReaderPage'
+import ReaderPage from '@/components/elements/ReaderPage'
 import StructuredData from '@/components/elements/StructuredData'
 import { getBlogDetail, getComments } from '@/services/blog'
 import { getBlogViews } from '@/services/view'
@@ -23,7 +23,7 @@ type Props = {
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const blog = await getBlogDetail({ params, searchParams })
-  
+
   // Handle missing blog data
   if (!blog || !blog.title) {
     return {
@@ -31,7 +31,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       description: 'The requested blog post could not be found.'
     }
   }
-  
+
   return {
     title: `${blog.title} ${METADATA.exTitle}`,
     description: blog.description,
@@ -80,7 +80,7 @@ function generateStructuredData(blog: BlogDetailProps, comments: CommentItemProp
 
 export default async function BlogDetailPage({ params, searchParams }: Props) {
   const blog = await getBlogDetail({ params, searchParams })
-  
+
   const pageViewCount = await getBlogViews(searchParams.id as string)
   const comments = await getComments(searchParams.id as string)
 

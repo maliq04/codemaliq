@@ -2,9 +2,9 @@
 
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { FaRegEye as ViewIcon, FaHeart as LikeIcon, FaComment as CommentIcon } from 'react-icons/fa'
-import { HiOutlineClock as ClockIcon, HiShare } from 'react-icons/hi'
 import { BsBookmark as BookmarkIcon } from 'react-icons/bs'
+import { FaComment as CommentIcon, FaHeart as LikeIcon, FaRegEye as ViewIcon } from 'react-icons/fa'
+import { HiOutlineClock as ClockIcon, HiShare } from 'react-icons/hi'
 import { scroller } from 'react-scroll'
 
 import { formatDate } from '@/common/helpers'
@@ -92,7 +92,7 @@ export default function LocalReaderHeader({
           </div>
         </motion.div>
       )}
-      
+
       <div className="mb-6 flex flex-col justify-between gap-2 border-b border-dashed border-neutral-600 pb-6 pt-5 text-[14px] text-neutral-600 dark:text-neutral-400 sm:flex-row">
         <div>
           Published on
@@ -107,7 +107,7 @@ export default function LocalReaderHeader({
               <span>Views</span>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-1 font-medium">
             <ClockIcon size={16} />
             <div className="ml-0.5 flex gap-1">
@@ -123,7 +123,7 @@ export default function LocalReaderHeader({
               <span>Like{stats.likes !== 1 && 's'}</span>
             </div>
           </div>
-          
+
           <div
             className="hidden cursor-pointer items-center gap-1 font-medium hover:dark:text-neutral-300 md:flex"
             onClick={scrollToSection}

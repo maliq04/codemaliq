@@ -22,13 +22,13 @@ const AnimateCounter = ({ total, ...rest }: AnimateCounterProps) => {
     const animateValue = (timestamp: number) => {
       if (!startTime) startTime = timestamp
       const progress = Math.min((timestamp - startTime) / duration, 1)
-      
+
       // Easing function (ease-out)
       const easeOut = 1 - Math.pow(1 - progress, 3)
       const currentValue = Math.floor(startValue + (endValue - startValue) * easeOut)
-      
+
       count.textContent = currentValue.toString()
-      
+
       if (progress < 1) {
         requestAnimationFrame(animateValue)
       }
@@ -37,7 +37,11 @@ const AnimateCounter = ({ total, ...rest }: AnimateCounterProps) => {
     requestAnimationFrame(animateValue)
   }, [total])
 
-  return <span {...rest} ref={countRef} data-testid="counter">0</span>
+  return (
+    <span {...rest} ref={countRef} data-testid="counter">
+      0
+    </span>
+  )
 }
 
 export default AnimateCounter

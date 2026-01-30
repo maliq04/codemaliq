@@ -1,9 +1,18 @@
 'use client'
 
-import { useState } from 'react'
-import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaShare, FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
-import { HiOutlineLink } from 'react-icons/hi'
 import { toast } from '@/lib/toast'
+import { useState } from 'react'
+import {
+  FaBookmark,
+  FaFacebook,
+  FaHeart,
+  FaLinkedin,
+  FaRegBookmark,
+  FaRegHeart,
+  FaShare,
+  FaTwitter
+} from 'react-icons/fa'
+import { HiOutlineLink } from 'react-icons/hi'
 
 interface LocalStats {
   views: number
@@ -53,10 +62,12 @@ export default function LocalInteractionBar({
 
   const handleSocialShare = (platform: string) => {
     let shareUrl = ''
-    
+
     switch (platform) {
       case 'twitter':
-        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(currentUrl)}`
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(
+          currentUrl
+        )}`
         break
       case 'facebook':
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`
@@ -110,7 +121,7 @@ export default function LocalInteractionBar({
         <button
           onClick={() => setShowShareMenu(!showShareMenu)}
           className={`flex items-center gap-2 rounded-full px-4 py-2 transition-all duration-200 ${
-            stats.shares > 0 
+            stats.shares > 0
               ? 'bg-green-100 text-green-600 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50'
               : 'bg-neutral-200 text-neutral-600 hover:bg-green-100 hover:text-green-600 dark:bg-neutral-700 dark:text-neutral-400 dark:hover:bg-green-900/30 dark:hover:text-green-400'
           }`}
@@ -156,12 +167,7 @@ export default function LocalInteractionBar({
       </div>
 
       {/* Click outside to close share menu */}
-      {showShareMenu && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setShowShareMenu(false)}
-        />
-      )}
+      {showShareMenu && <div className="fixed inset-0 z-40" onClick={() => setShowShareMenu(false)} />}
     </div>
   )
 }

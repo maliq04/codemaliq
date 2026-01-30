@@ -41,10 +41,10 @@ async function getBlog(category: string) {
   const blogs = await getBlogData()
 
   const activeId = BLOG_LINK.find(link => link.value === category)?.id
-  
+
   const data: BlogItem[] = blogs?.filter((blog: BlogItem) => {
     return blog.collection_id === activeId
   })
-  
+
   return data
 }

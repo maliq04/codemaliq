@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import ContactsList from '@/components/admin/contacts/ContactsList'
 
 export const metadata: Metadata = {

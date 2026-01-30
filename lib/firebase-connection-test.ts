@@ -1,5 +1,5 @@
 import { db } from '@/firebase'
-import { doc, getDoc, collection, getDocs, limit, query } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, limit, query } from 'firebase/firestore'
 
 export async function testFirebaseConnection(): Promise<{
   success: boolean
@@ -8,11 +8,11 @@ export async function testFirebaseConnection(): Promise<{
 }> {
   try {
     console.log('Testing Firebase connection...')
-    
+
     // Test 1: Try to read from a simple collection
     const testQuery = query(collection(db, 'test'), limit(1))
     const snapshot = await getDocs(testQuery)
-    
+
     console.log('Firebase connection test successful')
     return {
       success: true,
@@ -36,11 +36,11 @@ export async function testFirebaseConnection(): Promise<{
 
 export async function initializeFirestoreWithFallback() {
   const connectionTest = await testFirebaseConnection()
-  
+
   if (!connectionTest.success) {
     console.warn('Firestore connection failed, using fallback mode')
     return false
   }
-  
+
   return true
 }

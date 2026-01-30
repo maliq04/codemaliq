@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import StatCard from './StatCard'
-import RecentActivity from './RecentActivity'
+import { FiFileText, FiFolder, FiMail, FiMessageSquare } from 'react-icons/fi'
+
 import type { DashboardStats } from '@/common/types/admin'
-import { FiFileText, FiFolder, FiMessageSquare, FiMail } from 'react-icons/fi'
+
+import RecentActivity from './RecentActivity'
+import StatCard from './StatCard'
 
 export default function DashboardOverview() {
   const [stats, setStats] = useState<DashboardStats | null>(null)

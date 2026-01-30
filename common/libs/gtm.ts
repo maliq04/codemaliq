@@ -12,17 +12,18 @@ declare global {
 
 // Check if we're in development mode
 const isDevelopment = () => {
-  return process.env.NODE_ENV === 'development' ||
-         (typeof window !== 'undefined' && window.location.hostname === 'localhost') ||
-         (typeof window !== 'undefined' && window.location.hostname.includes('127.0.0.1'))
+  return (
+    process.env.NODE_ENV === 'development' ||
+    (typeof window !== 'undefined' && window.location.hostname === 'localhost') ||
+    (typeof window !== 'undefined' && window.location.hostname.includes('127.0.0.1'))
+  )
 }
 
 // Check if GTM is available and initialized
 const isGTMAvailable = () => {
-  return !isDevelopment() &&
-         typeof window !== 'undefined' && 
-         window.gtag !== undefined && 
-         window.dataLayer !== undefined
+  return (
+    !isDevelopment() && typeof window !== 'undefined' && window.gtag !== undefined && window.dataLayer !== undefined
+  )
 }
 
 export const sendPageView = (url: string) => {

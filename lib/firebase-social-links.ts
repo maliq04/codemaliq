@@ -1,5 +1,5 @@
-import { ref, onValue, update, push, serverTimestamp, set } from 'firebase/database'
 import { realtimeDb } from '@/firebase'
+import { onValue, push, ref, serverTimestamp, set, update } from 'firebase/database'
 
 // Types
 export interface SocialLink {
@@ -28,7 +28,6 @@ export interface SocialLinksData {
 
 // Social Links Management
 export class FirebaseSocialLinksService {
-  
   // Initialize database with default data
   static async initializeDatabase(): Promise<void> {
     try {
@@ -54,28 +53,32 @@ export class FirebaseSocialLinksService {
   // Get current social links
   static subscribeToSocialLinks(callback: (links: SocialLinksData) => void): () => void {
     const linksRef = ref(realtimeDb, 'contact_settings/links')
-    
-    return onValue(linksRef, (snapshot) => {
-      // IMPORTANT: Always provide fallback data to prevent infinite loading
-      const data = snapshot.val()
-      
-      if (data && typeof data === 'object') {
-        // Remove Firebase metadata and keep only the link data
-        const { updatedAt, ...links } = data
-        callback(links as SocialLinksData)
-      } else {
-        // If no data exists, return default values and initialize database
-        const defaultLinks = this.getDefaultLinks()
-        callback(defaultLinks)
-        
-        // Auto-initialize database in background
-        this.initializeDatabase().catch(console.error)
+
+    return onValue(
+      linksRef,
+      snapshot => {
+        // IMPORTANT: Always provide fallback data to prevent infinite loading
+        const data = snapshot.val()
+
+        if (data && typeof data === 'object') {
+          // Remove Firebase metadata and keep only the link data
+          const { updatedAt, ...links } = data
+          callback(links as SocialLinksData)
+        } else {
+          // If no data exists, return default values and initialize database
+          const defaultLinks = this.getDefaultLinks()
+          callback(defaultLinks)
+
+          // Auto-initialize database in background
+          this.initializeDatabase().catch(console.error)
+        }
+      },
+      error => {
+        console.error('Firebase subscription error:', error)
+        // On error, still provide default data to prevent loading state
+        callback(this.getDefaultLinks())
       }
-    }, (error) => {
-      console.error('Firebase subscription error:', error)
-      // On error, still provide default data to prevent loading state
-      callback(this.getDefaultLinks())
-    })
+    )
   }
 
   // Update social links
@@ -105,18 +108,17 @@ export class FirebaseSocialLinksService {
 
 // Contact Messages Management
 export class FirebaseContactInboxService {
-  
   // Send a new message
   static async sendMessage(messageData: Omit<ContactMessage, 'id' | 'timestamp' | 'read'>): Promise<string> {
     try {
       const messagesRef = ref(realtimeDb, 'inbox')
-      
+
       const newMessage = {
         ...messageData,
         timestamp: serverTimestamp(),
         read: false
       }
-      
+
       const result = await push(messagesRef, newMessage)
       return result.key!
     } catch (error) {
@@ -128,27 +130,33 @@ export class FirebaseContactInboxService {
   // Subscribe to messages (for admin)
   static subscribeToMessages(callback: (messages: ContactMessage[]) => void): () => void {
     const messagesRef = ref(realtimeDb, 'inbox')
-    
-    return onValue(messagesRef, (snapshot) => {
-      const data = snapshot.val()
-      
-      if (data && typeof data === 'object') {
-        const messagesList = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key],
-          timestamp: data[key].timestamp || Date.now()
-        })).sort((a, b) => b.timestamp - a.timestamp) // Most recent first
-        
-        callback(messagesList)
-      } else {
-        // Return empty array if no messages exist
+
+    return onValue(
+      messagesRef,
+      snapshot => {
+        const data = snapshot.val()
+
+        if (data && typeof data === 'object') {
+          const messagesList = Object.keys(data)
+            .map(key => ({
+              id: key,
+              ...data[key],
+              timestamp: data[key].timestamp || Date.now()
+            }))
+            .sort((a, b) => b.timestamp - a.timestamp) // Most recent first
+
+          callback(messagesList)
+        } else {
+          // Return empty array if no messages exist
+          callback([])
+        }
+      },
+      error => {
+        console.error('Firebase inbox subscription error:', error)
+        // On error, return empty array to prevent loading state
         callback([])
       }
-    }, (error) => {
-      console.error('Firebase inbox subscription error:', error)
-      // On error, return empty array to prevent loading state
-      callback([])
-    })
+    )
   }
 
   // Mark message as read

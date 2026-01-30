@@ -10,9 +10,7 @@ export default function CourseCard(props: CourseCardProps) {
   return (
     <Card className="flex items-center justify-between border border-neutral-200 p-4 text-sm text-neutral-700 hover:border-neutral-300 dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-neutral-600">
       <div className="flex items-center space-x-3">
-        <div className="flex h-8 w-8 items-center justify-center">
-          {STACKS[icon]}
-        </div>
+        <div className="flex h-8 w-8 items-center justify-center">{STACKS[icon]}</div>
         <span className="font-medium">{title}</span>
       </div>
       <div className="flex space-x-2">

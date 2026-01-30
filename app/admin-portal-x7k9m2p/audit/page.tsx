@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import AuditLogViewer from '@/components/admin/audit/AuditLogViewer'
 
 export const metadata: Metadata = {

@@ -1,8 +1,10 @@
-import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
+import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { readMDXFile, writeMDXFile, deleteMDXFile } from '@/lib/fs-utils'
 import { createAuditLog } from '@/lib/audit-log'
+import { deleteMDXFile, readMDXFile, writeMDXFile } from '@/lib/fs-utils'
+
 import type { BlogPost } from '@/common/types/admin'
 
 /**
@@ -12,7 +14,7 @@ import type { BlogPost } from '@/common/types/admin'
 export const GET = withAdminAuthSession(async (request, session, context) => {
   try {
     const { slug } = context?.params || {}
-    
+
     if (!slug) {
       return NextResponse.json(
         {
@@ -22,7 +24,7 @@ export const GET = withAdminAuthSession(async (request, session, context) => {
         { status: 400 }
       )
     }
-    
+
     const filePath = `contents/blog/${slug}.mdx`
     const fileData = await readMDXFile(filePath)
 

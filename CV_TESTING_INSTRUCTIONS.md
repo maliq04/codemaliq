@@ -5,12 +5,15 @@
 Since we can't generate a PDF programmatically without additional dependencies, here are the testing steps:
 
 ### Step 1: Create a Test PDF
+
 1. **Option A - Use any PDF creator:**
+
    - Open any word processor (Microsoft Word, Google Docs, etc.)
    - Create a simple CV with test content
    - Export/Save as PDF
 
 2. **Option B - Use online PDF generator:**
+
    - Go to any HTML to PDF converter online
    - Use the `test-cv.html` file I created in the project root
    - Convert it to PDF and download
@@ -22,12 +25,15 @@ Since we can't generate a PDF programmatically without additional dependencies, 
    - Save the file
 
 ### Step 2: Test the Upload System
+
 1. **Access Admin Panel:**
+
    ```
    http://localhost:3000/admin-portal-x7k9m2p
    ```
 
 2. **Navigate to Profile & CV:**
+
    - Click "Profile & CV" in the sidebar
    - You should see the CV management interface
 
@@ -38,12 +44,15 @@ Since we can't generate a PDF programmatically without additional dependencies, 
    - You should see success message
 
 ### Step 3: Test the Download System
+
 1. **Check About Page:**
+
    ```
    http://localhost:3000/about
    ```
 
 2. **Verify CV Button:**
+
    - Scroll to the Career section
    - You should see "Download My CV" button
    - Button should show file size and date
@@ -53,12 +62,15 @@ Since we can't generate a PDF programmatically without additional dependencies, 
    - PDF should open in new tab for preview/download
 
 ### Step 4: Test Real-time Updates
+
 1. **Delete CV in Admin:**
+
    - Go back to admin panel
    - Click "Delete" button
    - Confirm deletion
 
 2. **Check About Page:**
+
    - Refresh the About page
    - CV download button should disappear
 
@@ -69,6 +81,7 @@ Since we can't generate a PDF programmatically without additional dependencies, 
 ## 🔍 What to Look For
 
 ### ✅ Success Indicators:
+
 - [ ] File uploads without errors
 - [ ] Success message appears after upload
 - [ ] CV info displays correctly (name, size, date)
@@ -78,6 +91,7 @@ Since we can't generate a PDF programmatically without additional dependencies, 
 - [ ] File validation works (only PDF, max 10MB)
 
 ### ❌ Potential Issues:
+
 - Firebase connection errors
 - File upload failures
 - Button not appearing on About page
@@ -87,18 +101,21 @@ Since we can't generate a PDF programmatically without additional dependencies, 
 ## 🛠️ Troubleshooting
 
 ### If Upload Fails:
+
 1. Check browser console for errors
 2. Verify Firebase configuration
 3. Check file size (must be < 10MB)
 4. Ensure file is PDF format
 
 ### If Button Doesn't Appear:
+
 1. Check browser console for Firebase errors
 2. Verify Firebase database rules are updated
 3. Check if CV data exists in Firebase console
 4. Try hard refresh (Ctrl+F5)
 
 ### If Real-time Updates Don't Work:
+
 1. Check Firebase Realtime Database connection
 2. Verify database rules allow read/write
 3. Check browser network tab for Firebase calls

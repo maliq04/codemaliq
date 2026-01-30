@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
-import { database } from '@/lib/firebase-admin'
-import { createAuditLog } from '@/lib/audit-log'
-import { getServerSession } from 'next-auth'
+
 import { options } from '@/app/api/auth/[...nextauth]/options'
+import { createAuditLog } from '@/lib/audit-log'
+import { database } from '@/lib/firebase-admin'
+import { getServerSession } from 'next-auth'
 
 /**
  * GET /api/admin/uploads/files
@@ -17,23 +18,22 @@ export async function GET() {
 
     const filesRef = database.ref('admin/uploaded_files')
     const snapshot = await filesRef.once('value')
-    
+
     const filesData = snapshot.val() || {}
-    const files = Object.entries(filesData).map(([id, data]: [string, any]) => ({
-      id,
-      ...data
-    })).sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
-    
+    const files = Object.entries(filesData)
+      .map(([id, data]: [string, any]) => ({
+        id,
+        ...data
+      }))
+      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
+
     return NextResponse.json({
       success: true,
       data: files
     })
   } catch (error) {
     console.error('Error fetching uploaded files:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch files' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to fetch files' }, { status: 500 })
   }
 }
 
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     const session = await getServerSession(options)
     console.log('Session:', session)
     console.log('User email:', session?.user?.email)
-    
+
     if (!session?.user?.email || session.user.email !== 'maliqalfathir04@gmail.com') {
       console.log('Unauthorized access attempt')
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
@@ -55,12 +55,9 @@ export async function POST(request: Request) {
 
     const formData = await request.formData()
     const file = formData.get('file') as File
-    
+
     if (!file) {
-      return NextResponse.json(
-        { success: false, error: 'No file provided' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'No file provided' }, { status: 400 })
     }
 
     console.log('File received:', file?.name, file?.size, file?.type)
@@ -86,10 +83,7 @@ export async function POST(request: Request) {
 
     // Validate file type
     if (!settings.allowedTypes.includes(file.type)) {
-      return NextResponse.json(
-        { success: false, error: 'File type not allowed' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'File type not allowed' }, { status: 400 })
     }
 
     console.log('Converting file to base64...')
@@ -103,7 +97,7 @@ export async function POST(request: Request) {
     // Generate unique ID
     const fileId = `upload_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
     console.log('Generated file ID:', fileId)
-    
+
     console.log('Storing file in Firebase...')
     // Store file data in Firebase
     const fileData = {
@@ -143,7 +137,11 @@ export async function POST(request: Request) {
     console.error('Error uploading file:', error)
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
     return NextResponse.json(
-      { success: false, error: 'Failed to upload file', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        success: false,
+        error: 'Failed to upload file',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }

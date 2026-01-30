@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 
 interface BrandingSettings {
   logoUrl: string
@@ -53,39 +53,43 @@ export default function BrandingProvider({ children }: BrandingProviderProps) {
   const fetchBranding = async (forceRefresh = false) => {
     try {
       const cacheBuster = forceRefresh ? `?t=${Date.now()}&r=${Math.random()}` : `?t=${Date.now()}`
-      
+
       const response = await fetch(`/api/branding${cacheBuster}`, {
         cache: 'no-store',
         next: { revalidate: 0 },
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
+          Pragma: 'no-cache',
+          Expires: '0'
         }
       })
-      
+
       if (response.ok) {
         const data = await response.json()
-        
+
         if (data.success) {
           const newBranding = {
             ...data.data,
             lastUpdated: Date.now()
           }
-          
+
           setBranding(newBranding)
           setRefreshKey(prev => prev + 1)
-          
+
           // Force favicon update by dispatching a custom event
-          window.dispatchEvent(new CustomEvent('brandingUpdated', { 
-            detail: newBranding 
-          }))
-          
+          window.dispatchEvent(
+            new CustomEvent('brandingUpdated', {
+              detail: newBranding
+            })
+          )
+
           // Force a re-render of all branding-dependent components
           setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('brandingForceUpdate', { 
-              detail: newBranding 
-            }))
+            window.dispatchEvent(
+              new CustomEvent('brandingForceUpdate', {
+                detail: newBranding
+              })
+            )
           }, 100)
         }
       }
@@ -104,28 +108,34 @@ export default function BrandingProvider({ children }: BrandingProviderProps) {
   const forceRefresh = async () => {
     setIsLoading(true)
     await fetchBranding(true)
-    
+
     // Additional force refresh with multiple strategies
     setTimeout(async () => {
       await fetchBranding(true)
-      
+
       // Force all components to re-render by updating refresh key
       setRefreshKey(prev => prev + 1)
-      
+
       // Dispatch multiple events to ensure all components update
-      window.dispatchEvent(new CustomEvent('brandingUpdated', { 
-        detail: { ...branding, forceUpdate: true, timestamp: Date.now() }
-      }))
-      
-      window.dispatchEvent(new CustomEvent('brandingForceUpdate', { 
-        detail: { ...branding, forceUpdate: true, timestamp: Date.now() }
-      }))
-      
+      window.dispatchEvent(
+        new CustomEvent('brandingUpdated', {
+          detail: { ...branding, forceUpdate: true, timestamp: Date.now() }
+        })
+      )
+
+      window.dispatchEvent(
+        new CustomEvent('brandingForceUpdate', {
+          detail: { ...branding, forceUpdate: true, timestamp: Date.now() }
+        })
+      )
+
       // Additional event after short delay
       setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('brandingRefresh', { 
-          detail: { ...branding, forceUpdate: true, timestamp: Date.now() }
-        }))
+        window.dispatchEvent(
+          new CustomEvent('brandingRefresh', {
+            detail: { ...branding, forceUpdate: true, timestamp: Date.now() }
+          })
+        )
       }, 200)
     }, 100)
   }
@@ -135,7 +145,7 @@ export default function BrandingProvider({ children }: BrandingProviderProps) {
       const timer = setTimeout(() => {
         fetchBranding(false)
       }, 100)
-      
+
       return () => clearTimeout(timer)
     }
   }, [])
@@ -147,9 +157,5 @@ export default function BrandingProvider({ children }: BrandingProviderProps) {
     forceRefresh
   }
 
-  return (
-    <BrandingContext.Provider value={contextValue}>
-      {children}
-    </BrandingContext.Provider>
-  )
+  return <BrandingContext.Provider value={contextValue}>{children}</BrandingContext.Provider>
 }

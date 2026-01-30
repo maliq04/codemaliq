@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+
+import { useEffect, useState } from 'react'
 import { TbMessage2 as CommentIcon } from 'react-icons/tb'
+
 import { PLACEHOLDER_URL } from '@/common/constant'
 import { formatBlogSlug, formatDate } from '@/common/helpers'
 import { sendDataLayer } from '@/common/libs/gtm'
@@ -22,7 +24,7 @@ export default function RelatedArticlesCarousel({ posts }: RelatedArticlesCarous
     if (posts.length <= 1) return
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % posts.length)
+      setCurrentIndex(prevIndex => (prevIndex + 1) % posts.length)
     }, 5000) // 5 seconds
 
     return () => clearInterval(interval)
@@ -36,10 +38,10 @@ export default function RelatedArticlesCarousel({ posts }: RelatedArticlesCarous
       article_collection_id: post.collection_id || '',
       page_path: pathname
     })
-    
+
     const newSlug = formatBlogSlug(post.slug)
     const postId = `local-${post.slug}`
-    
+
     router.push(`/blog/${newSlug}?id=${postId}&read-mode=true`)
   }
 
@@ -58,9 +60,7 @@ export default function RelatedArticlesCarousel({ posts }: RelatedArticlesCarous
             <div
               key={index}
               className={`h-2 w-2 rounded-full transition-all duration-300 ${
-                index === currentIndex
-                  ? 'bg-teal-500 w-6'
-                  : 'bg-neutral-300 dark:bg-neutral-600'
+                index === currentIndex ? 'w-6 bg-teal-500' : 'bg-neutral-300 dark:bg-neutral-600'
               }`}
             />
           ))}
@@ -72,13 +72,16 @@ export default function RelatedArticlesCarousel({ posts }: RelatedArticlesCarous
           if (!post || !post.slug) return null
 
           return (
-            <div 
+            <div
               key={post.id}
-              className="group bg-white dark:bg-neutral-800 rounded-xl overflow-hidden cursor-pointer border border-neutral-200 dark:border-neutral-700 shadow-sm transition-all hover:shadow-md"
+              className="group cursor-pointer overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800"
               onClick={() => handleCardClick(post)}
             >
               {/* Replace the Image Container section with this */}
-              <div className="relative w-full h-[200px] overflow-hidden rounded-t-xl bg-neutral-200" style={{ isolation: 'isolate' }}>
+              <div
+                className="relative h-[200px] w-full overflow-hidden rounded-t-xl bg-neutral-200"
+                style={{ isolation: 'isolate' }}
+              >
                 <img
                   src={post.cover_image || PLACEHOLDER_URL}
                   alt={post.title}
@@ -94,15 +97,17 @@ export default function RelatedArticlesCarousel({ posts }: RelatedArticlesCarous
 
               {/* Content remains within the same container */}
               <div className="p-4">
-                <h3 className="font-semibold text-neutral-700 transition-all duration-300 dark:text-neutral-200 group-hover:text-teal-600 dark:group-hover:text-teal-400 leading-tight text-base md:text-lg mb-2">
-                  {post.title.slice(0, 60)}{post.title.length > 60 ? '...' : ''}
+                <h3 className="mb-2 text-base font-semibold leading-tight text-neutral-700 transition-all duration-300 group-hover:text-teal-600 dark:text-neutral-200 dark:group-hover:text-teal-400 md:text-lg">
+                  {post.title.slice(0, 60)}
+                  {post.title.length > 60 ? '...' : ''}
                 </h3>
-                
-                <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 hidden sm:block mb-3">
-                  {post.description.slice(0, 120)}{post.description.length > 120 ? '...' : ''}
+
+                <p className="mb-3 hidden text-sm leading-relaxed text-neutral-600 dark:text-neutral-400 sm:block">
+                  {post.description.slice(0, 120)}
+                  {post.description.length > 120 ? '...' : ''}
                 </p>
-                
-                <div className="flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-neutral-800">
+
+                <div className="flex items-center justify-between border-t border-neutral-100 pt-2 dark:border-neutral-800">
                   <div className="flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
                     <span>{formatDate(post.published_at, 'MMM dd')}</span>
                     <div className="flex items-center gap-1">
@@ -110,8 +115,8 @@ export default function RelatedArticlesCarousel({ posts }: RelatedArticlesCarous
                       <span>{post.comments_count}</span>
                     </div>
                   </div>
-                  
-                  <button className="text-xs font-medium text-teal-500 hover:text-teal-600 transition-colors duration-200">
+
+                  <button className="text-xs font-medium text-teal-500 transition-colors duration-200 hover:text-teal-600">
                     Read →
                   </button>
                 </div>

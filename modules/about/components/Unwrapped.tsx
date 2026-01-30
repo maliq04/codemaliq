@@ -23,8 +23,7 @@ export default function Unwrapped() {
         <SectionHeading title="Github Unwrapped" icon={<FaPhotoVideo className="mr-1" />} />
         <SectionSubHeading>
           <p className="dark:text-neutral-400">
-            My coding journey on{' '}
-            {isMounted && !isLoading && unwrappedData ? unwrappedData.years : '2023'}
+            My coding journey on {isMounted && !isLoading && unwrappedData ? unwrappedData.years : '2023'}
           </p>
         </SectionSubHeading>
       </div>

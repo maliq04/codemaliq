@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { listMDXFiles, readMDXFile, writeMDXFile, deleteMDXFile, generateSlug, ensureUniqueSlug } from '@/lib/fs-utils'
 import { createAuditLog } from '@/lib/audit-log'
+import { deleteMDXFile, ensureUniqueSlug, generateSlug, listMDXFiles, readMDXFile, writeMDXFile } from '@/lib/fs-utils'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -9,20 +10,20 @@ export const GET = withAdminAuthSession(async () => {
   try {
     const learnDir = path.join(process.cwd(), 'contents/learn')
     const categories = await fs.readdir(learnDir)
-    
+
     const articles: any[] = []
-    
+
     for (const category of categories) {
       const categoryPath = path.join(learnDir, category)
       const stat = await fs.stat(categoryPath)
-      
+
       if (stat.isDirectory()) {
         const files = await listMDXFiles(`contents/learn/${category}`)
-        
+
         for (const file of files) {
           const slug = file.replace(/\.mdx?$/, '')
           const fileData = await readMDXFile(`contents/learn/${category}/${file}`)
-          
+
           if (fileData) {
             articles.push({
               slug,

@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { useEffect, useState } from 'react'
+import { FiBook, FiFileText, FiFolder, FiImage, FiMail, FiMap, FiMessageSquare, FiSettings } from 'react-icons/fi'
+
 import type { AuditLog } from '@/common/types/admin'
-import { FiFileText, FiFolder, FiMessageSquare, FiMail, FiImage, FiSettings, FiBook, FiMap } from 'react-icons/fi'
 
 interface RecentActivityProps {
   limit?: number
@@ -58,7 +59,7 @@ export default function RecentActivity({ limit = 10 }: RecentActivityProps) {
     return (
       <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="flex items-start gap-4 animate-pulse">
+          <div key={i} className="flex animate-pulse items-start gap-4">
             <div className="h-10 w-10 rounded-full bg-neutral-200 dark:bg-neutral-700"></div>
             <div className="flex-1">
               <div className="h-4 w-3/4 rounded bg-neutral-200 dark:bg-neutral-700"></div>
@@ -71,11 +72,7 @@ export default function RecentActivity({ limit = 10 }: RecentActivityProps) {
   }
 
   if (error) {
-    return (
-      <div className="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/20 dark:text-red-400">
-        {error}
-      </div>
-    )
+    return <div className="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/20 dark:text-red-400">{error}</div>
   }
 
   if (activities.length === 0) {

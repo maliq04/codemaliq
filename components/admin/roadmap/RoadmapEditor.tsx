@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Trash2, Edit, Plus, Save } from 'lucide-react'
+import { Edit, Plus, Save, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 interface RoadmapItem {
   title: string
@@ -135,13 +135,13 @@ export default function RoadmapEditor() {
   }, {})
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Roadmap Management</h1>
         <div className="flex gap-2">
           <button
             onClick={startAdd}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700"
           >
             <Plus size={20} />
             Add Item
@@ -149,7 +149,7 @@ export default function RoadmapEditor() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400"
           >
             <Save size={20} />
             {saving ? 'Saving...' : 'Save Changes'}
@@ -158,71 +158,66 @@ export default function RoadmapEditor() {
       </div>
 
       {(isAdding || editingIndex !== null) && (
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-xl font-semibold mb-4">
-            {isAdding ? 'Add New Item' : 'Edit Item'}
-          </h3>
+        <div className="rounded-lg bg-white p-6 shadow">
+          <h3 className="mb-4 text-xl font-semibold">{isAdding ? 'Add New Item' : 'Edit Item'}</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Title *</label>
+              <label className="mb-1 block text-sm font-medium">Title *</label>
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-3 py-2 border rounded"
+                onChange={e => setFormData({ ...formData, title: e.target.value })}
+                className="w-full rounded border px-3 py-2"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Icon</label>
+              <label className="mb-1 block text-sm font-medium">Icon</label>
               <input
                 type="text"
                 value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                onChange={e => setFormData({ ...formData, icon: e.target.value })}
                 placeholder="e.g., React.js, Vue.js"
-                className="w-full px-3 py-2 border rounded"
+                className="w-full rounded border px-3 py-2"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Category *</label>
+              <label className="mb-1 block text-sm font-medium">Category *</label>
               <input
                 type="text"
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                onChange={e => setFormData({ ...formData, category: e.target.value })}
                 placeholder="e.g., frontend-developer, mastering-react-js"
-                className="w-full px-3 py-2 border rounded"
+                className="w-full rounded border px-3 py-2"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Link (Indonesian)</label>
+              <label className="mb-1 block text-sm font-medium">Link (Indonesian)</label>
               <input
                 type="text"
                 value={formData.linkIndonesia || ''}
-                onChange={(e) => setFormData({ ...formData, linkIndonesia: e.target.value })}
+                onChange={e => setFormData({ ...formData, linkIndonesia: e.target.value })}
                 placeholder="https://..."
-                className="w-full px-3 py-2 border rounded"
+                className="w-full rounded border px-3 py-2"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Link (English)</label>
+              <label className="mb-1 block text-sm font-medium">Link (English)</label>
               <input
                 type="text"
                 value={formData.linkEnglish || ''}
-                onChange={(e) => setFormData({ ...formData, linkEnglish: e.target.value })}
+                onChange={e => setFormData({ ...formData, linkEnglish: e.target.value })}
                 placeholder="https://..."
-                className="w-full px-3 py-2 border rounded"
+                className="w-full rounded border px-3 py-2"
               />
             </div>
             <div className="flex gap-2">
               <button
                 onClick={isAdding ? handleAdd : handleUpdate}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
               >
                 {isAdding ? 'Add' : 'Update'}
               </button>
-              <button
-                onClick={cancelEdit}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-              >
+              <button onClick={cancelEdit} className="rounded bg-gray-300 px-4 py-2 hover:bg-gray-400">
                 Cancel
               </button>
             </div>
@@ -231,25 +226,38 @@ export default function RoadmapEditor() {
       )}
 
       {Object.entries(groupedByCategory).map(([category, items]) => (
-        <div key={category} className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4 capitalize">{category.replace(/-/g, ' ')}</h2>
+        <div key={category} className="rounded-lg bg-white p-6 shadow">
+          <h2 className="mb-4 text-xl font-semibold capitalize">{category.replace(/-/g, ' ')}</h2>
           <div className="space-y-2">
             {items.map((item, index) => {
               const globalIndex = roadmap.list.findIndex(i => i === item)
               return (
-                <div key={index} className="flex items-center justify-between p-3 border border-gray-200 rounded hover:bg-gray-50">
+                <div
+                  key={index}
+                  className="flex items-center justify-between rounded border border-gray-200 p-3 hover:bg-gray-50"
+                >
                   <div className="flex-1">
                     <p className="font-medium">{item.title}</p>
                     <p className="text-sm text-gray-500">{item.icon}</p>
                     {(item.linkIndonesia || item.linkEnglish) && (
-                      <div className="flex gap-2 mt-1">
+                      <div className="mt-1 flex gap-2">
                         {item.linkIndonesia && (
-                          <a href={item.linkIndonesia} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
+                          <a
+                            href={item.linkIndonesia}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-600 hover:underline"
+                          >
                             🇮🇩 ID
                           </a>
                         )}
                         {item.linkEnglish && (
-                          <a href={item.linkEnglish} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
+                          <a
+                            href={item.linkEnglish}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-600 hover:underline"
+                          >
                             🇬🇧 EN
                           </a>
                         )}
@@ -259,14 +267,14 @@ export default function RoadmapEditor() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => startEdit(item, globalIndex)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                      className="rounded p-2 text-blue-600 hover:bg-blue-50"
                       title="Edit"
                     >
                       <Edit size={18} />
                     </button>
                     <button
                       onClick={() => handleDelete(globalIndex)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded"
+                      className="rounded p-2 text-red-600 hover:bg-red-50"
                       title="Delete"
                     >
                       <Trash2 size={18} />
@@ -280,9 +288,7 @@ export default function RoadmapEditor() {
       ))}
 
       {roadmap.list.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
-          No roadmap items found. Add your first item!
-        </div>
+        <div className="py-12 text-center text-gray-500">No roadmap items found. Add your first item!</div>
       )}
     </div>
   )

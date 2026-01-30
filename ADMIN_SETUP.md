@@ -37,6 +37,7 @@ To add a new admin user:
 3. Restart the development server
 
 Example:
+
 ```env
 ADMIN_EMAILS="admin@example.com,manager@example.com,editor@example.com"
 ```
@@ -50,11 +51,13 @@ ADMIN_EMAILS="admin@example.com,manager@example.com,editor@example.com"
 ## Admin Dashboard Features
 
 ### Dashboard Overview
+
 - View statistics for all content types
 - Quick actions for common tasks
 - Recent activity feed
 
 ### Blog Management
+
 - Create, edit, and delete blog posts
 - Upload cover images
 - Markdown editor with preview
@@ -62,47 +65,55 @@ ADMIN_EMAILS="admin@example.com,manager@example.com,editor@example.com"
 - SEO metadata
 
 ### Project Management
+
 - Add and manage portfolio projects
 - Upload project images
 - Reorder projects with drag-and-drop
 - Tech stack management
 
 ### Chat Moderation
+
 - View all chat messages in real-time
 - Delete inappropriate messages
 - Reply to users as admin
 - Flag messages for review
 
 ### Learning Articles
+
 - Create and manage educational content
 - Organize by category
 - Markdown editor with image upload
 - Preview mode
 
 ### Roadmap Management
+
 - Track learning goals and skills
 - Update completion status
 - Organize by category
 
 ### Contact Management
+
 - View contact form submissions
 - Mark messages as read/unread
 - Delete old messages
 - Quick email reply links
 
 ### Media Library
+
 - Upload images to Cloudinary
 - View all uploaded media
 - Copy image URLs
 - Delete unused media
 
 ### Configuration
+
 - Update profile photo
 - Manage social media links
 - Edit site metadata
 - Update contact information
 
 ### Audit Log
+
 - View all admin actions
 - Filter by action type and date
 - Track changes for accountability
@@ -113,7 +124,8 @@ ADMIN_EMAILS="admin@example.com,manager@example.com,editor@example.com"
 
 **Problem**: You see an "Access Denied" message after signing in.
 
-**Solution**: 
+**Solution**:
+
 1. Verify your email is in the `ADMIN_EMAILS` environment variable
 2. Make sure there are no typos in the email address
 3. Restart the development server after updating `.env.local`
@@ -124,6 +136,7 @@ ADMIN_EMAILS="admin@example.com,manager@example.com,editor@example.com"
 **Problem**: The admin dashboard URL returns a 404 error.
 
 **Solution**:
+
 1. Verify the `ADMIN_ROUTE_PATH` matches the URL you're accessing
 2. Make sure the development server is running
 3. Check that the admin route files exist in `app/admin-portal-x7k9m2p/`
@@ -133,6 +146,7 @@ ADMIN_EMAILS="admin@example.com,manager@example.com,editor@example.com"
 **Problem**: You're redirected to sign-in repeatedly.
 
 **Solution**:
+
 1. Clear your browser cookies
 2. Sign out completely and sign in again
 3. Check that `NEXTAUTH_SECRET` is set in `.env.local`
@@ -143,6 +157,7 @@ ADMIN_EMAILS="admin@example.com,manager@example.com,editor@example.com"
 **Problem**: Google sign-in fails or shows an error.
 
 **Solution**:
+
 1. Verify `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are correct
 2. Check that the callback URL is configured in Google Cloud Console:
    - `http://localhost:3001/api/auth/callback/google`
@@ -209,6 +224,7 @@ node -e "console.log(require('crypto').randomBytes(16).toString('hex'))"
 ## Support
 
 For issues or questions:
+
 1. Check this documentation first
 2. Review the audit log for error details
 3. Check browser console for client-side errors

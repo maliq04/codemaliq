@@ -1,11 +1,13 @@
 # Contact Links CRUD System - Complete Implementation
 
 ## Overview
+
 This document describes the complete CRUD (Create, Read, Update, Delete) system for managing contact links dynamically through the Admin Panel and displaying them on the Contact page.
 
 ## Features Implemented
 
 ### ✅ Admin Panel Management
+
 - **Create**: Add new contact links with all fields
 - **Read**: View all contact links with sorting and filtering
 - **Update**: Edit existing contact links inline
@@ -15,6 +17,7 @@ This document describes the complete CRUD (Create, Read, Update, Delete) system 
 - **Custom Button Text**: Set custom button text for each link
 
 ### ✅ Frontend Display
+
 - **Dynamic Loading**: Real-time updates from Firestore
 - **Responsive Design**: Works on all screen sizes
 - **Custom Styling**: Each link can have its own background color
@@ -22,6 +25,7 @@ This document describes the complete CRUD (Create, Read, Update, Delete) system 
 - **Loading States**: Skeleton loading while fetching data
 
 ### ✅ Database Integration
+
 - **Firestore Collection**: `contact-links` collection
 - **Real-time Updates**: Changes reflect immediately
 - **Data Validation**: URL format and required field validation
@@ -62,32 +66,36 @@ This document describes the complete CRUD (Create, Read, Update, Delete) system 
 ## Data Structure
 
 ### ContactLink Interface
+
 ```typescript
 interface ContactLink {
   id?: string
-  title: string                    // e.g., "Let's connect"
-  description: string              // e.g., "Connect for collaboration..."
-  url: string                      // e.g., "https://linkedin.com/in/username"
-  icon: string                     // e.g., "linkedin", "github", "discord"
+  title: string // e.g., "Let's connect"
+  description: string // e.g., "Connect for collaboration..."
+  url: string // e.g., "https://linkedin.com/in/username"
+  icon: string // e.g., "linkedin", "github", "discord"
   category: 'social' | 'professional' | 'community' | 'other'
-  isActive: boolean                // Show/hide on frontend
-  order: number                    // Display order
-  bgColor?: string                 // e.g., "bg-blue-600", "bg-red-600"
-  buttonText?: string              // e.g., "Go to LinkedIn", "Visit GitHub"
+  isActive: boolean // Show/hide on frontend
+  order: number // Display order
+  bgColor?: string // e.g., "bg-blue-600", "bg-red-600"
+  buttonText?: string // e.g., "Go to LinkedIn", "Visit GitHub"
   createdAt?: Timestamp
   updatedAt?: Timestamp
 }
 ```
 
 ### Firestore Collection: `contact-links`
+
 Each document contains the above fields with automatic timestamps.
 
 ## API Endpoints
 
 ### Public API
+
 - **GET** `/api/contact-links` - Get active contact links only
 
 ### Admin API (Requires Authentication)
+
 - **GET** `/api/admin/contact-links` - Get all contact links
 - **POST** `/api/admin/contact-links` - Create new contact link
 - **PUT** `/api/admin/contact-links/[id]` - Update contact link
@@ -99,10 +107,12 @@ Each document contains the above fields with automatic timestamps.
 ### For Administrators
 
 1. **Access Admin Panel**
+
    - Navigate to `/admin-portal-x7k9m2p/contacts`
    - Login with admin credentials
 
 2. **Add New Link**
+
    - Click "Add Link" button
    - Fill in all required fields:
      - Title (required)
@@ -116,11 +126,13 @@ Each document contains the above fields with automatic timestamps.
      - Active (checkbox to show/hide)
 
 3. **Edit Existing Link**
+
    - Click edit icon on any link
    - Modify fields as needed
    - Click "Save" to update
 
 4. **Delete Link**
+
    - Click delete icon
    - Confirm deletion in popup
 
@@ -130,6 +142,7 @@ Each document contains the above fields with automatic timestamps.
 ### For Frontend Display
 
 The contact links automatically appear on the `/contact` page in a responsive grid layout. Each link displays:
+
 - Custom background color
 - Icon
 - Title and description
@@ -170,6 +183,7 @@ The contact links automatically appear on the `/contact` page in a responsive gr
 ## Real-time Updates
 
 The system uses Firestore's real-time capabilities:
+
 - Changes in admin panel reflect immediately on frontend
 - No page refresh required
 - Optimistic updates for better UX
@@ -184,8 +198,9 @@ The system uses Firestore's real-time capabilities:
 ## Default Links
 
 The system initializes with these default links:
+
 1. **GitHub** - Explore the code
-2. **LinkedIn** - Let's connect  
+2. **LinkedIn** - Let's connect
 3. **NPM** - Open source
 4. **Discord** - Chat with the community
 
@@ -194,11 +209,13 @@ The system initializes with these default links:
 ### Common Issues
 
 1. **"Failed to save link" error**
+
    - Check Firestore rules allow authenticated writes
    - Verify URL format (must start with http:// or https://)
    - Ensure required fields are filled
 
 2. **Links not appearing on frontend**
+
    - Check if links are marked as "Active"
    - Verify Firestore rules allow public reads for active links
    - Check browser console for API errors
@@ -221,6 +238,7 @@ match /contact-links/{document} {
 ## Future Enhancements
 
 Potential improvements that could be added:
+
 - Drag-and-drop reordering
 - Bulk operations (delete multiple, bulk edit)
 - Link analytics (click tracking)

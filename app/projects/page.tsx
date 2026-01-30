@@ -2,9 +2,11 @@ import { Metadata } from 'next'
 
 import Container from '@/components/elements/Container'
 import PageHeading from '@/components/elements/PageHeading'
-import { METADATA } from '@/common/constant/metadata'
-import Projects from '@/modules/projects/components/Projects'
 import { getProjects } from '@/services/codemaliq'
+
+import { METADATA } from '@/common/constant/metadata'
+
+import Projects from '@/modules/projects/components/Projects'
 
 export const metadata: Metadata = {
   title: `Projects ${METADATA.exTitle}`,

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import ConfigEditor from '@/components/admin/config/ConfigEditor'
 
 export const metadata: Metadata = {

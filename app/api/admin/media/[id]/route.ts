@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { deleteFromFirebaseDatabase, getFirebaseDatabaseMedia } from '@/lib/firebase-media'
 import { createAuditLog } from '@/lib/audit-log'
+import { deleteFromFirebaseDatabase, getFirebaseDatabaseMedia } from '@/lib/firebase-media'
 
 /**
  * DELETE /api/admin/media/[id]
@@ -10,7 +11,7 @@ import { createAuditLog } from '@/lib/audit-log'
 export const DELETE = withAdminAuthSession(async (request, session, context) => {
   try {
     const { id } = context?.params || {}
-    
+
     if (!id) {
       return NextResponse.json(
         {

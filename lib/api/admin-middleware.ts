@@ -1,18 +1,17 @@
 import { NextResponse } from 'next/server'
+
 import { getAdminSession } from '@/lib/admin-auth'
 
 /**
  * Higher-order function to protect API routes with admin authentication
- * 
+ *
  * Usage:
  * export const GET = withAdminAuth(async (request, session) => {
  *   // Your API logic here
  *   return NextResponse.json({ data: 'protected data' })
  * })
  */
-export function withAdminAuth<T extends any[]>(
-  handler: (request: Request, ...args: T) => Promise<NextResponse>
-) {
+export function withAdminAuth<T extends any[]>(handler: (request: Request, ...args: T) => Promise<NextResponse>) {
   return async (request: Request, ...args: T): Promise<NextResponse> => {
     try {
       // Check if user is authenticated and is an admin
@@ -45,7 +44,7 @@ export function withAdminAuth<T extends any[]>(
 
 /**
  * Middleware variant that passes the session to the handler
- * 
+ *
  * Usage:
  * export const GET = withAdminAuthSession(async (request, session, context) => {
  *   const adminEmail = session.user.email
@@ -55,7 +54,7 @@ export function withAdminAuth<T extends any[]>(
  */
 export function withAdminAuthSession(
   handler: (
-    request: Request, 
+    request: Request,
     session: NonNullable<Awaited<ReturnType<typeof getAdminSession>>>,
     context?: { params: any }
   ) => Promise<NextResponse>

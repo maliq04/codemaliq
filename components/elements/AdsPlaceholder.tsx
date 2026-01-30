@@ -24,13 +24,7 @@ export default function AdsBanner({ className = 'h-full', data }: AdsBannerProps
       target="_blank"
     >
       <div className="flex items-center space-x-2 px-3 py-1">
-        <Image 
-          src={data.image} 
-          alt="promote icon" 
-          width={30} 
-          height={30} 
-          style={{ width: 'auto', height: 'auto' }}
-        />
+        <Image src={data.image} alt="promote icon" width={30} height={30} style={{ width: 'auto', height: 'auto' }} />
         <p>{data.description || 'Iklan'}</p>
       </div>
     </Link>

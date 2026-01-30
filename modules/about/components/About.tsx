@@ -2,12 +2,13 @@
 
 import Image from 'next/image'
 
-import { METADATA } from '@/common/constant/metadata'
-import { SOCIAL_MEDIA } from '@/common/constant/menu'
-import { ICareer } from '@/common/types/careers'
 import Breakline from '@/components/elements/Breakline'
-import SocialMedia from '@/components/elements/SocialMedia'
 import CVDownloadButton from '@/components/elements/CVDownloadButton'
+import SocialMedia from '@/components/elements/SocialMedia'
+
+import { SOCIAL_MEDIA } from '@/common/constant/menu'
+import { METADATA } from '@/common/constant/metadata'
+import { ICareer } from '@/common/types/careers'
 
 import CareerList from './CareerList'
 import SkillList from './SkillList'
@@ -18,7 +19,9 @@ interface AboutProps {
 }
 
 export default function About({ careers }: AboutProps) {
-  const githubUsername = SOCIAL_MEDIA.find(item => item.id === 'GitHub')?.href.split('/').pop()
+  const githubUsername = SOCIAL_MEDIA.find(item => item.id === 'GitHub')
+    ?.href.split('/')
+    .pop()
   const profileName = METADATA.creator
 
   return (
@@ -31,7 +34,11 @@ export default function About({ careers }: AboutProps) {
         <Breakline />
         <SkillList />
       </div>
-      <div data-aos="fade-right" className="mb-10 w-full flex-col items-center space-y-4 lg:mb-0 lg:w-4/12" suppressHydrationWarning={true}>
+      <div
+        data-aos="fade-right"
+        className="mb-10 w-full flex-col items-center space-y-4 lg:mb-0 lg:w-4/12"
+        suppressHydrationWarning={true}
+      >
         <div className="flex flex-col items-center space-y-2">
           <Image
             src={METADATA.profile}

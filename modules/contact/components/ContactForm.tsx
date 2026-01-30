@@ -43,7 +43,7 @@ export default function ContactForm() {
       if (emailResponse.status === 'fulfilled' && emailResponse.value.status === 200) {
         setIsSuccess(true)
       }
-      
+
       reset()
       setIsLoading(false)
     } catch (error) {

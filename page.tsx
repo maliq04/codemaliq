@@ -1,29 +1,29 @@
-import { Metadata } from 'next';
+import { Metadata } from 'next'
 
-import BlogCard from '@/modules/blog/components/BlogCard';
-import AdsPlaceholder from '@/components/elements/AdsPlaceholder';
-import SearchInput from '@/SearchInput';
-import Section from '@/components/elements/Section';
-import { siteConfig } from '@/config';
-import { getBlogData } from '@/services/blog'; // Path yang benar untuk data blog
-import { getPromotions } from '@/services/codemaliq';
-import { BlogItem } from '@/common/types/blog';
-import { IAdsBanner } from '@/common/types/ads';
+import SearchInput from '@/SearchInput'
+import AdsPlaceholder from '@/components/elements/AdsPlaceholder'
+import Section from '@/components/elements/Section'
+import { siteConfig } from '@/config'
+import { getBlogData } from '@/services/blog'
+// Path yang benar untuk data blog
+import { getPromotions } from '@/services/codemaliq'
+
+import { IAdsBanner } from '@/common/types/ads'
+import { BlogItem } from '@/common/types/blog'
+
+import BlogCard from '@/modules/blog/components/BlogCard'
 
 export const metadata: Metadata = {
   title: 'Blog',
   description: `Kumpulan tulisan seputar pemrograman, teknologi, dan pengembangan diri oleh ${siteConfig.author.name}.`,
   alternates: {
-    canonical: `${siteConfig.url}/blog`,
-  },
-};
+    canonical: `${siteConfig.url}/blog`
+  }
+}
 
 export default async function BlogPage() {
-  const [posts, promotions] = await Promise.all([
-    getBlogData(),
-    getPromotions()
-  ]);
-  const promotion = promotions.find((item: IAdsBanner) => item.showingOn?.includes('/blog'));
+  const [posts, promotions] = await Promise.all([getBlogData(), getPromotions()])
+  const promotion = promotions.find((item: IAdsBanner) => item.showingOn?.includes('/blog'))
 
   return (
     <Section>
@@ -41,5 +41,5 @@ export default async function BlogPage() {
         ))}
       </div>
     </Section>
-  );
+  )
 }

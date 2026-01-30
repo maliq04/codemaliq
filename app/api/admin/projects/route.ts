@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { readJSONFile, writeJSONFile } from '@/lib/fs-utils'
 import { createAuditLog } from '@/lib/audit-log'
+import { readJSONFile, writeJSONFile } from '@/lib/fs-utils'
 
 /**
  * GET /api/admin/projects
@@ -66,9 +67,7 @@ export const POST = withAdminAuthSession(async (request, session) => {
     }
 
     // Generate new ID
-    const maxId = data.projects?.length > 0 
-      ? Math.max(...data.projects.map((p: any) => p.id || 0))
-      : 0
+    const maxId = data.projects?.length > 0 ? Math.max(...data.projects.map((p: any) => p.id || 0)) : 0
     const newId = maxId + 1
 
     const newProject = {

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { FirebaseContactInboxService, ContactMessage } from '@/lib/firebase-social-links'
-import { MdEmail, MdMarkEmailRead, MdDelete, MdRefresh } from 'react-icons/md'
+import { ContactMessage, FirebaseContactInboxService } from '@/lib/firebase-social-links'
+import { useEffect, useState } from 'react'
+import { MdDelete, MdEmail, MdMarkEmailRead, MdRefresh } from 'react-icons/md'
 
 export default function ContactInboxManager() {
   const [messages, setMessages] = useState<ContactMessage[]>([])
@@ -33,16 +33,16 @@ export default function ContactInboxManager() {
       }, 10000) // 10 second timeout
 
       // Subscribe to real-time inbox updates
-      unsubscribe = FirebaseContactInboxService.subscribeToMessages((updatedMessages) => {
+      unsubscribe = FirebaseContactInboxService.subscribeToMessages(updatedMessages => {
         clearTimeout(timeoutId)
         setMessages(updatedMessages)
         setLoading(false)
         setIsConnected(true)
-        
+
         // Count unread messages
         const unread = updatedMessages.filter(msg => !msg.read).length
         setUnreadCount(unread)
-        
+
         console.log('Inbox updated:', updatedMessages.length, 'messages,', unread, 'unread')
       })
     } catch (error) {
@@ -70,7 +70,7 @@ export default function ContactInboxManager() {
 
   const handleDelete = async (messageId: string) => {
     if (!confirm('Delete this message?')) return
-    
+
     try {
       await FirebaseContactInboxService.deleteMessage(messageId)
       if (selectedMessage?.id === messageId) {
@@ -104,7 +104,7 @@ export default function ContactInboxManager() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Contact Inbox</h1>
@@ -113,39 +113,37 @@ export default function ContactInboxManager() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
-            isConnected 
-              ? 'bg-green-100 text-green-800' 
-              : 'bg-red-100 text-red-800'
-          }`}>
-            <div className={`w-2 h-2 rounded-full ${
-              isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'
-            }`}></div>
+          <div
+            className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm ${
+              isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }`}
+          >
+            <div className={`h-2 w-2 rounded-full ${isConnected ? 'animate-pulse bg-green-500' : 'bg-red-500'}`}></div>
             {isConnected ? 'Real-time updates' : 'Offline mode'}
           </div>
           <button
             onClick={() => window.location.reload()}
-            className="flex items-center gap-2 px-3 py-1 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm"
+            className="flex items-center gap-2 rounded-md bg-gray-100 px-3 py-1 text-sm text-gray-700 hover:bg-gray-200"
           >
-            <MdRefresh className="w-4 h-4" />
+            <MdRefresh className="h-4 w-4" />
             Refresh
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Messages List */}
-        <div className="lg:col-span-1 space-y-2">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Messages</h2>
-          
+        <div className="space-y-2 lg:col-span-1">
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">Messages</h2>
+
           {messages.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <MdEmail className="w-12 h-12 mx-auto mb-2 opacity-50" />
+            <div className="py-8 text-center text-gray-500">
+              <MdEmail className="mx-auto mb-2 h-12 w-12 opacity-50" />
               <p>No messages yet</p>
-              <p className="text-sm mt-2">Messages from the contact form will appear here</p>
+              <p className="mt-2 text-sm">Messages from the contact form will appear here</p>
             </div>
           ) : (
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+            <div className="max-h-96 space-y-2 overflow-y-auto">
               {messages.map(message => (
                 <div
                   key={message.id}
@@ -155,7 +153,7 @@ export default function ContactInboxManager() {
                       handleMarkAsRead(message.id!)
                     }
                   }}
-                  className={`p-4 rounded-lg border cursor-pointer transition-colors ${
+                  className={`cursor-pointer rounded-lg border p-4 transition-colors ${
                     selectedMessage?.id === message.id
                       ? 'border-blue-500 bg-blue-50'
                       : message.read
@@ -163,21 +161,15 @@ export default function ContactInboxManager() {
                       : 'border-blue-200 bg-blue-50 hover:bg-blue-100'
                   }`}
                 >
-                  <div className="flex items-start justify-between mb-2">
+                  <div className="mb-2 flex items-start justify-between">
                     <div className="flex items-center gap-2">
                       <h3 className="font-medium text-gray-900">{message.name}</h3>
-                      {!message.read && (
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      )}
+                      {!message.read && <div className="h-2 w-2 rounded-full bg-blue-500"></div>}
                     </div>
-                    <span className="text-xs text-gray-500">
-                      {formatTimeAgo(message.timestamp)}
-                    </span>
+                    <span className="text-xs text-gray-500">{formatTimeAgo(message.timestamp)}</span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-2">{message.email}</p>
-                  <p className="text-sm text-gray-700 line-clamp-2">
-                    {message.message}
-                  </p>
+                  <p className="mb-2 text-sm text-gray-600">{message.email}</p>
+                  <p className="line-clamp-2 text-sm text-gray-700">{message.message}</p>
                 </div>
               ))}
             </div>
@@ -187,56 +179,50 @@ export default function ContactInboxManager() {
         {/* Message Detail */}
         <div className="lg:col-span-2">
           {selectedMessage ? (
-            <div className="bg-white rounded-lg border p-6">
-              <div className="flex items-start justify-between mb-6">
+            <div className="rounded-lg border bg-white p-6">
+              <div className="mb-6 flex items-start justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">
-                    {selectedMessage.name}
-                  </h2>
-                  <p className="text-gray-600 mb-1">{selectedMessage.email}</p>
-                  <p className="text-sm text-gray-500">
-                    {formatDate(selectedMessage.timestamp)}
-                  </p>
+                  <h2 className="mb-2 text-xl font-bold text-gray-900">{selectedMessage.name}</h2>
+                  <p className="mb-1 text-gray-600">{selectedMessage.email}</p>
+                  <p className="text-sm text-gray-500">{formatDate(selectedMessage.timestamp)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   {!selectedMessage.read && (
                     <button
                       onClick={() => handleMarkAsRead(selectedMessage.id!)}
-                      className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200"
+                      className="flex items-center gap-1 rounded-md bg-blue-100 px-3 py-1 text-sm text-blue-700 hover:bg-blue-200"
                     >
-                      <MdMarkEmailRead className="w-4 h-4" />
+                      <MdMarkEmailRead className="h-4 w-4" />
                       Mark as read
                     </button>
                   )}
                   <button
                     onClick={() => handleDelete(selectedMessage.id!)}
-                    className="flex items-center gap-1 px-3 py-1 text-sm bg-red-100 text-red-700 rounded-md hover:bg-red-200"
+                    className="flex items-center gap-1 rounded-md bg-red-100 px-3 py-1 text-sm text-red-700 hover:bg-red-200"
                   >
-                    <MdDelete className="w-4 h-4" />
+                    <MdDelete className="h-4 w-4" />
                     Delete
                   </button>
                 </div>
               </div>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-medium text-gray-900 mb-2">Message:</h3>
-                <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
-                  {selectedMessage.message}
-                </p>
+              <div className="rounded-lg bg-gray-50 p-4">
+                <h3 className="mb-2 font-medium text-gray-900">Message:</h3>
+                <p className="whitespace-pre-wrap leading-relaxed text-gray-700">{selectedMessage.message}</p>
               </div>
 
-              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                <h3 className="font-medium text-blue-900 mb-2">Quick Actions:</h3>
+              <div className="mt-6 rounded-lg bg-blue-50 p-4">
+                <h3 className="mb-2 font-medium text-blue-900">Quick Actions:</h3>
                 <div className="flex gap-2">
                   <a
                     href={`mailto:${selectedMessage.email}?subject=Re: Your message&body=Hi ${selectedMessage.name},%0D%0A%0D%0AThank you for your message.%0D%0A%0D%0ABest regards`}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+                    className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
                   >
                     Reply via Email
                   </a>
                   <button
                     onClick={() => navigator.clipboard.writeText(selectedMessage.email)}
-                    className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-sm"
+                    className="rounded-md bg-gray-600 px-4 py-2 text-sm text-white hover:bg-gray-700"
                   >
                     Copy Email
                   </button>
@@ -244,14 +230,10 @@ export default function ContactInboxManager() {
               </div>
             </div>
           ) : (
-            <div className="bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-              <MdEmail className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Select a message to view
-              </h3>
-              <p className="text-gray-600">
-                Choose a message from the list to see its full content and reply options.
-              </p>
+            <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
+              <MdEmail className="mx-auto mb-4 h-16 w-16 text-gray-400" />
+              <h3 className="mb-2 text-lg font-medium text-gray-900">Select a message to view</h3>
+              <p className="text-gray-600">Choose a message from the list to see its full content and reply options.</p>
             </div>
           )}
         </div>

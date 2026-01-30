@@ -51,6 +51,7 @@ The admin dashboard is a secure, feature-rich content management system for the 
 ### Core Components
 
 #### 1. AdminLayout Component
+
 ```typescript
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -64,6 +65,7 @@ interface AdminLayoutProps {
 ```
 
 #### 2. AdminAuthGuard Component
+
 ```typescript
 interface AdminAuthGuardProps {
   children: React.ReactNode
@@ -78,6 +80,7 @@ interface AdminAuthGuardProps {
 ```
 
 #### 3. Dashboard Overview Component
+
 ```typescript
 interface DashboardStats {
   totalBlogs: number
@@ -100,6 +103,7 @@ interface ActivityItem {
 #### 4. Blog Management Components
 
 **BlogList Component**
+
 ```typescript
 interface BlogPost {
   slug: string
@@ -121,6 +125,7 @@ interface BlogListProps {
 ```
 
 **BlogEditor Component**
+
 ```typescript
 interface BlogEditorProps {
   post?: BlogPost
@@ -139,6 +144,7 @@ interface BlogEditorProps {
 #### 5. Project Management Components
 
 **ProjectList Component**
+
 ```typescript
 interface Project {
   id: string
@@ -161,6 +167,7 @@ interface ProjectListProps {
 ```
 
 **ProjectEditor Component**
+
 ```typescript
 interface ProjectEditorProps {
   project?: Project
@@ -172,6 +179,7 @@ interface ProjectEditorProps {
 #### 6. Chat Moderation Components
 
 **ChatModeration Component**
+
 ```typescript
 interface ChatMessage {
   id: string
@@ -198,6 +206,7 @@ interface ChatModerationProps {
 #### 7. Media Library Components
 
 **MediaLibrary Component**
+
 ```typescript
 interface MediaItem {
   public_id: string
@@ -218,6 +227,7 @@ interface MediaLibraryProps {
 ```
 
 **MediaUploader Component**
+
 ```typescript
 interface MediaUploaderProps {
   onUploadComplete: (url: string) => void
@@ -230,6 +240,7 @@ interface MediaUploaderProps {
 #### 8. Configuration Management Component
 
 **ConfigEditor Component**
+
 ```typescript
 interface SiteConfig {
   profile: {
@@ -264,6 +275,7 @@ interface ConfigEditorProps {
 ## Data Models
 
 ### Admin User Model
+
 ```typescript
 interface AdminUser {
   email: string
@@ -275,6 +287,7 @@ interface AdminUser {
 ```
 
 ### Audit Log Model
+
 ```typescript
 interface AuditLog {
   id: string
@@ -290,6 +303,7 @@ interface AuditLog {
 ```
 
 ### File System Structure
+
 ```
 project-root/
 ├── contents/
@@ -304,6 +318,7 @@ project-root/
 ```
 
 ### Firebase Structure
+
 ```json
 {
   "chat": {
@@ -339,46 +354,56 @@ project-root/
 
 ## Correctness Properties
 
-*A property is a characteristic or behavior that should hold true across all valid executions of a system-essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees.*
+_A property is a characteristic or behavior that should hold true across all valid executions of a system-essentially, a formal statement about what the system should do. Properties serve as the bridge between human-readable specifications and machine-verifiable correctness guarantees._
 
 ### Property 1: Admin authentication invariant
-*For any* request to admin routes, the user must have a valid NextAuth session AND their email must be in the admin whitelist, otherwise access is denied
+
+_For any_ request to admin routes, the user must have a valid NextAuth session AND their email must be in the admin whitelist, otherwise access is denied
 **Validates: Requirements 1.1, 1.2, 1.3, 1.4**
 
 ### Property 2: File system operation atomicity
-*For any* file write operation (blog, article, config), if the operation fails, the original file content must remain unchanged
+
+_For any_ file write operation (blog, article, config), if the operation fails, the original file content must remain unchanged
 **Validates: Requirements 3.3, 7.3, 10.2**
 
 ### Property 3: Audit log completeness
-*For any* create, update, or delete operation, an audit log entry must be created with timestamp, admin email, and action details
+
+_For any_ create, update, or delete operation, an audit log entry must be created with timestamp, admin email, and action details
 **Validates: Requirements 12.1, 12.4**
 
 ### Property 4: Media upload validation
-*For any* file upload, the system must validate file type and size before uploading to Cloudinary, rejecting invalid files
+
+_For any_ file upload, the system must validate file type and size before uploading to Cloudinary, rejecting invalid files
 **Validates: Requirements 2.2, 3.4, 9.2**
 
 ### Property 5: Configuration update validation
-*For any* configuration update, all required fields must be present and valid before saving to codemaliq.json
+
+_For any_ configuration update, all required fields must be present and valid before saving to codemaliq.json
 **Validates: Requirements 10.2, 10.4**
 
 ### Property 6: Chat message visibility consistency
-*For any* chat message marked as hidden or flagged, it must not appear in the public chat view but must remain in the admin moderation view
+
+_For any_ chat message marked as hidden or flagged, it must not appear in the public chat view but must remain in the admin moderation view
 **Validates: Requirements 5.4**
 
 ### Property 7: Blog slug uniqueness
-*For any* new blog post, the slug must be unique across all existing blog posts, or the system must reject the creation
+
+_For any_ new blog post, the slug must be unique across all existing blog posts, or the system must reject the creation
 **Validates: Requirements 3.2, 3.3**
 
 ### Property 8: Project order preservation
-*For any* project reorder operation, the final order in codemaliq.json must match the order specified by the admin
+
+_For any_ project reorder operation, the final order in codemaliq.json must match the order specified by the admin
 **Validates: Requirements 4.6**
 
 ### Property 9: Session expiration handling
-*For any* admin action, if the session has expired, the system must redirect to sign-in and preserve the intended action for after re-authentication
+
+_For any_ admin action, if the session has expired, the system must redirect to sign-in and preserve the intended action for after re-authentication
 **Validates: Requirements 1.1**
 
 ### Property 10: Cloudinary URL consistency
-*For any* media item uploaded to Cloudinary, the URL stored in the database must be the secure_url returned by Cloudinary
+
+_For any_ media item uploaded to Cloudinary, the URL stored in the database must be the secure_url returned by Cloudinary
 **Validates: Requirements 2.3, 3.4, 4.4, 9.2**
 
 ## Error Handling
@@ -386,21 +411,25 @@ project-root/
 ### Error Categories
 
 1. **Authentication Errors**
+
    - Session expired → Redirect to sign-in with return URL
    - Not admin → Show access denied page
    - Network error → Show retry button
 
 2. **File System Errors**
+
    - File not found → Show error toast, refresh list
    - Permission denied → Log error, show admin message
    - Invalid format → Show validation error with details
 
 3. **Upload Errors**
+
    - File too large → Show size limit message
    - Invalid format → Show accepted formats
    - Cloudinary error → Show error, allow retry
 
 4. **Database Errors**
+
    - Firebase connection lost → Show offline indicator, queue operations
    - Write failed → Show error, preserve form data
    - Read failed → Show error, allow refresh
@@ -423,6 +452,7 @@ project-root/
 ### Unit Testing
 
 **Test Coverage Areas:**
+
 - Admin authentication logic
 - File system operations (read, write, delete)
 - Data validation functions
@@ -430,12 +460,13 @@ project-root/
 - Configuration parsing and validation
 
 **Example Unit Tests:**
+
 ```typescript
 describe('Admin Authentication', () => {
   test('should allow access for whitelisted email', () => {
     // Test admin email validation
   })
-  
+
   test('should deny access for non-whitelisted email', () => {
     // Test non-admin rejection
   })
@@ -445,7 +476,7 @@ describe('Blog Operations', () => {
   test('should generate unique slug from title', () => {
     // Test slug generation
   })
-  
+
   test('should validate required blog fields', () => {
     // Test validation
   })
@@ -457,6 +488,7 @@ describe('Blog Operations', () => {
 **Testing Framework**: fast-check (JavaScript property-based testing library)
 
 **Property Test 1: Admin authentication invariant**
+
 ```typescript
 // Generate random user sessions and verify admin check
 fc.assert(
@@ -466,7 +498,7 @@ fc.assert(
       name: fc.string(),
       isAdmin: fc.boolean()
     }),
-    (user) => {
+    user => {
       const result = checkAdminAccess(user, adminWhitelist)
       return user.isAdmin ? result === true : result === false
     }
@@ -475,6 +507,7 @@ fc.assert(
 ```
 
 **Property Test 2: File operation atomicity**
+
 ```typescript
 // Generate random file operations and verify rollback on failure
 fc.assert(
@@ -484,7 +517,7 @@ fc.assert(
       content: fc.string(),
       shouldFail: fc.boolean()
     }),
-    async (operation) => {
+    async operation => {
       const originalContent = await readFile(operation.filename)
       try {
         await writeFile(operation.filename, operation.content, operation.shouldFail)
@@ -499,6 +532,7 @@ fc.assert(
 ```
 
 **Property Test 3: Audit log completeness**
+
 ```typescript
 // Generate random admin actions and verify audit logs are created
 fc.assert(
@@ -508,13 +542,14 @@ fc.assert(
       resourceType: fc.constantFrom('blog', 'project', 'chat'),
       resourceId: fc.uuid()
     }),
-    async (action) => {
+    async action => {
       await performAdminAction(action)
       const logs = await getAuditLogs()
-      return logs.some(log => 
-        log.action === action.action &&
-        log.resourceType === action.resourceType &&
-        log.resourceId === action.resourceId
+      return logs.some(
+        log =>
+          log.action === action.action &&
+          log.resourceType === action.resourceType &&
+          log.resourceId === action.resourceId
       )
     }
   )
@@ -522,6 +557,7 @@ fc.assert(
 ```
 
 **Property Test 4: Configuration validation**
+
 ```typescript
 // Generate random config updates and verify validation
 fc.assert(
@@ -536,7 +572,7 @@ fc.assert(
         linkedin: fc.webUrl()
       })
     }),
-    (config) => {
+    config => {
       const result = validateConfig(config)
       return result.valid === true
     }
@@ -547,6 +583,7 @@ fc.assert(
 ### Integration Testing
 
 **Test Scenarios:**
+
 1. Complete blog post creation flow (upload image, save post, verify file created)
 2. Project management flow (create, update, reorder, delete)
 3. Chat moderation flow (flag message, reply, delete)
@@ -556,6 +593,7 @@ fc.assert(
 ### End-to-End Testing
 
 **Critical User Flows:**
+
 1. Admin login → Dashboard → Create blog post → Verify on public site
 2. Admin login → Upload media → Use in project → Verify display
 3. Admin login → Moderate chat → Verify changes in public chat
@@ -564,10 +602,12 @@ fc.assert(
 ## API Routes
 
 ### Authentication Routes
+
 - `GET /api/admin/auth/check` - Verify admin status
 - `POST /api/admin/auth/logout` - Clear admin session
 
 ### Blog Management Routes
+
 - `GET /api/admin/blog` - List all blog posts
 - `GET /api/admin/blog/[slug]` - Get single blog post
 - `POST /api/admin/blog` - Create new blog post
@@ -575,6 +615,7 @@ fc.assert(
 - `DELETE /api/admin/blog/[slug]` - Delete blog post
 
 ### Project Management Routes
+
 - `GET /api/admin/projects` - List all projects
 - `POST /api/admin/projects` - Create new project
 - `PUT /api/admin/projects/[id]` - Update project
@@ -582,25 +623,30 @@ fc.assert(
 - `PUT /api/admin/projects/reorder` - Reorder projects
 
 ### Chat Moderation Routes
+
 - `GET /api/admin/chat` - Get all chat messages
 - `DELETE /api/admin/chat/[id]` - Delete chat message
 - `POST /api/admin/chat/reply` - Reply to chat message
 - `PUT /api/admin/chat/[id]/flag` - Flag/unflag message
 
 ### Media Management Routes
+
 - `GET /api/admin/media` - List all media from Cloudinary
 - `POST /api/admin/media/upload` - Upload media to Cloudinary
 - `DELETE /api/admin/media/[id]` - Delete media from Cloudinary
 
 ### Configuration Routes
+
 - `GET /api/admin/config` - Get current configuration
 - `PUT /api/admin/config` - Update configuration
 
 ### Audit Log Routes
+
 - `GET /api/admin/audit` - Get audit logs with pagination
 - `POST /api/admin/audit` - Create audit log entry
 
 ### Contact Management Routes
+
 - `GET /api/admin/contacts` - List all contact submissions
 - `PUT /api/admin/contacts/[id]/read` - Mark contact as read
 - `DELETE /api/admin/contacts/[id]` - Delete contact submission
@@ -608,6 +654,7 @@ fc.assert(
 ## Technology Stack
 
 ### Frontend
+
 - **Framework**: Next.js 14 (App Router)
 - **UI Library**: React 18
 - **Styling**: Tailwind CSS
@@ -618,6 +665,7 @@ fc.assert(
 - **File Upload**: react-dropzone
 
 ### Backend
+
 - **API**: Next.js API Routes
 - **Authentication**: NextAuth.js
 - **File System**: Node.js fs/promises
@@ -626,6 +674,7 @@ fc.assert(
 - **Validation**: Zod
 
 ### Development Tools
+
 - **TypeScript**: Type safety
 - **ESLint**: Code linting
 - **Prettier**: Code formatting

@@ -13,14 +13,14 @@ export default function Blog({ blogs }: BlogProps) {
     <div className="space-y-12">
       {/* Blog Header */}
       <BlogHeader />
-      
+
       {/* Featured Post - Clean Layout */}
       {blogs && blogs.length > 0 && (
         <div className="space-y-8">
           <BlogThumbnail newestBlog={blogs[0]} />
         </div>
       )}
-      
+
       {/* Related Articles Section - Clean Layout */}
       {blogs && blogs.length > 1 && (
         <div className="space-y-6">

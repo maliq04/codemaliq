@@ -39,7 +39,7 @@ const nextConfig = {
   // Disable font optimization to prevent build hanging on network issues
   optimizeFonts: false,
   env: {
-    CODEMALIQ_SERVICE: process.env.CODEMALIQ_SERVICE || '',
+    CODEMALIQ_SERVICE: process.env.CODEMALIQ_SERVICE || ''
   }
 }
 

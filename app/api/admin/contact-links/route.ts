@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { getAllContactLinks, addContactLink } from '@/lib/firestore-contact-links'
+import { addContactLink, getAllContactLinks } from '@/lib/firestore-contact-links'
 
 export const GET = withAdminAuthSession(async () => {
   try {

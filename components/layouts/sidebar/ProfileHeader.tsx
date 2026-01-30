@@ -3,12 +3,12 @@
 import NextImage from 'next/image'
 import Link from 'next/link'
 
+import DynamicLogo from '@/components/elements/DynamicLogo'
+import { useBranding } from '@/components/providers/BrandingProvider'
 import clsx from 'clsx'
 import { MdVerified as VerifiedIcon } from 'react-icons/md'
 
 import { BACKDROP_IMAGE, DEVTO_PROFILE } from '@/common/constant'
-import { useBranding } from '@/components/providers/BrandingProvider'
-import DynamicLogo from '@/components/elements/DynamicLogo'
 
 import Status from '../../elements/Status'
 import ToggleThemeIcon from '../../elements/ToggleThemeIcon'
@@ -21,7 +21,7 @@ interface ProfileHeaderProps {
 
 export default function ProfileHeader({ expandMenu, imageSize }: ProfileHeaderProps) {
   const { branding } = useBranding()
-  
+
   return (
     <div
       className={clsx(
@@ -31,7 +31,7 @@ export default function ProfileHeader({ expandMenu, imageSize }: ProfileHeaderPr
     >
       <div className="relative hidden w-full flex-col items-center overflow-hidden pb-2 lg:flex">
         <Status />
-        <div className="h-24 w-full overflow-hidden rounded-lg dark:brightness-50 3xl:h-40 bg-gradient-to-br from-blue-500 to-purple-600">
+        <div className="h-24 w-full overflow-hidden rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 dark:brightness-50 3xl:h-40">
           {/* Removed problematic Cloudinary image */}
         </div>
         <div className="absolute -right-1 bottom-[55px] z-10 rounded-xl py-2 pr-2 2xl:bottom-28 2xl:right-2">
@@ -46,7 +46,7 @@ export default function ProfileHeader({ expandMenu, imageSize }: ProfileHeaderPr
           />
         </div>
       </div>
-      
+
       {/* Mobile Avatar - Only show on mobile screens */}
       <div className="flex lg:hidden">
         <DynamicLogo

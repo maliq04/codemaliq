@@ -1,7 +1,8 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 interface AdminAuthGuardProps {
@@ -33,7 +34,7 @@ export default function AdminAuthGuard({ children, fallback }: AdminAuthGuardPro
           // Check admin status via API
           const response = await fetch('/api/admin/check-access')
           const data = await response.json()
-          
+
           setIsAdmin(data.isAdmin)
           setUserEmail(data.email)
           setIsChecking(false)

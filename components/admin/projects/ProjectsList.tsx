@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
+import { useEffect, useState } from 'react'
 
 export default function ProjectsList() {
   const router = useRouter()
@@ -70,7 +71,7 @@ export default function ProjectsList() {
       const result = await response.json()
 
       if (result.success) {
-        setProjects(projects.map(p => p.id === id ? result.data : p))
+        setProjects(projects.map(p => (p.id === id ? result.data : p)))
       } else {
         alert(result.error || 'Failed to update project')
       }
@@ -83,11 +84,11 @@ export default function ProjectsList() {
     return (
       <div className="p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
+          <div className="h-8 w-1/4 rounded bg-gray-200"></div>
+          <div className="h-12 rounded bg-gray-200"></div>
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-32 bg-gray-200 rounded"></div>
+              <div key={i} className="h-32 rounded bg-gray-200"></div>
             ))}
           </div>
         </div>
@@ -98,23 +99,21 @@ export default function ProjectsList() {
   if (error) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-          {error}
-        </div>
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">{error}</div>
       </div>
     )
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
-          <p className="text-gray-600 mt-1">{projects.length} total projects</p>
+          <p className="mt-1 text-gray-600">{projects.length} total projects</p>
         </div>
         <Link
           href="/admin-portal-x7k9m2p/projects/new"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
         >
           Create New Project
         </Link>
@@ -122,59 +121,39 @@ export default function ProjectsList() {
 
       <div className="grid gap-4">
         {projects.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
-            No projects found
-          </div>
+          <div className="rounded-lg bg-white p-8 text-center text-gray-500 shadow">No projects found</div>
         ) : (
           projects.map(project => (
-            <div
-              key={project.id}
-              className="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-6"
-            >
+            <div key={project.id} className="rounded-lg bg-white p-6 shadow transition-shadow hover:shadow-md">
               <div className="flex gap-4">
                 {project.image && (
-                  <div className="flex-shrink-0 w-40 h-28 relative rounded-lg overflow-hidden bg-gray-100">
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      sizes="160px"
-                      className="object-cover"
-                    />
+                  <div className="relative h-28 w-40 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                    <Image src={project.image} alt={project.title} fill sizes="160px" className="object-cover" />
                   </div>
                 )}
 
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {project.title}
-                        </h3>
+                      <div className="mb-2 flex items-center gap-2">
+                        <h3 className="text-lg font-semibold text-gray-900">{project.title}</h3>
                         {project.is_featured && (
-                          <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-700 rounded">
+                          <span className="rounded bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">
                             Featured
                           </span>
                         )}
                         <span
-                          className={`px-2 py-1 text-xs font-medium rounded ${
-                            project.is_show
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-gray-100 text-gray-700'
+                          className={`rounded px-2 py-1 text-xs font-medium ${
+                            project.is_show ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                           }`}
                         >
                           {project.is_show ? 'Visible' : 'Hidden'}
                         </span>
                       </div>
-                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-2">
+                      <p className="mb-3 line-clamp-2 text-sm text-gray-600">{project.description}</p>
+                      <div className="mb-2 flex flex-wrap gap-2">
                         {project.stacks?.map((stack: string) => (
-                          <span
-                            key={stack}
-                            className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs"
-                          >
+                          <span key={stack} className="rounded bg-blue-50 px-2 py-1 text-xs text-blue-700">
                             {stack}
                           </span>
                         ))}
@@ -206,14 +185,14 @@ export default function ProjectsList() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => toggleVisibility(project.id, project.is_show)}
-                        className="px-3 py-1 text-sm text-gray-600 hover:bg-gray-50 rounded transition-colors"
+                        className="rounded px-3 py-1 text-sm text-gray-600 transition-colors hover:bg-gray-50"
                         title={project.is_show ? 'Hide' : 'Show'}
                       >
                         {project.is_show ? '👁️' : '👁️‍🗨️'}
                       </button>
                       <button
                         onClick={() => router.push(`/admin-portal-x7k9m2p/projects/${project.id}`)}
-                        className="px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                        className="rounded px-3 py-1 text-sm text-blue-600 transition-colors hover:bg-blue-50"
                       >
                         Edit
                       </button>
@@ -221,13 +200,13 @@ export default function ProjectsList() {
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleDelete(project.id)}
-                            className="px-3 py-1 text-sm text-white bg-red-600 hover:bg-red-700 rounded transition-colors"
+                            className="rounded bg-red-600 px-3 py-1 text-sm text-white transition-colors hover:bg-red-700"
                           >
                             Confirm
                           </button>
                           <button
                             onClick={() => setDeleteConfirm(null)}
-                            className="px-3 py-1 text-sm text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                            className="rounded px-3 py-1 text-sm text-gray-600 transition-colors hover:bg-gray-100"
                           >
                             Cancel
                           </button>
@@ -235,7 +214,7 @@ export default function ProjectsList() {
                       ) : (
                         <button
                           onClick={() => setDeleteConfirm(project.id)}
-                          className="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
+                          className="rounded px-3 py-1 text-sm text-red-600 transition-colors hover:bg-red-50"
                         >
                           Delete
                         </button>

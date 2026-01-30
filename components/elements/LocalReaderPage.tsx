@@ -1,16 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-
 import Breakline from '@/components/elements/Breakline'
+import LocalCommentSystem from '@/components/elements/LocalCommentSystem'
+import LocalInteractionBar from '@/components/elements/LocalInteractionBar'
+import LocalReaderHeader from '@/components/elements/LocalReaderHeader'
 import MDXComponent from '@/components/elements/MDXComponent'
+import { useEffect, useState } from 'react'
 
 import { PLACEHOLDER_URL } from '@/common/constant'
 import { BlogDetailProps } from '@/common/types/blog'
-
-import LocalReaderHeader from '@/components/elements/LocalReaderHeader'
-import LocalInteractionBar from '@/components/elements/LocalInteractionBar'
-import LocalCommentSystem from '@/components/elements/LocalCommentSystem'
 
 interface LocalReaderProps {
   content: BlogDetailProps
@@ -34,7 +32,7 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
     shares: 0,
     bookmarks: 0
   })
-  
+
   const [userInteractions, setUserInteractions] = useState({
     liked: false,
     bookmarked: false
@@ -43,7 +41,7 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
   // Load stats and user interactions on mount (must be before early return)
   useEffect(() => {
     if (!content?.slug) return
-    
+
     const loadStats = async () => {
       try {
         const response = await fetch(`/api/blog/${content.slug}/stats`)
@@ -79,7 +77,7 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
         console.error('Failed to track view:', error)
       }
     }
-    
+
     loadStats()
     loadUserInteractions()
     trackView()
@@ -89,7 +87,7 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
   if (!content) {
     return (
       <div className="p-8 text-center">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <div className="rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700">
           Error: No content provided to LocalReaderPage
         </div>
       </div>
@@ -100,10 +98,10 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
 
   const handleLike = async () => {
     if (!slug || !setStats || !setUserInteractions) return
-    
+
     try {
       const action = userInteractions.liked ? 'unlike' : 'like'
-      
+
       const response = await fetch(`/api/blog/${slug}/stats`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -126,7 +124,7 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
 
   const handleBookmark = async () => {
     if (!slug || !setStats || !setUserInteractions) return
-    
+
     try {
       const action = userInteractions.bookmarked ? 'unbookmark' : 'bookmark'
       const response = await fetch(`/api/blog/${slug}/stats`, {
@@ -151,7 +149,7 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
 
   const handleShare = async () => {
     if (!slug || !setStats) return
-    
+
     try {
       await fetch(`/api/blog/${slug}/stats`, {
         method: 'POST',
@@ -177,16 +175,16 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
         reading_time_minutes={reading_time_minutes}
         published_at={published_at}
       />
-      
+
       <div className="space-y-6 leading-[1.8] text-neutral-900 dark:text-neutral-100">
         {/* Main Black Card */}
-        <div className="w-full max-w-4xl mx-auto overflow-hidden rounded-2xl bg-[#0a0a0a] shadow-2xl">
+        <div className="mx-auto w-full max-w-4xl overflow-hidden rounded-2xl bg-[#0a0a0a] shadow-2xl">
           {/* Image Container: Created Full Width & Full Height according to aspect ratio */}
-          <div className="w-full h-[300px] md:h-[450px] relative">
+          <div className="relative h-[300px] w-full md:h-[450px]">
             <img
               src={cover_image || PLACEHOLDER_URL}
               alt={title || 'Blog post image'}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
               style={{
                 display: 'block',
                 width: '100%',
@@ -196,34 +194,30 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
             />
             {/* Professional gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-            
+
             {/* Title overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                {title || 'Untitled Post'}
-              </h1>
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-white md:p-8">
+              <h1 className="text-2xl font-bold leading-tight md:text-4xl lg:text-5xl">{title || 'Untitled Post'}</h1>
             </div>
           </div>
-          
+
           {/* Title: Here we'll add padding so the text doesn't overlap the edges */}
           <div className="p-10">
-            <h2 className="text-xl font-medium text-white leading-tight mb-4">
+            <h2 className="mb-4 text-xl font-medium leading-tight text-white">
               {/* Additional metadata or description can go here */}
             </h2>
           </div>
         </div>
-        
+
         {/* BLOG CONTENT SECTION */}
-        <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="mx-auto max-w-4xl px-4 py-8">
           {body_markdown ? (
-            <div className="prose prose-lg max-w-none dark:prose-invert">
+            <div className="prose prose-lg dark:prose-invert max-w-none">
               <MDXComponent>{body_markdown}</MDXComponent>
             </div>
           ) : (
-            <div className="p-4 bg-neutral-100 border border-neutral-300 rounded-lg dark:bg-neutral-800 dark:border-neutral-700">
-              <p className="text-neutral-800 dark:text-neutral-200">
-                Content is loading...
-              </p>
+            <div className="rounded-lg border border-neutral-300 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-800">
+              <p className="text-neutral-800 dark:text-neutral-200">Content is loading...</p>
             </div>
           )}
         </div>
@@ -258,11 +252,7 @@ export default function LocalReaderPage({ content, pageViewCount }: LocalReaderP
 
       <Breakline className="!my-6" />
 
-      <LocalCommentSystem
-        slug={slug || ''}
-        commentsCount={stats.comments}
-        onCommentAdded={handleCommentAdded}
-      />
+      <LocalCommentSystem slug={slug || ''} commentsCount={stats.comments} onCommentAdded={handleCommentAdded} />
     </>
   )
 }

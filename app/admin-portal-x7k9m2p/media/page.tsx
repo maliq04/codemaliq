@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import MediaLibrary from '@/components/admin/media/MediaLibrary'
 
 export const metadata: Metadata = {

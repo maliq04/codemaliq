@@ -1,6 +1,7 @@
-import { METADATA } from '@/common/constant/metadata'
 import Saweria from '@/components/elements/Saweria'
 import TypeAnimation from '@/components/elements/TypeAnimation'
+
+import { METADATA } from '@/common/constant/metadata'
 
 export default function Introduction() {
   return (

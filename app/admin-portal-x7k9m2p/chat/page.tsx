@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import ChatModeration from '@/components/admin/chat/ChatModeration'
 
 export const metadata: Metadata = {

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import ProjectsList from '@/components/admin/projects/ProjectsList'
 
 export const metadata: Metadata = {

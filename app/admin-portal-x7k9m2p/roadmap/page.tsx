@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import RoadmapEditor from '@/components/admin/roadmap/RoadmapEditor'
 
 export const metadata: Metadata = {

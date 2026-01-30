@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useBranding } from '@/components/providers/BrandingProvider'
+import { useEffect } from 'react'
 
 export default function DynamicFavicon() {
   const { branding, isLoading } = useBranding()
@@ -13,12 +13,12 @@ export default function DynamicFavicon() {
       // Simple, safe favicon update without removing existing elements
       const isBase64 = branding.faviconUrl.startsWith('data:')
       let faviconUrl = branding.faviconUrl
-      
+
       // For regular URLs, add cache busting. For base64, use as-is
       if (!isBase64) {
         const timestamp = Date.now()
-        faviconUrl = branding.faviconUrl.includes('?') 
-          ? `${branding.faviconUrl}&t=${timestamp}` 
+        faviconUrl = branding.faviconUrl.includes('?')
+          ? `${branding.faviconUrl}&t=${timestamp}`
           : `${branding.faviconUrl}?t=${timestamp}`
       }
 
@@ -35,9 +35,10 @@ export default function DynamicFavicon() {
       if (branding.brandName) {
         const currentTitle = document.title
         const baseTitleParts = currentTitle.split(' | ')
-        document.title = baseTitleParts.length > 1 
-          ? `${baseTitleParts[0]} | ${branding.brandName}`
-          : `${currentTitle} | ${branding.brandName}`
+        document.title =
+          baseTitleParts.length > 1
+            ? `${baseTitleParts[0]} | ${branding.brandName}`
+            : `${currentTitle} | ${branding.brandName}`
       }
     } catch (error) {
       console.error('Error updating favicon:', error)
@@ -65,7 +66,7 @@ export default function DynamicFavicon() {
     }
 
     window.addEventListener('brandingForceUpdate', handleBrandingUpdate)
-    
+
     return () => {
       clearTimeout(updateTimer)
       window.removeEventListener('brandingForceUpdate', handleBrandingUpdate)

@@ -30,6 +30,7 @@ firebase deploy --only storage
 If you don't have Firebase CLI, update rules manually in Firebase Console:
 
 #### Database Rules (Firebase Console → Realtime Database → Rules):
+
 ```json
 {
   "rules": {
@@ -40,6 +41,7 @@ If you don't have Firebase CLI, update rules manually in Firebase Console:
 ```
 
 #### Storage Rules (Firebase Console → Storage → Rules):
+
 ```javascript
 rules_version = '2';
 service firebase.storage {
@@ -76,11 +78,13 @@ firebase deploy --only database,storage
 ## 📋 Verification Steps
 
 ### Database Rules Deployed Successfully:
+
 - [ ] No more "permission_denied" errors in console
 - [ ] CV Manager loads without errors
 - [ ] Can read CV data from Firebase
 
 ### Storage Rules Deployed Successfully:
+
 - [ ] No more CORS errors in console
 - [ ] File upload works without errors
 - [ ] Files appear in Firebase Storage console
@@ -88,16 +92,19 @@ firebase deploy --only database,storage
 ## 🔍 Troubleshooting
 
 ### If Database Rules Don't Work:
+
 1. Check Firebase Console → Realtime Database → Rules
 2. Ensure rules are published (not just saved)
 3. Try the simple rule: `{ "rules": { ".read": true, ".write": true } }`
 
 ### If Storage Rules Don't Work:
+
 1. Check Firebase Console → Storage → Rules
 2. Ensure rules are published
 3. Try the simple rule: `allow read, write: if true;`
 
 ### If Still Getting CORS Errors:
+
 1. Check Firebase project configuration
 2. Verify the correct Firebase project is being used
 3. Check if Storage is enabled in Firebase Console
@@ -106,6 +113,7 @@ firebase deploy --only database,storage
 ## 🎯 Expected Result
 
 After deploying the rules:
+
 - ✅ CV Manager loads without errors
 - ✅ File upload works successfully
 - ✅ CV appears on About page

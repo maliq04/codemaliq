@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { FaGithub, FaLinkedin, FaNpm, FaDiscord, FaTwitter, FaInstagram, FaYoutube, FaTiktok } from 'react-icons/fa'
-import { MdEdit, MdDelete, MdAdd, MdSave, MdCancel } from 'react-icons/md'
+import { useEffect, useState } from 'react'
+import { FaDiscord, FaGithub, FaInstagram, FaLinkedin, FaNpm, FaTiktok, FaTwitter, FaYoutube } from 'react-icons/fa'
+import { MdAdd, MdCancel, MdDelete, MdEdit, MdSave } from 'react-icons/md'
+
 import FirebaseStatusBanner from '../FirebaseStatusBanner'
 
 interface ContactLink {
@@ -128,7 +129,7 @@ export default function ContactLinksManager() {
         alert('Title is required')
         return
       }
-      
+
       if (!linkData.url?.trim()) {
         alert('URL is required')
         return
@@ -149,7 +150,7 @@ export default function ContactLinksManager() {
 
       const apiUrl = editingId ? `/api/admin/contact-links/${editingId}` : '/api/admin/contact-links'
       const method = editingId ? 'PUT' : 'POST'
-      
+
       const dataToSend = {
         ...linkData,
         title: linkData.title?.trim(),
@@ -157,13 +158,13 @@ export default function ContactLinksManager() {
         description: linkData.description?.trim() || '',
         order: Number(linkData.order) || 1
       }
-      
+
       const response = await fetch(apiUrl, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend)
       })
-      
+
       const result = await response.json()
       if (result.success) {
         await fetchLinks()
@@ -182,7 +183,7 @@ export default function ContactLinksManager() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this contact link?')) return
-    
+
     try {
       const response = await fetch(`/api/admin/contact-links/${id}`, { method: 'DELETE' })
       const result = await response.json()
@@ -201,10 +202,10 @@ export default function ContactLinksManager() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isActive })
       })
-      
+
       const result = await response.json()
       if (result.success) {
-        setLinks(links.map(l => l.id === id ? { ...l, isActive } : l))
+        setLinks(links.map(l => (l.id === id ? { ...l, isActive } : l)))
       }
     } catch (err) {
       alert('Failed to update link')
@@ -239,65 +240,65 @@ export default function ContactLinksManager() {
 
   const renderIcon = (iconName: string) => {
     const IconComponent = iconMap[iconName as keyof typeof iconMap]
-    return IconComponent ? <IconComponent className="w-5 h-5" /> : <FaGithub className="w-5 h-5" />
+    return IconComponent ? <IconComponent className="h-5 w-5" /> : <FaGithub className="h-5 w-5" />
   }
 
   const renderForm = () => (
-    <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-4 rounded-lg bg-gray-50 p-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Title *</label>
           <input
             type="text"
             value={formData.title || ''}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={e => setFormData({ ...formData, title: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="e.g., Let's connect"
             required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">URL *</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">URL *</label>
           <input
             type="url"
             value={formData.url || ''}
-            onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={e => setFormData({ ...formData, url: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="https://github.com/username"
             required
           />
-          <p className="text-xs text-gray-500 mt-1">Must start with http:// or https://</p>
+          <p className="mt-1 text-xs text-gray-500">Must start with http:// or https://</p>
         </div>
       </div>
-      
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <label className="mb-1 block text-sm font-medium text-gray-700">Description</label>
         <textarea
           value={formData.description || ''}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={e => setFormData({ ...formData, description: e.target.value })}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           rows={2}
           placeholder="Brief description of this link"
         />
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Button Text</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Button Text</label>
           <input
             type="text"
             value={formData.buttonText || ''}
-            onChange={(e) => setFormData({ ...formData, buttonText: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={e => setFormData({ ...formData, buttonText: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="e.g., Go to GitHub"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Background Color</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Background Color</label>
           <select
             value={formData.bgColor || 'bg-slate-900'}
-            onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={e => setFormData({ ...formData, bgColor: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="bg-slate-900">Dark Gray (GitHub)</option>
             <option value="bg-blue-600">Blue (LinkedIn)</option>
@@ -312,26 +313,28 @@ export default function ContactLinksManager() {
           </select>
         </div>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Icon</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Icon</label>
           <select
             value={formData.icon || 'github'}
-            onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={e => setFormData({ ...formData, icon: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {Object.keys(iconMap).map(icon => (
-              <option key={icon} value={icon}>{icon}</option>
+              <option key={icon} value={icon}>
+                {icon}
+              </option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Category</label>
           <select
             value={formData.category || 'professional'}
-            onChange={(e) => setFormData({ ...formData, category: e.target.value as ContactLink['category'] })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={e => setFormData({ ...formData, category: e.target.value as ContactLink['category'] })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="social">Social</option>
             <option value="professional">Professional</option>
@@ -340,39 +343,39 @@ export default function ContactLinksManager() {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Order</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">Order</label>
           <input
             type="number"
             value={formData.order || 1}
-            onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={e => setFormData({ ...formData, order: parseInt(e.target.value) })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             min="1"
           />
         </div>
       </div>
-      
+
       <div className="flex items-center gap-4">
         <label className="flex items-center">
           <input
             type="checkbox"
             checked={formData.isActive || false}
-            onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+            onChange={e => setFormData({ ...formData, isActive: e.target.checked })}
             className="mr-2"
           />
           Active
         </label>
       </div>
-      
+
       <div className="flex gap-2">
         <button
           onClick={() => handleSave(formData)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
           <MdSave /> Save
         </button>
         <button
           onClick={cancelEdit}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+          className="flex items-center gap-2 rounded-md bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
         >
           <MdCancel /> Cancel
         </button>
@@ -385,14 +388,14 @@ export default function ContactLinksManager() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <FirebaseStatusBanner />
-      
+
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Contact Links Management</h1>
         <button
           onClick={startAdd}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+          className="flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
         >
           <MdAdd /> Add Link
         </button>
@@ -404,37 +407,42 @@ export default function ContactLinksManager() {
         {links
           .sort((a, b) => a.order - b.order)
           .map(link => (
-            <div key={link.id} className="bg-white rounded-lg shadow p-4">
+            <div key={link.id} className="rounded-lg bg-white p-4 shadow">
               {editingId === link.id ? (
                 renderForm()
               ) : (
                 <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4 flex-1">
+                  <div className="flex flex-1 items-start gap-4">
                     <div className="flex items-center gap-2">
                       {renderIcon(link.icon)}
-                      <span className={`px-2 py-1 text-xs rounded ${
-                        link.category === 'professional' ? 'bg-blue-100 text-blue-700' :
-                        link.category === 'social' ? 'bg-purple-100 text-purple-700' :
-                        link.category === 'community' ? 'bg-green-100 text-green-700' :
-                        'bg-gray-100 text-gray-700'
-                      }`}>
+                      <span
+                        className={`rounded px-2 py-1 text-xs ${
+                          link.category === 'professional'
+                            ? 'bg-blue-100 text-blue-700'
+                            : link.category === 'social'
+                            ? 'bg-purple-100 text-purple-700'
+                            : link.category === 'community'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-gray-100 text-gray-700'
+                        }`}
+                      >
                         {link.category}
                       </span>
                     </div>
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="mb-1 flex items-center gap-2">
                         <h3 className="font-medium text-gray-900">{link.title}</h3>
                         <span className="text-sm text-gray-500">#{link.order}</span>
                         {!link.isActive && (
-                          <span className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded">Inactive</span>
+                          <span className="rounded bg-red-100 px-2 py-1 text-xs text-red-700">Inactive</span>
                         )}
                       </div>
-                      <p className="text-gray-600 text-sm mb-2">{link.description}</p>
+                      <p className="mb-2 text-sm text-gray-600">{link.description}</p>
                       <a
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 text-sm"
+                        className="text-sm text-blue-600 hover:text-blue-800"
                       >
                         {link.url}
                       </a>
@@ -445,21 +453,15 @@ export default function ContactLinksManager() {
                       <input
                         type="checkbox"
                         checked={link.isActive}
-                        onChange={(e) => handleToggleActive(link.id, e.target.checked)}
+                        onChange={e => handleToggleActive(link.id, e.target.checked)}
                         className="mr-1"
                       />
                       Active
                     </label>
-                    <button
-                      onClick={() => startEdit(link)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-                    >
+                    <button onClick={() => startEdit(link)} className="rounded p-2 text-blue-600 hover:bg-blue-50">
                       <MdEdit />
                     </button>
-                    <button
-                      onClick={() => handleDelete(link.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded"
-                    >
+                    <button onClick={() => handleDelete(link.id)} className="rounded p-2 text-red-600 hover:bg-red-50">
                       <MdDelete />
                     </button>
                   </div>

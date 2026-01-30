@@ -1,25 +1,26 @@
 'use client'
 
-import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+import { signOut, useSession } from 'next-auth/react'
 import { useState } from 'react'
 import {
-  FiHome,
+  FiActivity,
+  FiBook,
   FiFileText,
   FiFolder,
-  FiMessageSquare,
+  FiHome,
   FiImage,
-  FiSettings,
-  FiBook,
-  FiMap,
-  FiMail,
-  FiActivity,
-  FiMenu,
-  FiX,
   FiLogOut,
+  FiMail,
+  FiMap,
+  FiMenu,
+  FiMessageSquare,
+  FiSettings,
   FiUpload,
-  FiUser
+  FiUser,
+  FiX
 } from 'react-icons/fi'
 
 interface AdminLayoutProps {
@@ -60,10 +61,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     <div className="flex h-screen bg-neutral-100 dark:bg-neutral-900">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
       {/* Sidebar */}
@@ -111,11 +109,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <div className="border-t border-neutral-200 p-4 dark:border-neutral-700">
             <div className="mb-3 flex items-center gap-3">
               {session?.user?.image && (
-                <img
-                  src={session.user.image}
-                  alt={session.user.name || 'Admin'}
-                  className="h-10 w-10 rounded-full"
-                />
+                <img src={session.user.image} alt={session.user.name || 'Admin'} className="h-10 w-10 rounded-full" />
               )}
               <div className="flex-1 overflow-hidden">
                 <p className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">

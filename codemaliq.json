@@ -134,13 +134,7 @@
       "image": "",
       "link_demo": "https://codemaliq.com",
       "link_github": "https://github.com/maliq04/portfolio",
-      "stacks": [
-        "Next.js",
-        "TypeScript",
-        "Tailwind CSS",
-        "Framer Motion",
-        "Firebase"
-      ],
+      "stacks": ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Firebase"],
       "is_show": true,
       "is_featured": true
     },
@@ -152,12 +146,7 @@
       "image": "",
       "link_demo": "https://todo.codemaliq.com",
       "link_github": "https://github.com/maliq04/vue-todo",
-      "stacks": [
-        "Vue.js",
-        "JavaScript",
-        "SCSS",
-        "LocalStorage"
-      ],
+      "stacks": ["Vue.js", "JavaScript", "SCSS", "LocalStorage"],
       "is_show": true,
       "is_featured": false
     },

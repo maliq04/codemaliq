@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next'
 
 import Analytics from '@/components/elements/Analytics'
-import GoogleAdsense from '@/components/elements/GoogleAdsense'
 import DynamicFavicon from '@/components/elements/DynamicFavicon'
+import GoogleAdsense from '@/components/elements/GoogleAdsense'
 import Layouts from '@/components/layouts/index'
-import NextAuthSessionProvider from '@/components/providers/SessionProvider'
 import BrandingProvider from '@/components/providers/BrandingProvider'
+import NextAuthSessionProvider from '@/components/providers/SessionProvider'
 import { GeistSans } from 'geist/font/sans'
 import NextTopLoader from 'nextjs-toploader'
 
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
-    apple: '/favicon.ico',
+    apple: '/favicon.ico'
   }
 }
 
@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </ThemeProviderContext>
           </BrandingProvider>
         </NextAuthSessionProvider>
-        
+
         {/* Error suppression script for browser extensions */}
         <script
           dangerouslySetInnerHTML={{

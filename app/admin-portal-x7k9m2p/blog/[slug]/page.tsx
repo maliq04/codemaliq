@@ -1,8 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+
 import BlogEditor from '@/components/admin/blog/BlogEditor'
+import { useEffect, useState } from 'react'
+
 import type { BlogPost } from '@/common/types/admin'
 
 export default function EditBlogPage() {
@@ -65,9 +67,9 @@ export default function EditBlogPage() {
     return (
       <div className="p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="h-64 bg-gray-200 rounded"></div>
+          <div className="h-8 w-1/4 rounded bg-gray-200"></div>
+          <div className="h-12 rounded bg-gray-200"></div>
+          <div className="h-64 rounded bg-gray-200"></div>
         </div>
       </div>
     )
@@ -76,12 +78,10 @@ export default function EditBlogPage() {
   if (error || !post) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-          {error || 'Post not found'}
-        </div>
+        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">{error || 'Post not found'}</div>
         <button
           onClick={() => router.push('/admin-portal-x7k9m2p/blog')}
-          className="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+          className="mt-4 rounded bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
         >
           Back to Blog List
         </button>
@@ -92,10 +92,7 @@ export default function EditBlogPage() {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <button
-          onClick={() => router.push('/admin-portal-x7k9m2p/blog')}
-          className="text-blue-600 hover:text-blue-700"
-        >
+        <button onClick={() => router.push('/admin-portal-x7k9m2p/blog')} className="text-blue-600 hover:text-blue-700">
           ← Back to Blog List
         </button>
       </div>

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import BlogList from '@/components/admin/blog/BlogList'
 
 export const metadata: Metadata = {

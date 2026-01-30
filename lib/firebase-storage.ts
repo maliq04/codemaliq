@@ -25,21 +25,21 @@ export async function uploadToFirebaseStorage(
     console.log('File name:', fileName)
     console.log('Folder:', folder)
     console.log('Storage bucket:', process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET)
-    
+
     const bucket = storage.bucket()
     console.log('Bucket obtained:', bucket.name)
-    
+
     const filePath = `${folder}/${Date.now()}-${fileName}`
     console.log('File path:', filePath)
-    
+
     const fileUpload = bucket.file(filePath)
 
     // Upload the file
     await fileUpload.save(file, {
       metadata: {
-        contentType: 'image/jpeg', // Will be detected automatically
+        contentType: 'image/jpeg' // Will be detected automatically
       },
-      public: true,
+      public: true
     })
     console.log('File uploaded successfully')
 

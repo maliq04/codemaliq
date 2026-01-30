@@ -20,13 +20,7 @@ export default function ServicesList({ services }: { services: IServices[] }) {
       </div>
       <div className="mt-6 grid gap-4 md:grid-cols-2 3xl:grid-cols-4">
         {displayServices.map((item, index) => (
-          <ServicesCard
-            key={item.id}
-            id={item.id}
-            tag={item.tag}
-            title={item.title}
-            description={item.description}
-          />
+          <ServicesCard key={item.id} id={item.id} tag={item.tag} title={item.title} description={item.description} />
         ))}
       </div>
     </section>

@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { FaGithub, FaLinkedin, FaNpm, FaDiscord, FaTwitter, FaInstagram, FaYoutube, FaTiktok } from 'react-icons/fa'
+
+import { useEffect, useState } from 'react'
+import { FaDiscord, FaGithub, FaInstagram, FaLinkedin, FaNpm, FaTiktok, FaTwitter, FaYoutube } from 'react-icons/fa'
 
 interface ContactLink {
   id: string
@@ -52,15 +53,19 @@ export default function ContactLinks() {
 
   const renderIcon = (iconName: string) => {
     const IconComponent = iconMap[iconName as keyof typeof iconMap]
-    return IconComponent ? <IconComponent className="w-8 h-8 text-white" /> : <FaGithub className="w-8 h-8 text-white" />
+    return IconComponent ? (
+      <IconComponent className="h-8 w-8 text-white" />
+    ) : (
+      <FaGithub className="h-8 w-8 text-white" />
+    )
   }
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {[...Array(4)].map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="bg-gray-200 dark:bg-gray-700 rounded-2xl h-40"></div>
+            <div className="h-40 rounded-2xl bg-gray-200 dark:bg-gray-700"></div>
           </div>
         ))}
       </div>
@@ -69,51 +74,45 @@ export default function ContactLinks() {
 
   if (links.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-gray-500 dark:text-gray-400">No contact links available at the moment.</p>
       </div>
     )
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       {links
         .sort((a, b) => a.order - b.order)
         .map(link => (
           <div
             key={link.id}
-            className={`p-6 rounded-2xl text-white relative overflow-hidden group hover:scale-105 transition-transform duration-300 ${
+            className={`group relative overflow-hidden rounded-2xl p-6 text-white transition-transform duration-300 hover:scale-105 ${
               link.bgColor || 'bg-neutral-900'
             }`}
           >
             {/* Background pattern/texture */}
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-4 right-4">
-                {renderIcon(link.icon)}
-              </div>
+              <div className="absolute right-4 top-4">{renderIcon(link.icon)}</div>
             </div>
-            
+
             {/* Content */}
             <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-2">{link.title}</h3>
-              <p className="text-sm opacity-80 mb-4 leading-relaxed">
-                {link.description}
-              </p>
-              
+              <h3 className="mb-2 text-xl font-bold">{link.title}</h3>
+              <p className="mb-4 text-sm leading-relaxed opacity-80">{link.description}</p>
+
               <Link
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium transition-colors duration-200 backdrop-blur-sm"
+                className="inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium backdrop-blur-sm transition-colors duration-200 hover:bg-white/30"
               >
                 {link.buttonText || 'Go to Link'} →
               </Link>
             </div>
-            
+
             {/* Large icon in background */}
-            <div className="absolute bottom-4 right-4 opacity-20">
-              {renderIcon(link.icon)}
-            </div>
+            <div className="absolute bottom-4 right-4 opacity-20">{renderIcon(link.icon)}</div>
           </div>
         ))}
     </div>

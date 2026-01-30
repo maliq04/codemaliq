@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server'
+
 import { testFirebaseConnection } from '@/lib/firebase-connection-test'
 
 export async function GET() {
   try {
     const result = await testFirebaseConnection()
-    
+
     return NextResponse.json({
       success: true,
       firebaseConnected: result.success,

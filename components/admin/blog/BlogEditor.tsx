@@ -1,7 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+
+import { useEffect, useState } from 'react'
+
 import type { BlogPost, BlogPostFormData } from '@/common/types/admin'
 
 interface BlogEditorProps {
@@ -133,7 +135,7 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
 
   // Auto-resize image function for optimal blog display
   const resizeImageForBlog = (file: File): Promise<File> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
       const img = new Image()
@@ -142,40 +144,44 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
         // Target dimensions for blog images (16:9 aspect ratio)
         const targetWidth = 1200
         const targetHeight = 675
-        
+
         // Calculate scaling to maintain aspect ratio
         const scale = Math.max(targetWidth / img.width, targetHeight / img.height)
         const scaledWidth = img.width * scale
         const scaledHeight = img.height * scale
-        
+
         // Set canvas size to target dimensions
         canvas.width = targetWidth
         canvas.height = targetHeight
-        
+
         if (ctx) {
           // Fill with white background
           ctx.fillStyle = '#ffffff'
           ctx.fillRect(0, 0, targetWidth, targetHeight)
-          
+
           // Center the image
           const offsetX = (targetWidth - scaledWidth) / 2
           const offsetY = (targetHeight - scaledHeight) / 2
-          
+
           // Draw the resized image
           ctx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight)
-          
+
           // Convert to blob and create new file
-          canvas.toBlob((blob) => {
-            if (blob) {
-              const resizedFile = new File([blob], file.name, {
-                type: 'image/jpeg',
-                lastModified: Date.now()
-              })
-              resolve(resizedFile)
-            } else {
-              resolve(file) // Fallback to original file
-            }
-          }, 'image/jpeg', 0.9) // High quality JPEG
+          canvas.toBlob(
+            blob => {
+              if (blob) {
+                const resizedFile = new File([blob], file.name, {
+                  type: 'image/jpeg',
+                  lastModified: Date.now()
+                })
+                resolve(resizedFile)
+              } else {
+                resolve(file) // Fallback to original file
+              }
+            },
+            'image/jpeg',
+            0.9
+          ) // High quality JPEG
         } else {
           resolve(file) // Fallback to original file
         }
@@ -193,51 +199,41 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
     return (
       <div className="p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="h-64 bg-gray-200 rounded"></div>
+          <div className="h-8 w-1/4 rounded bg-gray-200"></div>
+          <div className="h-12 rounded bg-gray-200"></div>
+          <div className="h-64 rounded bg-gray-200"></div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="mx-auto max-w-5xl p-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          {isEditMode ? 'Edit Blog Post' : 'Create New Blog Post'}
-        </h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900">{isEditMode ? 'Edit Blog Post' : 'Create New Blog Post'}</h1>
+        <p className="mt-1 text-gray-600">
           {isEditMode ? `Editing: ${initialData?.slug}` : 'Fill in the details below'}
         </p>
       </div>
 
-      {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-          {error}
-        </div>
-      )}
+      {error && <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">{error}</div>}
 
       {/* Tabs */}
       <div className="mb-6 border-b border-gray-200">
         <div className="flex gap-4">
           <button
             onClick={() => setShowPreview(false)}
-            className={`px-4 py-2 font-medium border-b-2 transition-colors ${
-              !showPreview
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
+            className={`border-b-2 px-4 py-2 font-medium transition-colors ${
+              !showPreview ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
             Edit
           </button>
           <button
             onClick={() => setShowPreview(true)}
-            className={`px-4 py-2 font-medium border-b-2 transition-colors ${
-              showPreview
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
+            className={`border-b-2 px-4 py-2 font-medium transition-colors ${
+              showPreview ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
             Preview
@@ -247,31 +243,25 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
 
       {showPreview ? (
         /* Preview Mode */
-        <div className="bg-white rounded-lg shadow p-8">
+        <div className="rounded-lg bg-white p-8 shadow">
           {formData.image && (
             <div className="mb-6">
-              <div className="relative w-full aspect-[16/9] overflow-hidden rounded-xl shadow-lg">
-                <img
-                  src={formData.image}
-                  alt={formData.title}
-                  className="w-full h-full object-cover"
-                />
+              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl shadow-lg">
+                <img src={formData.image} alt={formData.title} className="h-full w-full object-cover" />
                 {/* Preview indicator */}
-                <div className="absolute top-4 left-4 bg-gradient-to-r from-teal-500 to-blue-500 text-white text-sm px-3 py-1 rounded-full">
+                <div className="absolute left-4 top-4 rounded-full bg-gradient-to-r from-teal-500 to-blue-500 px-3 py-1 text-sm text-white">
                   Blog Preview
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mt-2">
-                Preview shows how your image will appear on the blog page
-              </p>
+              <p className="mt-2 text-sm text-gray-500">Preview shows how your image will appear on the blog page</p>
             </div>
           )}
-          <h1 className="text-3xl font-bold mb-4">{formData.title || 'Untitled'}</h1>
-          <p className="text-gray-600 mb-4">{formData.description}</p>
+          <h1 className="mb-4 text-3xl font-bold">{formData.title || 'Untitled'}</h1>
+          <p className="mb-4 text-gray-600">{formData.description}</p>
           {formData.tags.length > 0 && (
-            <div className="flex gap-2 mb-6">
+            <div className="mb-6 flex gap-2">
               {formData.tags.map(tag => (
-                <span key={tag} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                <span key={tag} className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
                   {tag}
                 </span>
               ))}
@@ -286,76 +276,64 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Title *
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-700">Title *</label>
             <input
               type="text"
               value={formData.title}
               onChange={e => setFormData({ ...formData, title: e.target.value })}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               placeholder="Enter post title"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-700">Description</label>
             <textarea
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               placeholder="Brief description of the post"
             />
           </div>
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Category *
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-700">Category *</label>
             <select
               value={formData.category}
               onChange={e => setFormData({ ...formData, category: e.target.value as any })}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Categories (Home + Next.js + TypeScript)</option>
               <option value="home">Home Only</option>
               <option value="nextjs">Next.js Only</option>
               <option value="typescript">TypeScript Only</option>
             </select>
-            <p className="text-sm text-gray-500 mt-1">
-              Choose where this post will appear on the blog page
-            </p>
+            <p className="mt-1 text-sm text-gray-500">Choose where this post will appear on the blog page</p>
           </div>
 
           {/* Post Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Post Type *
-            </label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <label className="mb-2 block text-sm font-medium text-gray-700">Post Type *</label>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div
                 onClick={() => setFormData({ ...formData, postType: 'local' })}
-                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  formData.postType === 'local'
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                className={`cursor-pointer rounded-lg border-2 p-4 transition-all ${
+                  formData.postType === 'local' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-4 h-4 rounded-full border-2 ${
-                    formData.postType === 'local'
-                      ? 'border-blue-500 bg-blue-500'
-                      : 'border-gray-300'
-                  }`}>
+                  <div
+                    className={`h-4 w-4 rounded-full border-2 ${
+                      formData.postType === 'local' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                    }`}
+                  >
                     {formData.postType === 'local' && (
-                      <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5"></div>
+                      <div className="mx-auto mt-0.5 h-2 w-2 rounded-full bg-white"></div>
                     )}
                   </div>
                   <div>
@@ -364,16 +342,16 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
                   </div>
                 </div>
                 <div className="mt-3 text-sm text-gray-600">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-green-500"></span>
                     Advanced comment system with replies
                   </div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-green-500"></span>
                     Like, bookmark, and share features
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <span className="h-2 w-2 rounded-full bg-green-500"></span>
                     Full control over content and interactions
                   </div>
                 </div>
@@ -381,20 +359,18 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
 
               <div
                 onClick={() => setFormData({ ...formData, postType: 'devto' })}
-                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  formData.postType === 'devto'
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                className={`cursor-pointer rounded-lg border-2 p-4 transition-all ${
+                  formData.postType === 'devto' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-4 h-4 rounded-full border-2 ${
-                    formData.postType === 'devto'
-                      ? 'border-blue-500 bg-blue-500'
-                      : 'border-gray-300'
-                  }`}>
+                  <div
+                    className={`h-4 w-4 rounded-full border-2 ${
+                      formData.postType === 'devto' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                    }`}
+                  >
                     {formData.postType === 'devto' && (
-                      <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5"></div>
+                      <div className="mx-auto mt-0.5 h-2 w-2 rounded-full bg-white"></div>
                     )}
                   </div>
                   <div>
@@ -403,16 +379,16 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
                   </div>
                 </div>
                 <div className="mt-3 text-sm text-gray-600">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-blue-500"></span>
                     Uses dev.to comment system
                   </div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-blue-500"></span>
                     Links to dev.to for interactions
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                    <span className="h-2 w-2 rounded-full bg-blue-500"></span>
                     Requires dev.to post ID
                   </div>
                 </div>
@@ -423,18 +399,16 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
           {/* Dev.to Post ID (only show if devto type selected) */}
           {formData.postType === 'devto' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Dev.to Post ID *
-              </label>
+              <label className="mb-2 block text-sm font-medium text-gray-700">Dev.to Post ID *</label>
               <input
                 type="text"
                 value={formData.devtoId || ''}
                 onChange={e => setFormData({ ...formData, devtoId: e.target.value })}
                 required={formData.postType === 'devto'}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter the dev.to post ID (e.g., 123456)"
               />
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="mt-1 text-sm text-gray-500">
                 The numeric ID from your dev.to post URL (e.g., dev.to/username/post-title-123456)
               </p>
             </div>
@@ -442,19 +416,17 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
 
           {/* Cover Image */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Cover Image
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-700">Cover Image</label>
             <div className="space-y-4">
-              <div className="flex gap-4 items-start">
+              <div className="flex items-start gap-4">
                 <input
                   type="text"
                   value={formData.image}
                   onChange={e => setFormData({ ...formData, image: e.target.value })}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                   placeholder="Image URL"
                 />
-                <label className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition-colors">
+                <label className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700">
                   {uploadingImage ? 'Processing...' : 'Upload & Auto-Resize'}
                   <input
                     type="file"
@@ -465,18 +437,14 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
                   />
                 </label>
               </div>
-              
+
               {/* Image Preview with Proper Sizing */}
               {formData.image && (
                 <div className="space-y-2">
-                  <div className="relative w-full aspect-[16/9] overflow-hidden rounded-xl border-2 border-gray-200 bg-gray-50">
-                    <img
-                      src={formData.image}
-                      alt="Cover Image Preview"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border-2 border-gray-200 bg-gray-50">
+                    <img src={formData.image} alt="Cover Image Preview" className="h-full w-full object-cover" />
                     {/* Size indicator overlay */}
-                    <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                    <div className="absolute right-2 top-2 rounded bg-black/70 px-2 py-1 text-xs text-white">
                       Optimized for Blog
                     </div>
                   </div>
@@ -485,11 +453,11 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
                   </p>
                 </div>
               )}
-              
+
               {/* Upload Instructions */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="font-medium text-blue-900 mb-2">📸 Auto-Resize Feature</h4>
-                <ul className="text-sm text-blue-800 space-y-1">
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+                <h4 className="mb-2 font-medium text-blue-900">📸 Auto-Resize Feature</h4>
+                <ul className="space-y-1 text-sm text-blue-800">
                   <li>• Images are automatically resized to 1200×675px (16:9 aspect ratio)</li>
                   <li>• Perfect size for blog hero images and thumbnails</li>
                   <li>• Maintains image quality while optimizing file size</li>
@@ -501,22 +469,20 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
 
           {/* Tags */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tags
-            </label>
-            <div className="flex gap-2 mb-2">
+            <label className="mb-2 block text-sm font-medium text-gray-700">Tags</label>
+            <div className="mb-2 flex gap-2">
               <input
                 type="text"
                 value={tagInput}
                 onChange={e => setTagInput(e.target.value)}
                 onKeyPress={e => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="flex-1 rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                 placeholder="Add a tag"
               />
               <button
                 type="button"
                 onClick={handleAddTag}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                className="rounded-lg bg-gray-100 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200"
               >
                 Add
               </button>
@@ -526,7 +492,7 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
                 {formData.tags.map(tag => (
                   <span
                     key={tag}
-                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm flex items-center gap-2"
+                    className="flex items-center gap-2 rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700"
                   >
                     {tag}
                     <button
@@ -544,15 +510,13 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
 
           {/* Content */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Content (Markdown) *
-            </label>
+            <label className="mb-2 block text-sm font-medium text-gray-700">Content (Markdown) *</label>
             <textarea
               value={formData.content}
               onChange={e => setFormData({ ...formData, content: e.target.value })}
               required
               rows={20}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 font-mono text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500"
               placeholder="Write your post content in Markdown..."
             />
           </div>
@@ -564,7 +528,7 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
               id="published"
               checked={formData.published}
               onChange={e => setFormData({ ...formData, published: e.target.checked })}
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
             <label htmlFor="published" className="text-sm font-medium text-gray-700">
               Publish immediately
@@ -572,18 +536,18 @@ export default function BlogEditor({ initialData, onSave, mode = 'create' }: Blo
           </div>
 
           {/* Actions */}
-          <div className="flex gap-4 pt-4 border-t">
+          <div className="flex gap-4 border-t pt-4">
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors"
+              className="rounded-lg bg-blue-600 px-6 py-2 text-white transition-colors hover:bg-blue-700 disabled:bg-gray-400"
             >
               {saving ? 'Saving...' : isEditMode ? 'Update Post' : 'Create Post'}
             </button>
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              className="rounded-lg bg-gray-100 px-6 py-2 text-gray-700 transition-colors hover:bg-gray-200"
             >
               Cancel
             </button>

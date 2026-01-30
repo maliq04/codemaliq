@@ -3,13 +3,13 @@
 import Container from '@/components/elements/Container'
 import PageHeading from '@/components/elements/PageHeading'
 import { DragDropContext, DropResult } from '@hello-pangea/dnd'
+import { useEffect, useState } from 'react'
 
 import { tourTaskBoard } from '@/common/constant/drivers'
 import createDrivers from '@/common/libs/drivers'
 import { IColumns } from '@/common/types/board'
 
 import { useTaskBoard } from '@/stores/board'
-import { useEffect, useState } from 'react'
 
 import TaskColumn from './TaskColumn'
 import TaskLoading from './TaskLoading'
@@ -72,7 +72,7 @@ export default function TaskBoard() {
     <DragDropContext onDragEnd={result => onDragEnd(result, columns, setColumns)}>
       <Container withMarginTop={false}>
         <PageHeading title={PAGE_TITLE} description={PAGE_DESCRIPTION} />
-        <div className="min-h-[70vh] mt-8 flex w-full flex-col space-y-4 md:flex-row md:space-y-0">
+        <div className="mt-8 flex min-h-[70vh] w-full flex-col space-y-4 md:flex-row md:space-y-0">
           {isMounted ? (
             Object.entries(columns).map(([columnId, column]) => (
               <TaskColumn key={columnId} columnId={columnId} column={column} />

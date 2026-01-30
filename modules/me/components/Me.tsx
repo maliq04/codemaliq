@@ -12,7 +12,7 @@ import MeProfile from './MeProfile'
 export default function MeSection({ careers = [], promotions = [] }: { careers: ICareer[]; promotions: IAdsBanner[] }) {
   // Add safety check for SOCIAL_MEDIA
   const filteredSocialMedia = SOCIAL_MEDIA?.filter?.(item => item.title !== 'NPM' && item.title !== 'TikTok') || []
-  
+
   return (
     <section className="min-h-screen">
       <MeProfile />

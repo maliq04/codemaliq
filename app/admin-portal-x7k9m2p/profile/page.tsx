@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+
 import CVManager from '@/components/admin/profile/CVManager'
 
 export const metadata: Metadata = {

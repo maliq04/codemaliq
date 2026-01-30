@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
-import { database } from '@/lib/firebase-admin'
-import { createAuditLog } from '@/lib/audit-log'
-import { getServerSession } from 'next-auth'
+
 import { options } from '@/app/api/auth/[...nextauth]/options'
+import { createAuditLog } from '@/lib/audit-log'
+import { database } from '@/lib/firebase-admin'
+import { getServerSession } from 'next-auth'
 
 /**
  * GET /api/admin/uploads/settings
@@ -17,7 +18,7 @@ export async function GET() {
 
     const settingsRef = database.ref('admin/upload_settings')
     const snapshot = await settingsRef.once('value')
-    
+
     const defaultSettings = {
       maxFileSize: 5,
       allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
@@ -27,19 +28,16 @@ export async function GET() {
       brandName: 'Maliq Al Fathir',
       brandDescription: 'Full Stack Developer & Tech Enthusiast'
     }
-    
+
     const settings = snapshot.val() || defaultSettings
-    
+
     return NextResponse.json({
       success: true,
       data: settings
     })
   } catch (error) {
     console.error('Error fetching upload settings:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch settings' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to fetch settings' }, { status: 500 })
   }
 }
 
@@ -52,7 +50,7 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(options)
     console.log('Session:', session)
-    
+
     if (!session?.user?.email || session.user.email !== 'maliqalfathir04@gmail.com') {
       console.log('Unauthorized access attempt')
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
@@ -60,33 +58,19 @@ export async function POST(request: Request) {
 
     const body = await request.json()
     console.log('Request body:', body)
-    
-    const {
-      maxFileSize,
-      allowedTypes,
-      logoUrl,
-      faviconUrl,
-      ogImageUrl,
-      brandName,
-      brandDescription
-    } = body
+
+    const { maxFileSize, allowedTypes, logoUrl, faviconUrl, ogImageUrl, brandName, brandDescription } = body
 
     console.log('Validating settings...')
     // Validate settings
     if (!maxFileSize || maxFileSize < 1 || maxFileSize > 50) {
       console.log('Invalid max file size:', maxFileSize)
-      return NextResponse.json(
-        { success: false, error: 'Invalid max file size' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Invalid max file size' }, { status: 400 })
     }
 
     if (!allowedTypes || !Array.isArray(allowedTypes) || allowedTypes.length === 0) {
       console.log('Invalid allowed types:', allowedTypes)
-      return NextResponse.json(
-        { success: false, error: 'Invalid allowed types' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Invalid allowed types' }, { status: 400 })
     }
 
     console.log('Saving settings to Firebase...')
@@ -126,7 +110,11 @@ export async function POST(request: Request) {
     console.error('Error updating upload settings:', error)
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
     return NextResponse.json(
-      { success: false, error: 'Failed to update settings', details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        success: false,
+        error: 'Failed to update settings',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }

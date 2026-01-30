@@ -51,6 +51,7 @@ GITHUB_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ## Troubleshooting:
 
 If you see "Failed to fetch GitHub data" in the console:
+
 1. Check that your token is valid
 2. Ensure the token has the correct scopes
 3. Verify the username in `common/constant/github.ts` matches your GitHub username

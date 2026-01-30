@@ -1,8 +1,8 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
-import { getDatabase } from 'firebase/database';
+import { getApp, getApps, initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getDatabase } from 'firebase/database'
+import { getFirestore } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 
 // Your web app's Firebase configuration, using environment variables
 const firebaseConfig = {
@@ -13,57 +13,57 @@ const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-};
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL
+}
 
 // Validate Firebase configuration
 const isFirebaseConfigValid = () => {
-  const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
-  return requiredFields.every(field => firebaseConfig[field as keyof typeof firebaseConfig]);
-};
+  const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId']
+  return requiredFields.every(field => firebaseConfig[field as keyof typeof firebaseConfig])
+}
 
 // Initialize Firebase with error handling
-let app: any = null;
-let auth: any = null;
-let db: any = null;
-let storage: any = null;
-let realtimeDb: any = null;
+let app: any = null
+let auth: any = null
+let db: any = null
+let storage: any = null
+let realtimeDb: any = null
 
 try {
   if (isFirebaseConfigValid()) {
-    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-    
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
+
     // Initialize services with error handling
     try {
-      auth = getAuth(app);
+      auth = getAuth(app)
     } catch (error) {
-      console.warn('Firebase Auth initialization failed:', error);
+      console.warn('Firebase Auth initialization failed:', error)
     }
-    
+
     try {
-      db = getFirestore(app);
+      db = getFirestore(app)
     } catch (error) {
-      console.warn('Firestore initialization failed:', error);
+      console.warn('Firestore initialization failed:', error)
     }
-    
+
     try {
-      storage = getStorage(app);
+      storage = getStorage(app)
     } catch (error) {
-      console.warn('Firebase Storage initialization failed:', error);
+      console.warn('Firebase Storage initialization failed:', error)
     }
-    
+
     try {
       if (firebaseConfig.databaseURL) {
-        realtimeDb = getDatabase(app);
+        realtimeDb = getDatabase(app)
       }
     } catch (error) {
-      console.warn('Realtime Database initialization failed:', error);
+      console.warn('Realtime Database initialization failed:', error)
     }
   } else {
-    console.warn('Firebase configuration is incomplete. Some features may not work.');
+    console.warn('Firebase configuration is incomplete. Some features may not work.')
   }
 } catch (error) {
-  console.error('Firebase initialization failed:', error);
+  console.error('Firebase initialization failed:', error)
 }
 
-export { app, auth, db, storage, realtimeDb };
+export { app, auth, db, storage, realtimeDb }

@@ -1,5 +1,5 @@
-import { getServerSession } from 'next-auth/next'
 import { options } from '@/app/api/auth/[...nextauth]/options'
+import { getServerSession } from 'next-auth/next'
 
 /**
  * Get the list of admin emails from environment variables
@@ -17,10 +17,10 @@ export function getAdminEmails(): string[] {
  */
 export function isAdminEmail(email: string | null | undefined): boolean {
   if (!email) return false
-  
+
   const adminEmails = getAdminEmails()
   const normalizedEmail = email.trim().toLowerCase()
-  
+
   return adminEmails.includes(normalizedEmail)
 }
 
@@ -30,11 +30,11 @@ export function isAdminEmail(email: string | null | undefined): boolean {
  */
 export async function isAdminUser(): Promise<boolean> {
   const session = await getServerSession(options)
-  
+
   if (!session?.user?.email) {
     return false
   }
-  
+
   return isAdminEmail(session.user.email)
 }
 
@@ -44,15 +44,15 @@ export async function isAdminUser(): Promise<boolean> {
  */
 export async function getAdminSession() {
   const session = await getServerSession(options)
-  
+
   if (!session?.user?.email) {
     return null
   }
-  
+
   if (!isAdminEmail(session.user.email)) {
     return null
   }
-  
+
   return session
 }
 
@@ -70,11 +70,11 @@ export interface AdminUser {
  */
 export async function getAdminUser(): Promise<AdminUser | null> {
   const session = await getAdminSession()
-  
+
   if (!session?.user) {
     return null
   }
-  
+
   return {
     email: session.user.email!,
     name: session.user.name || null,

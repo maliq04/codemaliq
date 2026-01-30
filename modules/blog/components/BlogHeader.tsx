@@ -2,14 +2,14 @@
 
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
 
+import DynamicLogo from '@/components/elements/DynamicLogo'
+import { useBranding } from '@/components/providers/BrandingProvider'
 import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 import { BLOG_LINK } from '@/common/constant/menu'
 import { cn } from '@/common/libs/cn'
-import { useBranding } from '@/components/providers/BrandingProvider'
-import DynamicLogo from '@/components/elements/DynamicLogo'
 
 export default function BlogHeader() {
   const { resolvedTheme } = useTheme()
@@ -29,7 +29,7 @@ export default function BlogHeader() {
         <DynamicLogo
           width={96}
           height={96}
-          className="rounded-full object-cover w-full h-full border-2 border-neutral-200 dark:border-neutral-700 shadow-lg"
+          className="h-full w-full rounded-full border-2 border-neutral-200 object-cover shadow-lg dark:border-neutral-700"
           alt={branding.brandName}
         />
       </div>

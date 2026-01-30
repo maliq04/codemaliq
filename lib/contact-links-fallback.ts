@@ -80,13 +80,13 @@ const defaultContactLinks: ContactLink[] = [
 export class ContactLinksFallback {
   static getAll(): ContactLink[] {
     if (typeof window === 'undefined') return defaultContactLinks
-    
+
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) {
         return JSON.parse(stored)
       }
-      
+
       // Initialize with default links
       this.setAll(defaultContactLinks)
       return defaultContactLinks
@@ -97,12 +97,14 @@ export class ContactLinksFallback {
   }
 
   static getActive(): ContactLink[] {
-    return this.getAll().filter(link => link.isActive).sort((a, b) => a.order - b.order)
+    return this.getAll()
+      .filter(link => link.isActive)
+      .sort((a, b) => a.order - b.order)
   }
 
   static setAll(links: ContactLink[]): void {
     if (typeof window === 'undefined') return
-    
+
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(links))
     } catch (error) {
@@ -121,22 +123,22 @@ export class ContactLinksFallback {
     const links = this.getAll()
     links.push(newLink)
     this.setAll(links)
-    
+
     return newLink
   }
 
   static update(id: string, updates: Partial<ContactLink>): ContactLink | null {
     const links = this.getAll()
     const index = links.findIndex(link => link.id === id)
-    
+
     if (index === -1) return null
-    
+
     links[index] = {
       ...links[index],
       ...updates,
       updatedAt: new Date().toISOString()
     }
-    
+
     this.setAll(links)
     return links[index]
   }
@@ -144,9 +146,9 @@ export class ContactLinksFallback {
   static delete(id: string): boolean {
     const links = this.getAll()
     const filteredLinks = links.filter(link => link.id !== id)
-    
+
     if (filteredLinks.length === links.length) return false
-    
+
     this.setAll(filteredLinks)
     return true
   }

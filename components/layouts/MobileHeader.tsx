@@ -2,12 +2,11 @@
 
 import Link from 'next/link'
 
+import DynamicLogo from '@/components/elements/DynamicLogo'
+import { useBranding } from '@/components/providers/BrandingProvider'
 import { AnimatePresence } from 'framer-motion'
 import { useEffect } from 'react'
 import { MdVerified as VerifiedIcon } from 'react-icons/md'
-
-import { useBranding } from '@/components/providers/BrandingProvider'
-import DynamicLogo from '@/components/elements/DynamicLogo'
 
 import { useMenu } from '@/stores/menu'
 
@@ -34,7 +33,7 @@ export default function MobileHeader() {
       document.body.style.overflow = 'auto'
     }
   }, [isOpen])
-  
+
   return (
     <div className="flex flex-col rounded-b-md px-4 py-4 shadow-sm lg:hidden">
       <div className="flex w-full items-center justify-between">
@@ -44,7 +43,9 @@ export default function MobileHeader() {
           </div>
           <div className="mt-1 flex items-center gap-2">
             <Link href="/" passHref>
-              <h2 className="font-sora flex-grow whitespace-nowrap text-lg font-medium lg:text-xl">{branding.brandName}</h2>
+              <h2 className="font-sora flex-grow whitespace-nowrap text-lg font-medium lg:text-xl">
+                {branding.brandName}
+              </h2>
             </Link>
             <Tooltip title="Verified">
               <VerifiedIcon size={18} className="text-blue-400" />

@@ -1,7 +1,6 @@
-import { useState } from 'react'
-
-import { useBranding } from '@/components/providers/BrandingProvider'
 import DynamicLogo from '@/components/elements/DynamicLogo'
+import { useBranding } from '@/components/providers/BrandingProvider'
+import { useState } from 'react'
 
 import { MENU_ITEMS } from '@/common/constant/menu'
 
@@ -14,7 +13,7 @@ export default function LeftCollapseNavigation() {
   const [isHover, setIsHover] = useState(false)
   const filterdMenu = MENU_ITEMS?.filter(item => item?.isShow)
   const { branding } = useBranding()
-  
+
   return (
     <div
       onMouseEnter={() => setIsHover(true)}
@@ -27,12 +26,7 @@ export default function LeftCollapseNavigation() {
         ) : (
           <div className="flex flex-col items-center gap-8">
             <div className="z-10 rounded-full border-2 border-white shadow-md dark:border-neutral-800">
-              <DynamicLogo 
-                width={50} 
-                height={50} 
-                className="rounded-full xl:h-16 xl:w-16" 
-                alt={branding.brandName}
-              />
+              <DynamicLogo width={50} height={50} className="rounded-full xl:h-16 xl:w-16" alt={branding.brandName} />
             </div>
             <ToggleThemeIcon />
           </div>

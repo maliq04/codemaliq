@@ -1,10 +1,10 @@
+import data from '@/codemaliq.json'
+
+import { careersMock } from '@/common/mocks/careers'
 import { IAdsBanner } from '@/common/types/ads'
 import { ICareer } from '@/common/types/careers'
 import { ICodemaliq, ILearn, IService } from '@/common/types/codemaliq'
 import { IProjectItem } from '@/common/types/projects'
-
-import data from '@/codemaliq.json'
-import { careersMock } from '@/common/mocks/careers'
 
 export async function getCodemaliqData(): Promise<ICodemaliq> {
   const response = data as ICodemaliq

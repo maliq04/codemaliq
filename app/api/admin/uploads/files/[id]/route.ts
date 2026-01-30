@@ -1,17 +1,15 @@
 import { NextResponse } from 'next/server'
-import { database } from '@/lib/firebase-admin'
-import { createAuditLog } from '@/lib/audit-log'
-import { getServerSession } from 'next-auth'
+
 import { options } from '@/app/api/auth/[...nextauth]/options'
+import { createAuditLog } from '@/lib/audit-log'
+import { database } from '@/lib/firebase-admin'
+import { getServerSession } from 'next-auth'
 
 /**
  * DELETE /api/admin/uploads/files/[id]
  * Delete an uploaded file
  */
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(options)
     if (!session?.user?.email || session.user.email !== 'maliqalfathir04@gmail.com') {
@@ -26,10 +24,7 @@ export async function DELETE(
     const fileData = snapshot.val()
 
     if (!fileData) {
-      return NextResponse.json(
-        { success: false, error: 'File not found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ success: false, error: 'File not found' }, { status: 404 })
     }
 
     // Delete file from Firebase
@@ -51,9 +46,6 @@ export async function DELETE(
     })
   } catch (error) {
     console.error('Error deleting file:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to delete file' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to delete file' }, { status: 500 })
   }
 }

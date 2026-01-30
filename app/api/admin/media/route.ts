@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { uploadToFirebaseDatabase, listFirebaseDatabaseMedia } from '@/lib/firebase-media'
 import { createAuditLog } from '@/lib/audit-log'
+import { listFirebaseDatabaseMedia, uploadToFirebaseDatabase } from '@/lib/firebase-media'
 
 /**
  * GET /api/admin/media
  * List all media from Firebase Database
  */
-export const GET = withAdminAuthSession(async (request) => {
+export const GET = withAdminAuthSession(async request => {
   try {
     const { searchParams } = new URL(request.url)
     const folder = searchParams.get('folder') || undefined

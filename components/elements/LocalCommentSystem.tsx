@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { FaReply, FaHeart, FaRegHeart } from 'react-icons/fa'
-import { formatDate } from '@/common/helpers'
 import { toast } from '@/lib/toast'
+import { useEffect, useState } from 'react'
+import { FaHeart, FaRegHeart, FaReply } from 'react-icons/fa'
+
+import { formatDate } from '@/common/helpers'
 
 interface Comment {
   id: string
@@ -61,7 +62,7 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!newComment.author.trim() || !newComment.email.trim() || !newComment.content.trim()) {
       toast.error('Please fill in all fields')
       return
@@ -97,7 +98,7 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
 
   const handleSubmitReply = async (e: React.FormEvent, commentId: string) => {
     e.preventDefault()
-    
+
     if (!newReply.author.trim() || !newReply.email.trim() || !newReply.content.trim()) {
       toast.error('Please fill in all fields')
       return
@@ -117,11 +118,11 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
-          setComments(prev => prev.map(comment => 
-            comment.id === commentId 
-              ? { ...comment, replies: [...comment.replies, data.data] }
-              : comment
-          ))
+          setComments(prev =>
+            prev.map(comment =>
+              comment.id === commentId ? { ...comment, replies: [...comment.replies, data.data] } : comment
+            )
+          )
           setNewReply({ author: '', email: '', content: '' })
           setReplyingTo(null)
           toast.success('Reply added successfully!')
@@ -144,11 +145,13 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
-          setComments(prev => prev.map(comment => 
-            comment.id === commentId 
-              ? { ...comment, likes: data.data.likes, userLiked: data.data.userLiked }
-              : comment
-          ))
+          setComments(prev =>
+            prev.map(comment =>
+              comment.id === commentId
+                ? { ...comment, likes: data.data.likes, userLiked: data.data.userLiked }
+                : comment
+            )
+          )
         }
       }
     } catch (error) {
@@ -165,18 +168,20 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
       if (response.ok) {
         const data = await response.json()
         if (data.success) {
-          setComments(prev => prev.map(comment => 
-            comment.id === commentId 
-              ? {
-                  ...comment,
-                  replies: comment.replies.map(reply =>
-                    reply.id === replyId
-                      ? { ...reply, likes: data.data.likes, userLiked: data.data.userLiked }
-                      : reply
-                  )
-                }
-              : comment
-          ))
+          setComments(prev =>
+            prev.map(comment =>
+              comment.id === commentId
+                ? {
+                    ...comment,
+                    replies: comment.replies.map(reply =>
+                      reply.id === replyId
+                        ? { ...reply, likes: data.data.likes, userLiked: data.data.userLiked }
+                        : reply
+                    )
+                  }
+                : comment
+            )
+          )
         }
       }
     } catch (error) {
@@ -188,7 +193,7 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
     return (
       <section id="local-comments" className="space-y-5 pb-6 pt-4">
         <div className="animate-pulse">
-          <div className="h-6 w-32 bg-neutral-200 rounded dark:bg-neutral-700"></div>
+          <div className="h-6 w-32 rounded bg-neutral-200 dark:bg-neutral-700"></div>
         </div>
       </section>
     )
@@ -211,7 +216,7 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
             type="text"
             placeholder="Your name"
             value={newComment.author}
-            onChange={(e) => setNewComment(prev => ({ ...prev, author: e.target.value }))}
+            onChange={e => setNewComment(prev => ({ ...prev, author: e.target.value }))}
             className="rounded-md border border-neutral-300 px-3 py-2 dark:border-neutral-600 dark:bg-neutral-700"
             required
           />
@@ -219,7 +224,7 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
             type="email"
             placeholder="Your email"
             value={newComment.email}
-            onChange={(e) => setNewComment(prev => ({ ...prev, email: e.target.value }))}
+            onChange={e => setNewComment(prev => ({ ...prev, email: e.target.value }))}
             className="rounded-md border border-neutral-300 px-3 py-2 dark:border-neutral-600 dark:bg-neutral-700"
             required
           />
@@ -227,15 +232,12 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
         <textarea
           placeholder="Write your comment..."
           value={newComment.content}
-          onChange={(e) => setNewComment(prev => ({ ...prev, content: e.target.value }))}
+          onChange={e => setNewComment(prev => ({ ...prev, content: e.target.value }))}
           className="w-full rounded-md border border-neutral-300 px-3 py-2 dark:border-neutral-600 dark:bg-neutral-700"
           rows={4}
           required
         />
-        <button
-          type="submit"
-          className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        >
+        <button type="submit" className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
           Post Comment
         </button>
       </form>
@@ -243,11 +245,9 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
       {/* Comments List */}
       <div className="space-y-6">
         {comments.length === 0 ? (
-          <div className="text-center py-8 text-neutral-500">
-            No comments yet. Be the first to comment!
-          </div>
+          <div className="py-8 text-center text-neutral-500">No comments yet. Be the first to comment!</div>
         ) : (
-          comments.map((comment) => (
+          comments.map(comment => (
             <div key={comment.id} className="space-y-4 border-b border-neutral-200 pb-6 dark:border-neutral-700">
               {/* Comment */}
               <div className="space-y-3">
@@ -276,13 +276,16 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
 
               {/* Reply Form */}
               {replyingTo === comment.id && (
-                <form onSubmit={(e) => handleSubmitReply(e, comment.id)} className="ml-6 space-y-3 rounded-lg bg-neutral-100 p-3 dark:bg-neutral-700">
+                <form
+                  onSubmit={e => handleSubmitReply(e, comment.id)}
+                  className="ml-6 space-y-3 rounded-lg bg-neutral-100 p-3 dark:bg-neutral-700"
+                >
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <input
                       type="text"
                       placeholder="Your name"
                       value={newReply.author}
-                      onChange={(e) => setNewReply(prev => ({ ...prev, author: e.target.value }))}
+                      onChange={e => setNewReply(prev => ({ ...prev, author: e.target.value }))}
                       className="rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-600"
                       required
                     />
@@ -290,7 +293,7 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
                       type="email"
                       placeholder="Your email"
                       value={newReply.email}
-                      onChange={(e) => setNewReply(prev => ({ ...prev, email: e.target.value }))}
+                      onChange={e => setNewReply(prev => ({ ...prev, email: e.target.value }))}
                       className="rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-600"
                       required
                     />
@@ -298,7 +301,7 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
                   <textarea
                     placeholder="Write your reply..."
                     value={newReply.content}
-                    onChange={(e) => setNewReply(prev => ({ ...prev, content: e.target.value }))}
+                    onChange={e => setNewReply(prev => ({ ...prev, content: e.target.value }))}
                     className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-600"
                     rows={3}
                     required
@@ -324,11 +327,14 @@ export default function LocalCommentSystem({ slug, commentsCount, onCommentAdded
               {/* Replies */}
               {comment.replies.length > 0 && (
                 <div className="ml-6 space-y-4">
-                  {comment.replies.map((reply) => (
-                    <div key={reply.id} className="space-y-2 border-l-2 border-neutral-200 pl-4 dark:border-neutral-600">
+                  {comment.replies.map(reply => (
+                    <div
+                      key={reply.id}
+                      className="space-y-2 border-l-2 border-neutral-200 pl-4 dark:border-neutral-600"
+                    >
                       <div className="flex items-start justify-between">
                         <div>
-                          <div className="font-medium text-sm">{reply.author}</div>
+                          <div className="text-sm font-medium">{reply.author}</div>
                           <div className="text-xs text-neutral-500">{formatDate(reply.timestamp)}</div>
                         </div>
                         <button

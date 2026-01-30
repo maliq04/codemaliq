@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
+
 import { withAdminAuthSession } from '@/lib/api/admin-middleware'
-import { readJSONFile, writeJSONFile } from '@/lib/fs-utils'
 import { createAuditLog } from '@/lib/audit-log'
+import { readJSONFile, writeJSONFile } from '@/lib/fs-utils'
 
 /**
  * GET /api/admin/projects/[id]
